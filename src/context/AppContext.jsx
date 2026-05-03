@@ -4,7 +4,7 @@ export const AppContext = createContext();
 
 const defaultContent = {
   // Navigation
-  navLogo: "Code by Osama",
+  navLogo: "Codexa",
   navAboutEn: "About",
   navAboutAr: "من أنا",
   navServicesEn: "Services",
@@ -17,8 +17,8 @@ const defaultContent = {
   // Hero
   heroBadgeEn: "Laravel & Business Systems Developer",
   heroBadgeAr: "مطور لارافل وأنظمة أعمال",
-  heroTitle1En: "Hi, I'm Osama.",
-  heroTitle1Ar: "مرحباً، أنا أسامة.",
+  heroTitle1En: "Hi, We are Codexa.",
+  heroTitle1Ar: "مرحباً، نحن Codexa.",
   heroTitle2En: "I build digital solutions.",
   heroTitle2Ar: "أبني حلولاً رقمية.",
   heroIntroEn: "I build professional websites and custom business systems for companies, factories, and export businesses.",
