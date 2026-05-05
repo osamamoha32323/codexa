@@ -4,7 +4,7 @@ import { AppContext } from '../context/AppContext';
 import {
   Building2, Factory, Globe, LayoutDashboard, ShoppingCart, Code2,
   Mail, PhoneCall, MapPin, CheckCircle2, ArrowRight, ArrowLeft, ExternalLink,
-  Github, Linkedin, Twitter, Languages, Search
+  Github, Linkedin, Twitter, Languages, Search, Menu, X
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -129,6 +129,7 @@ const MatrixRain = () => {
 export default function HomePage() {
   const { content, addMessage, projects, lang, setLang } = useContext(AppContext);
   const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -262,20 +263,20 @@ export default function HomePage() {
     <div className={`min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-200 transition-colors duration-300 ${isRtl ? 'font-arabic' : 'font-sans'}`}>
 
       {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-500 px-6 md:px-12 lg:px-24 py-4 ${scrolled
-        ? 'bg-slate-950/80 backdrop-blur-xl border-b border-white/10 py-3 shadow-2xl'
+      <nav className={`fixed w-full z-50 transition-all duration-500 px-6 md:px-12 lg:px-24 ${scrolled
+        ? 'bg-slate-950/90 backdrop-blur-xl border-b border-white/10 py-3 shadow-2xl'
         : 'bg-transparent py-5'
         }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link to="/" className="hover:opacity-90 transition-opacity">
+          <Link to="/" className="hover:opacity-90 transition-opacity relative z-50">
             <Logo light={true} />
           </Link>
 
+          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8 font-medium text-slate-300">
             <a href="#about" className="hover:text-blue-400 transition-colors">{t.navAbout}</a>
             <a href="#services" className="hover:text-blue-400 transition-colors">{t.navServices}</a>
             <a href="#projects" className="hover:text-blue-400 transition-colors">{t.navProjects}</a>
-
 
             <div className="flex items-center gap-4 border-s border-white/10 ps-4">
               <button
@@ -291,7 +292,69 @@ export default function HomePage() {
               </a>
             </div>
           </div>
+
+          {/* Mobile Menu Toggle */}
+          <div className="md:hidden flex items-center gap-4 relative z-50">
+            <button
+              onClick={toggleLanguage}
+              className="flex items-center gap-2 text-slate-400 hover:text-blue-400 transition-colors px-3 py-1.5 rounded-lg bg-white/5 border border-white/10"
+            >
+              <Languages className="w-4 h-4" />
+              <span className="text-xs font-bold uppercase">{isRtl ? 'EN' : 'AR'}</span>
+            </button>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 text-white bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{
+            opacity: isMenuOpen ? 1 : 0,
+            height: isMenuOpen ? 'auto' : 0
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          className={`md:hidden absolute top-full left-0 w-full bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 overflow-hidden shadow-2xl`}
+        >
+          <div className="px-6 py-8 flex flex-col gap-6 text-center">
+            <a
+              href="#about"
+              onClick={() => setIsMenuOpen(false)}
+              className="text-xl font-medium text-slate-300 hover:text-blue-400 transition-colors"
+            >
+              {t.navAbout}
+            </a>
+            <a
+              href="#services"
+              onClick={() => setIsMenuOpen(false)}
+              className="text-xl font-medium text-slate-300 hover:text-blue-400 transition-colors"
+            >
+              {t.navServices}
+            </a>
+            <a
+              href="#projects"
+              onClick={() => setIsMenuOpen(false)}
+              className="text-xl font-medium text-slate-300 hover:text-blue-400 transition-colors"
+            >
+              {t.navProjects}
+            </a>
+            <div className="pt-4 border-t border-white/10">
+              <a
+                href="#contact"
+                onClick={() => setIsMenuOpen(false)}
+                className="inline-block w-full px-6 py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg shadow-lg shadow-blue-600/20 active:scale-[0.98] transition-all"
+              >
+                {t.navTalk}
+              </a>
+            </div>
+          </div>
+        </motion.div>
       </nav>
 
       {/* Hero Section */}
