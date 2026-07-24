@@ -54,13 +54,13 @@ const defaultProjects = [
   },
   {
     id: 2,
-    titleEn: "Premium Export Portal",
-    titleAr: "بوابة التصدير الممتازة",
+    titleEn: "Ryan Trading",
+    titleAr: "ريان تريدنج",
     descriptionEn: "A high-end multi-language website for an international export company, showcasing fresh produce and facilitating global trade.",
     descriptionAr: "موقع إلكتروني متعدد اللغات رفيع المستوى لشركة تصدير دولية، يعرض المنتجات الطازجة ويسهل عمليات التجارة العالمية.",
     tech: "Laravel, Blade, Multi-language, Bootstrap",
     image: "/projects/export.png",
-    url: "#"
+    url: "https://www.edku-overseas.com/"
   }
 ];
 

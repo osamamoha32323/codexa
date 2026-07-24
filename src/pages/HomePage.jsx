@@ -192,6 +192,7 @@ export default function HomePage() {
       : "A selection of recent development work, ranging from business portals to complex management systems.",
     projectsViewAll: isRtl ? "عرض كل المشاريع" : "View all projects",
     projectsViewDetails: isRtl ? "قريباً" : "Coming Soon",
+    projectsVisitSite: isRtl ? "زيارة الموقع" : "Visit Website",
 
     // Skills & Reasons
     skillsTitle: isRtl ? "المهارات التقنية" : "Technical Arsenal",
@@ -513,10 +514,10 @@ export default function HomePage() {
                 className="group flex flex-col bg-white rounded-3xl border border-slate-200 overflow-hidden hover:border-blue-500/50 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-500"
               >
                 <a
-                  href={project.image}
+                  href={project.url && project.url !== '#' ? project.url : project.image}
                   target="_blank"
                   rel="noreferrer"
-                  className={`h-64 w-full ${project.image.startsWith('bg-') ? project.image : 'bg-slate-100'} relative overflow-hidden block cursor-zoom-in group/img`}
+                  className={`h-64 w-full ${project.image.startsWith('bg-') ? project.image : 'bg-slate-100'} relative overflow-hidden block cursor-pointer group/img`}
                   dir="ltr"
                 >
                   {!project.image.startsWith('bg-') && (
@@ -528,7 +529,7 @@ export default function HomePage() {
                   )}
                   <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover/img:opacity-100 duration-300">
                     <div className="bg-white/20 backdrop-blur-md p-4 rounded-full border border-white/30 text-white transform scale-90 group-hover/img:scale-100 transition-transform">
-                      <Search className="w-6 h-6" />
+                      {project.url && project.url !== '#' ? <ExternalLink className="w-6 h-6" /> : <Search className="w-6 h-6" />}
                     </div>
                   </div>
                 </a>
@@ -545,9 +546,21 @@ export default function HomePage() {
                     ))}
                   </div>
 
-                  <div className="inline-flex items-center justify-center w-full gap-2 py-3 px-4 bg-slate-50 border border-slate-200 text-slate-400 rounded-xl font-medium cursor-default">
-                    {t.projectsViewDetails}
-                  </div>
+                  {project.url && project.url !== '#' ? (
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center justify-center w-full gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all shadow-md shadow-blue-600/20 group/btn active:scale-[0.98]"
+                    >
+                      <span>{t.projectsVisitSite}</span>
+                      <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
+                    </a>
+                  ) : (
+                    <div className="inline-flex items-center justify-center w-full gap-2 py-3 px-4 bg-slate-50 border border-slate-200 text-slate-400 rounded-xl font-medium cursor-default">
+                      {t.projectsViewDetails}
+                    </div>
+                  )}
                 </div>
               </motion.div>
             ))}
