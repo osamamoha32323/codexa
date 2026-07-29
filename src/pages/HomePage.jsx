@@ -154,28 +154,28 @@ export default function HomePage() {
   const t = {
     // Navigation
     navLogo: content.navLogo || "Codexa",
-    navAbout: isRtl ? (content.navAboutAr || "من أنا") : (content.navAboutEn || "About"),
+    navAbout: isRtl ? (content.navAboutAr || "من نحن") : (content.navAboutEn || "About Us"),
     navServices: isRtl ? "الخدمات" : "Services",
     navProjects: isRtl ? "المشاريع" : "Projects",
-    navTalk: isRtl ? "تواصل معي" : "Let's Talk",
+    navTalk: isRtl ? "تواصل معنا" : "Contact Us",
 
     // Hero
-    heroBadge: isRtl ? (content.heroBadgeAr || "مطور لارافل وأنظمة أعمال") : (content.heroBadgeEn || "Laravel & Business Systems Developer"),
+    heroBadge: isRtl ? (content.heroBadgeAr || "شركة حلول برمجية وأنظمة أعمال") : (content.heroBadgeEn || "Software House & Business Systems"),
     heroTitle1: isRtl ? (content.heroTitle1Ar || "مرحباً، نحن Codexa.") : (content.heroTitle1En || "Hi, We are Codexa."),
-    heroTitle2: isRtl ? (content.heroTitle2Ar || "أبني حلولاً رقمية.") : (content.heroTitle2En || "I build digital solutions."),
+    heroTitle2: isRtl ? (content.heroTitle2Ar || "نبني حلولاً رقمية.") : (content.heroTitle2En || "We build digital solutions."),
     heroIntro: isRtl
-      ? (content.heroIntroAr || "أقوم ببناء مواقع احترافية وأنظمة أعمال مخصصة للشركات والمصانع وشركات التصدير.")
-      : (content.heroIntroEn || "I build professional websites and custom business systems for companies, factories, and export businesses."),
-    heroBtnProjects: isRtl ? "شاهد مشاريعي" : "View My Projects",
-    heroBtnContact: isRtl ? "تواصل معي" : "Contact Me",
+      ? (content.heroIntroAr || "نقوم ببناء مواقع احترافية وأنظمة أعمال مخصصة للشركات والمصانع وشركات التصدير.")
+      : (content.heroIntroEn || "We build professional websites and custom business systems for companies, factories, and export businesses."),
+    heroBtnProjects: isRtl ? "شاهد مشاريعنا" : "View Our Projects",
+    heroBtnContact: isRtl ? "تواصل معنا" : "Contact Us",
 
     // About
-    aboutTitle: isRtl ? (content.aboutTitleAr || "من أنا") : (content.aboutTitleEn || "About Me"),
-    aboutP1: isRtl ? (content.aboutP1Ar || "أنا مطور ويب أركز على بناء حلول حقيقية للشركات. أتخصص في إنشاء مواقع الشركات، أنظمة المصانع، بوابات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة.")
-      : (content.aboutP1En || "I am a web developer focused on building real solutions for businesses. I specialize in creating powerful company websites, factory systems, export business portals, admin dashboards, and robust custom web applications."),
+    aboutTitle: isRtl ? (content.aboutTitleAr || "من نحن") : (content.aboutTitleEn || "About Us"),
+    aboutP1: isRtl ? (content.aboutP1Ar || "نحن شركة تطوير برمجيات نركز على بناء حلول حقيقية للشركات. نتخصص في إنشاء مواقع الشركات، أنظمة المصانع، بوابات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة.")
+      : (content.aboutP1En || "We are a software development agency focused on building real solutions for businesses. We specialize in creating powerful company websites, factory systems, export business portals, admin dashboards, and robust custom web applications."),
     aboutP2: isRtl
-      ? (content.aboutP2Ar || "مع خبرتي في Laravel, PHP, MySQL بالإضافة إلى الواجهات (HTML/CSS/JS/Bootstrap)، لا ينصب تركيزي فقط على المظهر الجمالي، بل على هندسة أنظمة تدفع بعجلة الأعمال للأمام وتوفر حلولاً عملية.")
-      : (content.aboutP2En || "With expertise in Laravel, PHP, MySQL, formatting with HTML/CSS, and interactivity through JavaScript and Bootstrap, my focus is not just on aesthetics, but on engineering systems that drive actual business value."),
+      ? (content.aboutP2Ar || "مع خبرتنا في Laravel, PHP, MySQL بالإضافة إلى الواجهات (HTML/CSS/JS/Bootstrap)، لا ينصب تركيزنا فقط على المظهر الجمالي، بل على هندسة أنظمة تدفع بعجلة الأعمال للأمام وتوفر حلولاً عملية.")
+      : (content.aboutP2En || "With expertise in Laravel, PHP, MySQL, formatting with HTML/CSS, and interactivity through JavaScript and Bootstrap, our focus is not just on aesthetics, but on engineering systems that drive actual business value."),
     aboutStat1: isRtl ? "أعمال موجهة" : "Business Focused",
     aboutStat2: isRtl ? "أنظمة موثوقة" : "Reliable Systems",
 
@@ -196,10 +196,10 @@ export default function HomePage() {
 
     // Skills & Reasons
     skillsTitle: isRtl ? "المهارات التقنية" : "Technical Arsenal",
-    reasonsTitle: isRtl ? "لماذا تختارني؟" : "Why Choose Me?",
+    reasonsTitle: isRtl ? "لماذا تختارنا؟" : "Why Choose Us?",
 
     // Contact
-    contactTitle: isRtl ? "تواصل معي" : "Get in Touch",
+    contactTitle: isRtl ? "تواصل معنا" : "Contact Us",
     contactDesc: isRtl
       ? "هل تبحث عن حل برمجي مخصص لشركتك؟ دعنا نناقش مشروعك."
       : "Looking for a tailored web solution for your company? Let's discuss your project.",
@@ -210,7 +210,7 @@ export default function HomePage() {
     contactLocationValue: isRtl ? "الإسكندرية" : "Alexandria",
 
     // Footer
-    footerTitle: isRtl ? (content.footerTitleAr || "مطور ويب | أنظمة أعمال") : (content.footerTitleEn || "Web Developer | Business Systems"),
+    footerTitle: isRtl ? (content.footerTitleAr || "شركة حلول برمجية | أنظمة أعمال") : (content.footerTitleEn || "Software House | Business Systems"),
     footerCopyright: isRtl ? `© ${new Date().getFullYear()} Codexa. جميع الحقوق محفوظة.` : `© ${new Date().getFullYear()} Codexa. All rights reserved.`,
     footerBuiltWith: isRtl ? "تم البناء باستخدام React و Tailwind" : "Built with React & Tailwind",
   };
@@ -438,8 +438,8 @@ export default function HomePage() {
                   <div className="flex-1 p-5 overflow-hidden flex flex-col justify-center">
                     <pre className="text-[13px] md:text-[15px] lg:text-[17px] font-mono text-slate-300 leading-[1.8] font-medium text-left">
                       <code>
-                        <span className="text-purple-400">const</span> <span className="text-amber-300">Developer</span> = &#123;<br />
-                        &nbsp;&nbsp;<span className="text-blue-400">role</span>: <span className="text-green-300">"Full-Stack Web Developer"</span>,<br />
+                        <span className="text-purple-400">const</span> <span className="text-amber-300">Company</span> = &#123;<br />
+                        &nbsp;&nbsp;<span className="text-blue-400">role</span>: <span className="text-green-300">"Software House & Solutions"</span>,<br />
                         &nbsp;&nbsp;<span className="text-blue-400">mission</span>: <span className="text-green-300">"Building real business solutions"</span>,<br />
                         &nbsp;&nbsp;<span className="text-blue-400">specialties</span>: [<br />
                         &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">"Company Websites"</span>, <span className="text-green-300">"Factory Systems"</span>,<br />

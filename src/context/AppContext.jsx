@@ -5,40 +5,40 @@ export const AppContext = createContext();
 const defaultContent = {
   // Navigation
   navLogo: "Codexa",
-  navAboutEn: "About",
-  navAboutAr: "من أنا",
+  navAboutEn: "About Us",
+  navAboutAr: "من نحن",
   navServicesEn: "Services",
   navServicesAr: "الخدمات",
   navProjectsEn: "Projects",
   navProjectsAr: "المشاريع",
-  navTalkEn: "Let's Talk",
-  navTalkAr: "تواصل معي",
+  navTalkEn: "Contact Us",
+  navTalkAr: "تواصل معنا",
 
   // Hero
-  heroBadgeEn: "Laravel & Business Systems Developer",
-  heroBadgeAr: "مطور لارافل وأنظمة أعمال",
+  heroBadgeEn: "Software House & Business Systems",
+  heroBadgeAr: "شركة حلول برمجية وأنظمة أعمال",
   heroTitle1En: "Hi, We are Codexa.",
   heroTitle1Ar: "مرحباً، نحن Codexa.",
-  heroTitle2En: "I build digital solutions.",
-  heroTitle2Ar: "أبني حلولاً رقمية.",
-  heroIntroEn: "I build professional websites and custom business systems for companies, factories, and export businesses.",
-  heroIntroAr: "أقوم ببناء مواقع احترافية وأنظمة أعمال مخصصة للشركات والمصانع وشركات التصدير.",
-  heroBtnProjectsEn: "View My Projects",
-  heroBtnProjectsAr: "شاهد مشاريعي",
-  heroBtnContactEn: "Contact Me",
-  heroBtnContactAr: "تواصل معي",
+  heroTitle2En: "We build digital solutions.",
+  heroTitle2Ar: "نبني حلولاً رقمية.",
+  heroIntroEn: "We build professional websites and custom business systems for companies, factories, and export businesses.",
+  heroIntroAr: "نقوم ببناء مواقع احترافية وأنظمة أعمال مخصصة للشركات والمصانع وشركات التصدير.",
+  heroBtnProjectsEn: "View Our Projects",
+  heroBtnProjectsAr: "شاهد مشاريعنا",
+  heroBtnContactEn: "Contact Us",
+  heroBtnContactAr: "تواصل معنا",
 
   // About
-  aboutTitleEn: "About Me",
-  aboutTitleAr: "من أنا",
-  aboutP1En: "I am a web developer focused on building real solutions for businesses. I specialize in creating powerful company websites, factory systems, export business portals, admin dashboards, and robust custom web applications.",
-  aboutP1Ar: "أنا مطور ويب أركز على بناء حلول حقيقية للشركات. أتخصص في إنشاء مواقع الشركات، أنظمة المصانع، بوابات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة.",
-  aboutP2En: "With expertise in Laravel, PHP, MySQL, formatting with HTML/CSS, and interactivity through JavaScript and Bootstrap, my focus is not just on aesthetics, but on engineering systems that drive actual business value.",
-  aboutP2Ar: "مع خبرتي في Laravel, PHP, MySQL بالإضافة إلى الواجهات (HTML/CSS/JS/Bootstrap)، لا ينصب تركيزي فقط على المظهر الجمالي، بل على هندسة أنظمة تدفع بعجلة الأعمال للأمام وتوفر حلولاً عملية.",
+  aboutTitleEn: "About Us",
+  aboutTitleAr: "من نحن",
+  aboutP1En: "We are a software development agency focused on building real solutions for businesses. We specialize in creating powerful company websites, factory systems, export business portals, admin dashboards, and robust custom web applications.",
+  aboutP1Ar: "نحن شركة تطوير برمجيات نركز على بناء حلول حقيقية للشركات. نتخصص في إنشاء مواقع الشركات، أنظمة المصانع، بوابات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة.",
+  aboutP2En: "With expertise in Laravel, PHP, MySQL, formatting with HTML/CSS, and interactivity through JavaScript and Bootstrap, our focus is not just on aesthetics, but on engineering systems that drive actual business value.",
+  aboutP2Ar: "مع خبرتنا في Laravel, PHP, MySQL بالإضافة إلى الواجهات (HTML/CSS/JS/Bootstrap)، لا ينصب تركيزنا فقط على المظهر الجمالي، بل على هندسة أنظمة تدفع بعجلة الأعمال للأمام وتوفر حلولاً عملية.",
   
   // Footer
-  footerTitleEn: "Web Developer | Business Systems",
-  footerTitleAr: "مطور ويب | أنظمة أعمال"
+  footerTitleEn: "Software House | Business Systems & Web Solutions",
+  footerTitleAr: "شركة حلول برمجية | أنظمة أعمال ومواقع إلكترونية"
 };
 
 const defaultProjects = [
