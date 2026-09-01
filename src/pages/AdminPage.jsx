@@ -259,7 +259,7 @@ export default function AdminPage() {
                   dir="ltr"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="osama.mohamedr3d33@gmail.com"
+                  placeholder="ادخل البريد الإلكتروني..."
                   className="w-full bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
@@ -273,7 +273,7 @@ export default function AdminPage() {
                 dir="ltr"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                placeholder="•••••••••"
+                placeholder="ادخل كلمة المرور..."
                 className="w-full bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
@@ -320,7 +320,6 @@ export default function AdminPage() {
                 <h1 className="text-lg font-bold tracking-tight text-white leading-tight">
                   Codexa <span className="text-blue-400 font-normal text-sm">Control Panel</span>
                 </h1>
-                <p className="text-[11px] text-slate-400">{adminEmail}</p>
               </div>
             </div>
           </div>
