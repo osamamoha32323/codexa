@@ -156,11 +156,23 @@ export default function HomePage() {
     reasons, 
     lang, 
     setLang, 
-    addQuoteRequest
+    addQuoteRequest,
+    usdToEgpRate,
+    setUsdToEgpRate
   } = useContext(AppContext);
 
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Currency Selection for Budget: 'USD' | 'EGP'
+  const [currency, setCurrency] = useState('USD');
+  const [budgetSelection, setBudgetSelection] = useState('tier-2'); // 'tier-1', 'tier-2', 'tier-3', 'tier-4', 'custom'
+  const [customBudgetAmount, setCustomBudgetAmount] = useState('');
+
+  // Rate helper: formats amount in EGP dynamically
+  const formatEgp = (usdVal) => {
+    return Math.round(usdVal * (usdToEgpRate || 49)).toLocaleString();
+  };
 
   // Quote Form State
   const [quoteForm, setQuoteForm] = useState({
@@ -169,7 +181,7 @@ export default function HomePage() {
     email: '',
     phone: '',
     projectType: 'Company Website',
-    budget: '$500 - $1,500',
+    budget: '$500 – $1,500',
     details: ''
   });
   const [quoteSent, setQuoteSent] = useState(false);
@@ -291,7 +303,41 @@ export default function HomePage() {
 
   const handleQuoteSubmit = (e) => {
     e.preventDefault();
-    addQuoteRequest(quoteForm);
+
+    let finalBudgetText = '';
+    if (budgetSelection === 'tier-1') {
+      finalBudgetText = currency === 'USD' 
+        ? `Under $500 (حوالي ${formatEgp(500)} ج.م)`
+        : `أقل من ${formatEgp(500)} ج.م (Under $500)`;
+    } else if (budgetSelection === 'tier-2') {
+      finalBudgetText = currency === 'USD'
+        ? `$500 – $1,500 (${formatEgp(500)} – ${formatEgp(1500)} ج.م)`
+        : `${formatEgp(500)} – ${formatEgp(1500)} ج.م ($500 – $1,500)`;
+    } else if (budgetSelection === 'tier-3') {
+      finalBudgetText = currency === 'USD'
+        ? `$1,500 – $3,000 (${formatEgp(1500)} – ${formatEgp(3000)} ج.م)`
+        : `${formatEgp(1500)} – ${formatEgp(3000)} ج.م ($1,500 – $3,000)`;
+    } else if (budgetSelection === 'tier-4') {
+      finalBudgetText = currency === 'USD'
+        ? `$3,000+ (${formatEgp(3000)}+ ج.م)`
+        : `${formatEgp(3000)}+ ج.م ($3,000+)`;
+    } else if (budgetSelection === 'custom') {
+      const numVal = parseFloat(customBudgetAmount) || 0;
+      if (currency === 'USD') {
+        finalBudgetText = `$${numVal.toLocaleString()} USD (${formatEgp(numVal)} ج.م)`;
+      } else {
+        const usdEquiv = (numVal / (usdToEgpRate || 49)).toFixed(1);
+        finalBudgetText = `${numVal.toLocaleString()} ج.م (حوالي $${usdEquiv} USD)`;
+      }
+    }
+
+    addQuoteRequest({
+      ...quoteForm,
+      budget: finalBudgetText,
+      currencyUsed: currency,
+      liveExchangeRate: `1 USD = ${usdToEgpRate || 49} EGP`
+    });
+
     setQuoteSent(true);
     setQuoteForm({
       name: '',
@@ -299,9 +345,10 @@ export default function HomePage() {
       email: '',
       phone: '',
       projectType: 'Company Website',
-      budget: '$500 - $1,500',
+      budget: '',
       details: ''
     });
+    setCustomBudgetAmount('');
     setTimeout(() => setQuoteSent(false), 6000);
   };
 
@@ -953,6 +1000,7 @@ export default function HomePage() {
                     </div>
                   </div>
 
+                  {/* Project Type & Dual-Currency Budget Selector */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
@@ -973,21 +1021,92 @@ export default function HomePage() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        {isRtl ? 'الميزانية التقديرية' : 'Estimated Budget'}
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-xs font-semibold text-slate-300">
+                          {isRtl ? 'الميزانية المتوقعة' : 'Estimated Budget'}
+                        </label>
+                        
+                        {/* Currency Toggle Switcher */}
+                        <div className="flex items-center gap-1 bg-slate-950 p-0.5 rounded-lg border border-white/10 text-[10px] font-bold">
+                          <button
+                            type="button"
+                            onClick={() => setCurrency('USD')}
+                            className={`px-2 py-0.5 rounded-md transition-colors ${
+                              currency === 'USD' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            $ USD
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setCurrency('EGP')}
+                            className={`px-2 py-0.5 rounded-md transition-colors ${
+                              currency === 'EGP' ? 'bg-emerald-600 text-white' : 'text-slate-400 hover:text-white'
+                            }`}
+                          >
+                            ج.م EGP
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Budget Dropdown */}
                       <select
-                        value={quoteForm.budget}
-                        onChange={(e) => setQuoteForm({ ...quoteForm, budget: e.target.value })}
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500"
+                        value={budgetSelection}
+                        onChange={(e) => setBudgetSelection(e.target.value)}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 font-sans"
                       >
-                        <option value="$300 - $700">$300 - $700</option>
-                        <option value="$700 - $1,500">$700 - $1,500</option>
-                        <option value="$1,500 - $3,000">$1,500 - $3,000</option>
-                        <option value="$3,000+">$3,000+</option>
+                        {currency === 'USD' ? (
+                          <>
+                            <option value="tier-1">Under $500 (≈ {formatEgp(500)} EGP)</option>
+                            <option value="tier-2">$500 – $1,500 (≈ {formatEgp(500)} – {formatEgp(1500)} EGP)</option>
+                            <option value="tier-3">$1,500 – $3,000 (≈ {formatEgp(1500)} – {formatEgp(3000)} EGP)</option>
+                            <option value="tier-4">$3,000+ (≈ {formatEgp(3000)}+ EGP)</option>
+                            <option value="custom">✍️ {isRtl ? 'أدخل ميزانية مخصصة...' : 'Enter custom budget...'}</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="tier-1">أقل من {formatEgp(500)} ج.م (Under $500)</option>
+                            <option value="tier-2">{formatEgp(500)} – {formatEgp(1500)} ج.م ($500 – $1,500)</option>
+                            <option value="tier-3">{formatEgp(1500)} – {formatEgp(3000)} ج.م ($1,500 – $3,000)</option>
+                            <option value="tier-4">{formatEgp(3000)}+ ج.م ($3,000+)</option>
+                            <option value="custom">✍️ {isRtl ? 'أدخل ميزانية مخصصة...' : 'Enter custom budget...'}</option>
+                          </>
+                        )}
                       </select>
                     </div>
                   </div>
+
+                  {/* Custom Budget Input if Selected */}
+                  {budgetSelection === 'custom' && (
+                    <div className="p-3.5 rounded-xl bg-slate-950/80 border border-blue-500/30 space-y-2 animate-fadeIn">
+                      <label className="block text-xs font-semibold text-blue-300">
+                        {isRtl ? `أدخل المبلغ المطلوب (${currency === 'USD' ? 'بالدولار الأمريكي $' : 'بالجنيه المصري ج.م'}):` : `Enter your specific budget amount (${currency}):`}
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="number"
+                          required
+                          min="50"
+                          value={customBudgetAmount}
+                          onChange={(e) => setCustomBudgetAmount(e.target.value)}
+                          placeholder={currency === 'USD' ? 'e.g. 1200' : 'مثال: 50000'}
+                          className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                        />
+                        {customBudgetAmount && parseFloat(customBudgetAmount) > 0 && (
+                          <div className="mt-2 text-xs text-slate-400 flex items-center justify-between">
+                            <span>
+                              {currency === 'USD' 
+                                ? `يعادل تقريباً: ${formatEgp(parseFloat(customBudgetAmount))} جنيه مصري`
+                                : `Equivalent to: approx $${(parseFloat(customBudgetAmount) / (usdToEgpRate || 49)).toFixed(1)} USD`}
+                            </span>
+                            <span className="text-[10px] text-slate-500 font-mono">
+                              (1 USD = {usdToEgpRate || 49} EGP)
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">

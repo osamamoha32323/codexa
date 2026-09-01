@@ -352,6 +352,32 @@ export const AppProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // USD to EGP Exchange Rate (Default: 49, with live auto-sync)
+  const [usdToEgpRate, setUsdToEgpRate] = useState(() => {
+    const savedRate = localStorage.getItem('codexa_usd_egp_rate');
+    return savedRate ? parseFloat(savedRate) : 49.0;
+  });
+
+  // Fetch live exchange rate from open API with fallback
+  useEffect(() => {
+    const fetchLiveRate = async () => {
+      try {
+        const res = await fetch('https://open.er-api.com/v6/latest/USD');
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.rates && data.rates.EGP) {
+            const liveRate = parseFloat(data.rates.EGP.toFixed(2));
+            setUsdToEgpRate(liveRate);
+            localStorage.setItem('codexa_usd_egp_rate', liveRate.toString());
+          }
+        }
+      } catch (err) {
+        console.log('Using stored/default USD to EGP exchange rate:', usdToEgpRate);
+      }
+    };
+    fetchLiveRate();
+  }, []);
+
   const [lang, setLang] = useState('ar');
 
   // Sync state to localStorage
@@ -431,6 +457,8 @@ export const AppProvider = ({ children }) => {
       quoteRequests,
       setQuoteRequests,
       addQuoteRequest,
+      usdToEgpRate,
+      setUsdToEgpRate,
       resetToDefaults,
       lang,
       setLang
