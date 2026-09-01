@@ -6,7 +6,8 @@ import {
   Save, Plus, Trash2, Edit3, ArrowLeft,
   ExternalLink, Layers, CheckCircle2, Shield, Eye, Database,
   Sparkles, Home, Briefcase, Phone, Settings, Info, Lock, LogOut, KeyRound, Mail, Check,
-  FileText, Calendar, DollarSign, User, MessageSquare, Tag, AlertCircle, Workflow, Cpu
+  FileText, Calendar, DollarSign, User, MessageSquare, Tag, AlertCircle, Workflow, Cpu,
+  Image, Upload, X
 } from 'lucide-react';
 
 const availableIcons = [
@@ -1284,145 +1285,230 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* CASE STUDY MODAL */}
+      {/* CASE STUDY MODAL (ENLARGED + IMAGE UPLOAD SUPPORT) */}
       {newProjectModal && editingProject && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-white/15 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-bold text-white">
-              {editingProject.id ? 'تعديل دراسة الحالة' : 'إضافة دراسة حالة جديدة'}
-            </h3>
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6">
+          <div className="bg-slate-900 border border-white/15 rounded-3xl max-w-4xl w-full p-6 sm:p-8 shadow-2xl space-y-6 max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div>
+                <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                  <Layers className="w-5 h-5 text-blue-400" />
+                  {editingProject.id ? 'تعديل دراسة الحالة والمشروع' : 'إضافة دراسة حالة جديدة'}
+                </h3>
+                <p className="text-xs text-slate-400 mt-1">
+                  قم برفع صورة المشروع وإدخال التفاصيل باللغتين العربية والإنجليزية.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNewProjectModal(false)}
+                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            <form onSubmit={handleSaveProject} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+            <form onSubmit={handleSaveProject} className="space-y-6">
+              {/* Title Fields */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">عنوان المشروع (English)</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">عنوان المشروع (English) *</label>
                   <input
                     type="text"
                     required
                     value={editingProject.titleEn}
                     onChange={(e) => setEditingProject({ ...editingProject, titleEn: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                    placeholder="Ryan Trading — Export Portal"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">عنوان المشروع (عربي)</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">عنوان المشروع (عربي) *</label>
                   <input
                     type="text"
                     dir="rtl"
                     required
                     value={editingProject.titleAr}
                     onChange={(e) => setEditingProject({ ...editingProject, titleAr: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+                    placeholder="ريان تريدنج — منصة وبوابة التصدير الدولية"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">التقنيات المستخدمة</label>
-                <input
-                  type="text"
-                  required
-                  value={editingProject.tech}
-                  onChange={(e) => setEditingProject({ ...editingProject, tech: e.target.value })}
-                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
-                  placeholder="Laravel, React, MySQL"
-                />
+              {/* IMAGE UPLOAD & PREVIEW SECTION */}
+              <div className="p-4 rounded-2xl bg-slate-950/80 border border-white/10 space-y-4">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-blue-400 flex items-center gap-2">
+                    <Image className="w-4 h-4" /> صورة المشروع (Project Image)
+                  </label>
+                  <span className="text-[11px] text-slate-400">
+                    يمكنك رفع صورة من جهازك أو وضع رابط
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                  {/* Image Preview Box */}
+                  <div className="sm:col-span-4 bg-slate-900 border border-white/10 rounded-2xl h-40 flex items-center justify-center overflow-hidden relative group">
+                    {editingProject.image ? (
+                      <img
+                        src={editingProject.image}
+                        alt="Project Preview"
+                        className="w-full h-full object-cover rounded-2xl"
+                      />
+                    ) : (
+                      <div className="text-center p-3 text-slate-500">
+                        <Image className="w-8 h-8 mx-auto mb-1 opacity-40" />
+                        <span className="text-[11px]">لا توجد صورة محددة</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Upload Actions */}
+                  <div className="sm:col-span-8 space-y-3">
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">
+                        1. رفع صورة مباشرة من جهازك (ملف JPG, PNG, WebP):
+                      </label>
+                      <label className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 text-blue-400 rounded-xl cursor-pointer text-xs font-bold transition-all hover:scale-[1.01] active:scale-[0.99]">
+                        <Upload className="w-4 h-4" />
+                        <span>اختر صورة من جهاز الكمبيوتر</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setEditingProject({ ...editingProject, image: reader.result });
+                              };
+                              reader.readAsDataURL(file);
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">
+                        2. أو أدخل رابط الصورة يدوياً (URL / Path):
+                      </label>
+                      <input
+                        type="text"
+                        value={editingProject.image || ''}
+                        onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
+                        className="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono"
+                        placeholder="/projects/export.png أو https://..."
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">مسار أو رابط الصورة</label>
-                <input
-                  type="text"
-                  required
-                  value={editingProject.image}
-                  onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
-                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
-                  placeholder="/projects/export.png"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">رابط المشروع المباشر</label>
-                <input
-                  type="text"
-                  value={editingProject.url}
-                  onChange={(e) => setEditingProject({ ...editingProject, url: e.target.value })}
-                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
-                  placeholder="https://..."
-                />
+              {/* Tech & URL */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">التقنيات المستخدمة (مفصولة بفاصلة)</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingProject.tech}
+                    onChange={(e) => setEditingProject({ ...editingProject, tech: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono"
+                    placeholder="Laravel, React, MySQL, Tailwind"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">رابط المشروع المباشر (Live URL)</label>
+                  <input
+                    type="text"
+                    value={editingProject.url}
+                    onChange={(e) => setEditingProject({ ...editingProject, url: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 font-mono"
+                    placeholder="https://example.com"
+                  />
+                </div>
               </div>
 
               {/* Challenge */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">التحدي التجاري (EN)</label>
+                  <label className="block text-xs font-semibold text-amber-400 mb-1.5">التحدي التجاري (EN Challenge) *</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     required
                     value={editingProject.challengeEn}
                     onChange={(e) => setEditingProject({ ...editingProject, challengeEn: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 leading-relaxed"
+                    placeholder="Describe the business challenge..."
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">التحدي التجاري (عربي)</label>
+                  <label className="block text-xs font-semibold text-amber-400 mb-1.5">التحدي التجاري (عربي) *</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     dir="rtl"
                     required
                     value={editingProject.challengeAr}
                     onChange={(e) => setEditingProject({ ...editingProject, challengeAr: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 leading-relaxed"
+                    placeholder="اشرح التحدي الذي كان يواجهه العميل..."
                   />
                 </div>
               </div>
 
               {/* Solution */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">الحل البرمجي (EN)</label>
+                  <label className="block text-xs font-semibold text-blue-400 mb-1.5">الحل البرمجي (EN Solution) *</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     required
                     value={editingProject.solutionEn}
                     onChange={(e) => setEditingProject({ ...editingProject, solutionEn: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 leading-relaxed"
+                    placeholder="Explain the technical solution..."
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">الحل البرمجي (عربي)</label>
+                  <label className="block text-xs font-semibold text-blue-400 mb-1.5">الحل البرمجي (عربي) *</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     dir="rtl"
                     required
                     value={editingProject.solutionAr}
                     onChange={(e) => setEditingProject({ ...editingProject, solutionAr: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 leading-relaxed"
+                    placeholder="اشرح كيف قمنا بحل المشكلة وتطوير النظام..."
                   />
                 </div>
               </div>
 
               {/* Result */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">النتيجة والأثر (EN)</label>
+                  <label className="block text-xs font-semibold text-emerald-400 mb-1.5">النتيجة والقيمة المضافة (EN Result) *</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     required
                     value={editingProject.resultEn}
                     onChange={(e) => setEditingProject({ ...editingProject, resultEn: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 leading-relaxed"
+                    placeholder="State the outcome and measurable ROI..."
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">النتيجة والأثر (عربي)</label>
+                  <label className="block text-xs font-semibold text-emerald-400 mb-1.5">النتيجة والقيمة المضافة (عربي) *</label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     dir="rtl"
                     required
                     value={editingProject.resultAr}
                     onChange={(e) => setEditingProject({ ...editingProject, resultAr: e.target.value })}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500 leading-relaxed"
+                    placeholder="النتائج التي حققها المشروع للعميل..."
                   />
                 </div>
               </div>
@@ -1431,15 +1517,15 @@ export default function AdminPage() {
                 <button
                   type="button"
                   onClick={() => setNewProjectModal(false)}
-                  className="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold"
+                  className="px-6 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 text-xs font-bold transition-colors"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/20"
+                  className="px-8 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/25 flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
-                  حفظ دراسة الحالة
+                  <Save className="w-4 h-4" /> حفظ دراسة الحالة
                 </button>
               </div>
             </form>
