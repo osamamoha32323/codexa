@@ -5,7 +5,8 @@ import {
   Building2, Factory, Globe, LayoutDashboard, ShoppingCart, Code2,
   Save, Plus, Trash2, Edit3, ArrowLeft,
   ExternalLink, Layers, CheckCircle2, Shield, Eye, Database,
-  Sparkles, Home, Briefcase, Phone, Settings, Info, Lock, LogOut, KeyRound, Mail, Check
+  Sparkles, Home, Briefcase, Phone, Settings, Info, Lock, LogOut, KeyRound, Mail, Check,
+  FileText, Calendar, DollarSign, User, MessageSquare, Tag, AlertCircle, Workflow, Cpu
 } from 'lucide-react';
 
 const availableIcons = [
@@ -24,12 +25,16 @@ export default function AdminPage() {
     updateAllContent,
     services,
     setServices,
+    workflow,
+    setWorkflow,
     projects,
     setProjects,
-    skills,
-    setSkills,
+    techCategories,
+    setTechCategories,
     reasons,
     setReasons,
+    quoteRequests,
+    setQuoteRequests,
   } = useContext(AppContext);
 
   // Authentication State
@@ -59,7 +64,7 @@ export default function AdminPage() {
   const [passChangeSuccess, setPassChangeSuccess] = useState('');
   const [passChangeError, setPassChangeError] = useState('');
 
-  const [activeTab, setActiveTab] = useState('hero');
+  const [activeTab, setActiveTab] = useState('proposals');
   const [saveToast, setSaveToast] = useState(false);
 
   // Local draft state for form fields to enable the explicit Save Button
@@ -77,12 +82,15 @@ export default function AdminPage() {
   const [editingProject, setEditingProject] = useState(null);
   const [newProjectModal, setNewProjectModal] = useState(false);
 
-  // Skills input
-  const [newSkillText, setNewSkillText] = useState('');
+  // Tech Category State
+  const [selectedCatIdx, setSelectedCatIdx] = useState(0);
+  const [newTechItem, setNewTechItem] = useState('');
 
   // Reasons input
-  const [newReasonEn, setNewReasonEn] = useState('');
-  const [newReasonAr, setNewReasonAr] = useState('');
+  const [newReasonTitleEn, setNewReasonTitleEn] = useState('');
+  const [newReasonTitleAr, setNewReasonTitleAr] = useState('');
+  const [newReasonDescEn, setNewReasonDescEn] = useState('');
+  const [newReasonDescAr, setNewReasonDescAr] = useState('');
 
   const triggerToast = (msg = 'تم حفظ التعديلات بنجاح!') => {
     setSaveToast(msg);
@@ -143,6 +151,14 @@ export default function AdminPage() {
     triggerToast('تم تحديث كلمة المرور بنجاح!');
   };
 
+  // --- Proposal Requests Management ---
+  const handleDeleteProposal = (id) => {
+    if (window.confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
+      setQuoteRequests(prev => prev.filter(req => req.id !== id));
+      triggerToast('تم حذف الطلب');
+    }
+  };
+
   // --- Project CRUD ---
   const handleSaveProject = (e) => {
     e.preventDefault();
@@ -185,30 +201,56 @@ export default function AdminPage() {
     }
   };
 
-  // --- Skill CRUD ---
-  const handleAddSkill = () => {
-    if (newSkillText.trim() && !skills.includes(newSkillText.trim())) {
-      setSkills(prev => [...prev, newSkillText.trim()]);
-      setNewSkillText('');
-      triggerToast('تمت إضافة المهارة');
+  // --- Tech Categories (Skills) CRUD ---
+  const handleAddTechItem = () => {
+    if (newTechItem.trim()) {
+      setTechCategories(prev => {
+        const updated = [...prev];
+        if (!updated[selectedCatIdx].items.includes(newTechItem.trim())) {
+          updated[selectedCatIdx] = {
+            ...updated[selectedCatIdx],
+            items: [...updated[selectedCatIdx].items, newTechItem.trim()]
+          };
+        }
+        return updated;
+      });
+      setNewTechItem('');
+      triggerToast('تمت إضافة التقنية بنجاح');
     }
   };
 
-  const handleDeleteSkill = (skillToDelete) => {
-    setSkills(prev => prev.filter(s => s !== skillToDelete));
-    triggerToast('تمت إزالة المهارة');
+  const handleDeleteTechItem = (catIdx, itemToDelete) => {
+    setTechCategories(prev => {
+      const updated = [...prev];
+      updated[catIdx] = {
+        ...updated[catIdx],
+        items: updated[catIdx].items.filter(it => it !== itemToDelete)
+      };
+      return updated;
+    });
+    triggerToast('تم حذف التقنية');
   };
 
   // --- Reasons CRUD ---
   const handleAddReason = () => {
-    if (newReasonEn.trim() || newReasonAr.trim()) {
+    if (newReasonTitleAr.trim() || newReasonTitleEn.trim()) {
+      const newNum = String((reasons.length + 1)).padStart(2, '0');
       setReasons(prev => [
         ...prev,
-        { id: Date.now(), en: newReasonEn.trim(), ar: newReasonAr.trim() }
+        {
+          id: Date.now(),
+          num: newNum,
+          titleEn: newReasonTitleEn.trim() || 'Custom Advantage',
+          titleAr: newReasonTitleAr.trim() || 'ميزة مخصصة',
+          en: newReasonDescEn.trim(),
+          ar: newReasonDescAr.trim()
+        }
       ]);
-      setNewReasonEn('');
-      setNewReasonAr('');
-      triggerToast('تمت إضافة الميزة');
+      setNewReasonTitleEn('');
+      setNewReasonTitleAr('');
+      setNewReasonDescEn('');
+      setNewReasonDescAr('');
+      triggerToast('تمت إضافة الميزة بنجاح');
     }
   };
 
@@ -218,11 +260,17 @@ export default function AdminPage() {
   };
 
   const navTabs = [
+    {
+      id: 'proposals',
+      label: 'طلبات عروض الأسعار (Proposals)',
+      icon: <FileText className="w-4 h-4 text-emerald-400" />,
+      badge: quoteRequests?.length || 0
+    },
     { id: 'hero', label: 'الرئيسية والهيدر', icon: <Home className="w-4 h-4" /> },
     { id: 'about', label: 'من نحن (About Us)', icon: <Info className="w-4 h-4" /> },
     { id: 'services', label: 'الخدمات (Services)', icon: <Briefcase className="w-4 h-4" /> },
-    { id: 'projects', label: 'المشاريع (Projects)', icon: <Layers className="w-4 h-4" /> },
-    { id: 'skills', label: 'المهارات والمميزات', icon: <Sparkles className="w-4 h-4" /> },
+    { id: 'projects', label: 'المشاريع ودراسات الحالة', icon: <Layers className="w-4 h-4" /> },
+    { id: 'skills', label: 'المهارات والمميزات (Tech & Why Us)', icon: <Sparkles className="w-4 h-4" /> },
     { id: 'contact', label: 'التواصل والفوتر', icon: <Phone className="w-4 h-4" /> },
     { id: 'security', label: 'إعدادات الأمان والباسورد', icon: <KeyRound className="w-4 h-4" /> },
   ];
@@ -231,7 +279,6 @@ export default function AdminPage() {
   if (!isLoggedIn) {
     return (
       <div className="min-h-screen bg-[#080d1a] flex items-center justify-center p-6 text-white font-sans relative overflow-hidden selection:bg-blue-600">
-        {/* Background glow effects */}
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
 
         <div className="max-w-md w-full bg-slate-900/80 border border-white/10 rounded-3xl p-8 backdrop-blur-xl shadow-2xl relative z-10">
@@ -252,17 +299,15 @@ export default function AdminPage() {
           <form onSubmit={handleLogin} className="space-y-4" dir="rtl">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5 text-right">البريد الإلكتروني</label>
-              <div className="relative">
-                <input
-                  type="email"
-                  required
-                  dir="ltr"
-                  value={loginEmail}
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  placeholder="ادخل البريد الإلكتروني..."
-                  className="w-full bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors"
-                />
-              </div>
+              <input
+                type="email"
+                required
+                dir="ltr"
+                value={loginEmail}
+                onChange={(e) => setLoginEmail(e.target.value)}
+                placeholder="ادخل البريد الإلكتروني..."
+                className="w-full bg-slate-950/80 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500 transition-colors"
+              />
             </div>
 
             <div>
@@ -363,20 +408,27 @@ export default function AdminPage() {
         <aside className="md:col-span-1 space-y-2">
           <div className="bg-slate-900/60 border border-white/10 rounded-2xl p-3 backdrop-blur-sm sticky top-24">
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 py-2">
-              أقسام الموقع
+              لوحة التحكم
             </p>
             {navTabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                   activeTab === tab.id
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 font-bold'
                     : 'text-slate-400 hover:text-white hover:bg-white/5'
                 }`}
               >
-                {tab.icon}
-                <span>{tab.label}</span>
+                <div className="flex items-center gap-3">
+                  {tab.icon}
+                  <span className="text-xs">{tab.label}</span>
+                </div>
+                {tab.badge !== undefined && tab.badge > 0 && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-slate-950">
+                    {tab.badge}
+                  </span>
+                )}
               </button>
             ))}
 
@@ -394,6 +446,101 @@ export default function AdminPage() {
         {/* Right Content Editor */}
         <main className="md:col-span-3 space-y-6">
           
+          {/* TAB: PROPOSALS (REQUEST A PROJECT PROPOSAL INBOX) */}
+          {activeTab === 'proposals' && (
+            <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm space-y-6">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-emerald-400" /> طلبات المشاريع (Project Proposals Inbox)
+                  </h2>
+                  <p className="text-slate-400 text-xs mt-1">
+                    قائمة بجميع العملاء والشركات الذين قاموا بملء نموذج "Request a Project Proposal" من الموقع.
+                  </p>
+                </div>
+                <span className="px-3 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold rounded-xl">
+                  {quoteRequests?.length || 0} طلب
+                </span>
+              </div>
+
+              {(!quoteRequests || quoteRequests.length === 0) ? (
+                <div className="p-12 text-center rounded-2xl bg-slate-950/60 border border-white/5 space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-white/5 text-slate-500 flex items-center justify-center mx-auto">
+                    <MessageSquare className="w-6 h-6" />
+                  </div>
+                  <h4 className="text-sm font-bold text-slate-300">لا توجد طلبات جديدة حتى الآن</h4>
+                  <p className="text-xs text-slate-500 max-w-sm mx-auto">
+                    بمجرد أن يقوم أي زائر بملء نموذج "أخبرنا عن مشروعك"، ستظهر بياناته هنا فوراً.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {quoteRequests.map((req) => (
+                    <div
+                      key={req.id}
+                      className="p-5 rounded-2xl bg-slate-950 border border-white/10 hover:border-blue-500/30 transition-all space-y-4"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">
+                            {req.name ? req.name.charAt(0).toUpperCase() : 'U'}
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-white">{req.name}</h4>
+                            <p className="text-xs text-slate-400">{req.company || 'فردي / بدون شركة'}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] text-slate-500 flex items-center gap-1 font-mono">
+                            <Calendar className="w-3 h-3" /> {req.date || 'اليوم'}
+                          </span>
+                          <button
+                            onClick={() => handleDeleteProposal(req.id)}
+                            className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                            title="حذف الطلب"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Details & Specs */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                        <div className="p-3 bg-slate-900/80 rounded-xl border border-white/5">
+                          <span className="text-slate-500 block mb-1">البريد الإلكتروني:</span>
+                          <a href={`mailto:${req.email}`} className="font-mono text-blue-400 hover:underline">
+                            {req.email}
+                          </a>
+                        </div>
+                        <div className="p-3 bg-slate-900/80 rounded-xl border border-white/5">
+                          <span className="text-slate-500 block mb-1">الهاتف / WhatsApp:</span>
+                          <a href={`https://wa.me/${req.phone?.replace(/[^0-9]/g, '')}`} target="_blank" rel="noreferrer" className="font-mono text-emerald-400 hover:underline">
+                            {req.phone}
+                          </a>
+                        </div>
+                        <div className="p-3 bg-slate-900/80 rounded-xl border border-white/5">
+                          <span className="text-slate-500 block mb-1">نوع المشروع:</span>
+                          <span className="font-bold text-white">{req.projectType}</span>
+                        </div>
+                        <div className="p-3 bg-slate-900/80 rounded-xl border border-white/5">
+                          <span className="text-slate-500 block mb-1">الميزانية التقديرية:</span>
+                          <span className="font-bold text-emerald-400 font-mono">{req.budget}</span>
+                        </div>
+                      </div>
+
+                      {/* Project Description */}
+                      <div className="p-3.5 bg-slate-900/50 rounded-xl border border-white/5 text-xs text-slate-300">
+                        <span className="text-slate-400 font-bold block mb-1">تفاصيل المشروع والطلب:</span>
+                        <p className="leading-relaxed whitespace-pre-line">{req.details}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
           {/* TAB: HERO & GENERAL */}
           {activeTab === 'hero' && (
             <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm space-y-6">
@@ -508,49 +655,6 @@ export default function AdminPage() {
                     />
                   </div>
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">زر المشاريع (EN / عربي)</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="text"
-                        value={formContent.heroBtnProjectsEn || ''}
-                        onChange={(e) => handleFieldChange('heroBtnProjectsEn', e.target.value)}
-                        className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                        placeholder="View Projects"
-                      />
-                      <input
-                        type="text"
-                        dir="rtl"
-                        value={formContent.heroBtnProjectsAr || ''}
-                        onChange={(e) => handleFieldChange('heroBtnProjectsAr', e.target.value)}
-                        className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                        placeholder="شاهد مشاريعنا"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">زر التواصل (EN / عربي)</label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <input
-                        type="text"
-                        value={formContent.heroBtnContactEn || ''}
-                        onChange={(e) => handleFieldChange('heroBtnContactEn', e.target.value)}
-                        className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                        placeholder="Contact Us"
-                      />
-                      <input
-                        type="text"
-                        dir="rtl"
-                        value={formContent.heroBtnContactAr || ''}
-                        onChange={(e) => handleFieldChange('heroBtnContactAr', e.target.value)}
-                        className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                        placeholder="تواصل معنا"
-                      />
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           )}
@@ -563,7 +667,7 @@ export default function AdminPage() {
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     <Info className="w-5 h-5 text-blue-400" /> قسم من نحن (About Us)
                   </h2>
-                  <p className="text-slate-400 text-xs mt-1">تعديل فقرات النبذة التعريفية والإحصائيات.</p>
+                  <p className="text-slate-400 text-xs mt-1">تعديل فقرات النبذة التعريفية ومحاور القيمة.</p>
                 </div>
                 <button
                   onClick={handleSaveAll}
@@ -616,67 +720,6 @@ export default function AdminPage() {
                   />
                 </div>
               </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">الفقرة 2 (English)</label>
-                  <textarea
-                    rows={4}
-                    value={formContent.aboutP2En || ''}
-                    onChange={(e) => handleFieldChange('aboutP2En', e.target.value)}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">الفقرة 2 (عربي)</label>
-                  <textarea
-                    rows={4}
-                    dir="rtl"
-                    value={formContent.aboutP2Ar || ''}
-                    onChange={(e) => handleFieldChange('aboutP2Ar', e.target.value)}
-                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-white/10 pt-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">شارة الإحصائية 1 (EN / عربي)</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <input
-                      type="text"
-                      value={formContent.aboutStat1En || ''}
-                      onChange={(e) => handleFieldChange('aboutStat1En', e.target.value)}
-                      className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                    />
-                    <input
-                      type="text"
-                      dir="rtl"
-                      value={formContent.aboutStat1Ar || ''}
-                      onChange={(e) => handleFieldChange('aboutStat1Ar', e.target.value)}
-                      className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">شارة الإحصائية 2 (EN / عربي)</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <input
-                      type="text"
-                      value={formContent.aboutStat2En || ''}
-                      onChange={(e) => handleFieldChange('aboutStat2En', e.target.value)}
-                      className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                    />
-                    <input
-                      type="text"
-                      dir="rtl"
-                      value={formContent.aboutStat2Ar || ''}
-                      onChange={(e) => handleFieldChange('aboutStat2Ar', e.target.value)}
-                      className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           )}
 
@@ -688,7 +731,7 @@ export default function AdminPage() {
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
                     <Briefcase className="w-5 h-5 text-blue-400" /> إدارة الخدمات (Services)
                   </h2>
-                  <p className="text-slate-400 text-xs mt-1">إضافة وتعديل وحذف الخدمات المعروضة.</p>
+                  <p className="text-slate-400 text-xs mt-1">إضافة وتعديل وحذف الخدمات المعروضة وعبارات الـ CTA.</p>
                 </div>
                 <button
                   onClick={() => {
@@ -697,7 +740,9 @@ export default function AdminPage() {
                       titleAr: '',
                       descEn: '',
                       descAr: '',
-                      icon: 'Code2'
+                      icon: 'Code2',
+                      ctaEn: 'Start Project →',
+                      ctaAr: 'ابدأ مشروعك ←'
                     });
                     setNewServiceModal(true);
                   }}
@@ -744,23 +789,29 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* TAB: PROJECTS */}
+          {/* TAB: PROJECTS (CASE STUDIES) */}
           {activeTab === 'projects' && (
             <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm space-y-6">
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Layers className="w-5 h-5 text-blue-400" /> مشاريع البورتفوليو (Portfolio)
+                    <Layers className="w-5 h-5 text-blue-400" /> مشاريع ودراسات الحالة (Case Studies)
                   </h2>
-                  <p className="text-slate-400 text-xs mt-1">إضافة وتعديل وحذف مشاريع سابقة وروابطها.</p>
+                  <p className="text-slate-400 text-xs mt-1">إضافة وتعديل دراسات الحالة المفصلة (التحدي، الحل، والنتيجة).</p>
                 </div>
                 <button
                   onClick={() => {
                     setEditingProject({
                       titleEn: '',
                       titleAr: '',
-                      descriptionEn: '',
-                      descriptionAr: '',
+                      subtitleEn: '',
+                      subtitleAr: '',
+                      challengeEn: '',
+                      challengeAr: '',
+                      solutionEn: '',
+                      solutionAr: '',
+                      resultEn: '',
+                      resultAr: '',
                       tech: 'Laravel, MySQL, React',
                       image: '/projects/accounting.png',
                       url: '#'
@@ -769,47 +820,51 @@ export default function AdminPage() {
                   }}
                   className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-colors shadow-lg shadow-blue-600/20"
                 >
-                  <Plus className="w-4 h-4" /> إضافة مشروع جديد
+                  <Plus className="w-4 h-4" /> إضافة دراسة حالة جديدة
                 </button>
               </div>
 
               {/* Projects Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-4">
                 {projects.map((project) => (
-                  <div key={project.id} className="bg-slate-950 border border-white/10 rounded-2xl overflow-hidden hover:border-blue-500/30 transition-all flex flex-col justify-between">
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-xs text-blue-400 font-mono bg-blue-500/10 px-2 py-0.5 rounded">
-                          {project.tech}
-                        </span>
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => {
-                              setEditingProject(project);
-                              setNewProjectModal(true);
-                            }}
-                            className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
-                          >
-                            <Edit3 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteProject(project.id)}
-                            className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
+                  <div key={project.id} className="bg-slate-950 border border-white/10 rounded-2xl p-5 hover:border-blue-500/30 transition-all flex flex-col justify-between space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-bold text-white text-base">{project.titleEn}</h4>
+                        <p className="text-xs text-slate-400 font-arabic">{project.titleAr}</p>
                       </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setEditingProject(project);
+                            setNewProjectModal(true);
+                          }}
+                          className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition-colors"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProject(project.id)}
+                          className="p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
 
-                      <h4 className="font-bold text-white text-base">{project.titleEn}</h4>
-                      <p className="text-xs text-slate-400 font-arabic">{project.titleAr}</p>
-                      <p className="text-xs text-slate-300 mt-2 line-clamp-2">{project.descriptionEn}</p>
-                      
-                      {project.url && project.url !== '#' && (
-                        <a href={project.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-blue-400 hover:underline mt-3">
-                          <ExternalLink className="w-3 h-3" /> {project.url}
-                        </a>
-                      )}
+                    <div className="text-xs text-slate-300 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="p-2.5 rounded-lg bg-slate-900 border border-white/5">
+                        <span className="font-bold text-amber-400 block mb-1">التحدي:</span>
+                        <p className="line-clamp-2 text-slate-400">{project.challengeAr || project.challengeEn}</p>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-slate-900 border border-white/5">
+                        <span className="font-bold text-blue-400 block mb-1">الحل:</span>
+                        <p className="line-clamp-2 text-slate-400">{project.solutionAr || project.solutionEn}</p>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-slate-900 border border-white/5">
+                        <span className="font-bold text-emerald-400 block mb-1">النتيجة:</span>
+                        <p className="line-clamp-2 text-slate-400">{project.resultAr || project.resultEn}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -817,15 +872,19 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* TAB: SKILLS & REASONS */}
+          {/* TAB: TECH STACK & REASONS (المهارات والمميزات) */}
           {activeTab === 'skills' && (
-            <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm space-y-8">
-              {/* Technical Arsenal */}
+            <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm space-y-10">
+              
+              {/* 1. Categorized Technology Stack Management */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-blue-400" /> المهارات والتقنيات (Skills)
-                  </h2>
+                  <div>
+                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                      <Cpu className="w-5 h-5 text-blue-400" /> البنية التكنولوجية (Technology Stack)
+                    </h2>
+                    <p className="text-slate-400 text-xs mt-1">إضافة وحذف التقنيات مصنفة حسب الأقسام (Backend, Frontend, Security, Engineering).</p>
+                  </div>
                   <button
                     onClick={handleSaveAll}
                     className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-md transition-colors"
@@ -833,70 +892,125 @@ export default function AdminPage() {
                     <Save className="w-3.5 h-3.5" /> حفظ
                   </button>
                 </div>
-                
-                <div className="flex gap-2">
+
+                {/* Category Selection Tabs */}
+                <div className="flex flex-wrap gap-2 pt-2">
+                  {techCategories.map((cat, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedCatIdx(idx)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                        selectedCatIdx === idx
+                          ? 'bg-blue-600 text-white shadow-md'
+                          : 'bg-slate-950 text-slate-400 hover:text-white border border-white/10'
+                      }`}
+                    >
+                      {cat.categoryAr} ({cat.items.length})
+                    </button>
+                  ))}
+                </div>
+
+                {/* Add new technology input */}
+                <div className="flex gap-2 pt-2">
                   <input
                     type="text"
-                    value={newSkillText}
-                    onChange={(e) => setNewSkillText(e.target.value)}
-                    placeholder="أضف تقنية (مثال: Next.js, Redis, Docker)..."
-                    className="flex-1 bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500"
-                    onKeyDown={(e) => { if (e.key === 'Enter') handleAddSkill(); }}
+                    value={newTechItem}
+                    onChange={(e) => setNewTechItem(e.target.value)}
+                    placeholder={`أضف تقنية جديدة لقسم ${techCategories[selectedCatIdx]?.categoryAr}...`}
+                    className="flex-1 bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500"
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleAddTechItem(); }}
                   />
                   <button
-                    onClick={handleAddSkill}
+                    onClick={handleAddTechItem}
                     className="px-5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-colors"
                   >
-                    إضافة
+                    إضافة تقنية
                   </button>
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {skills.map((skill, idx) => (
-                    <span key={idx} className="px-3 py-1.5 rounded-xl bg-slate-950 border border-white/10 text-xs text-slate-200 flex items-center gap-2">
-                      {skill}
-                      <button onClick={() => handleDeleteSkill(skill)} className="text-slate-500 hover:text-red-400 font-bold">
-                        &times;
-                      </button>
-                    </span>
-                  ))}
+                {/* Display Current Category Items */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-white/10 space-y-3">
+                  <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                    التقنيات الحالية في {techCategories[selectedCatIdx]?.categoryAr}:
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {techCategories[selectedCatIdx]?.items.map((item, itemIdx) => (
+                      <span key={itemIdx} className="px-3 py-1.5 rounded-xl bg-slate-900 border border-white/10 text-xs text-slate-200 flex items-center gap-2 font-mono">
+                        {item}
+                        <button
+                          onClick={() => handleDeleteTechItem(selectedCatIdx, item)}
+                          className="text-slate-500 hover:text-red-400 font-bold ml-1"
+                        >
+                          &times;
+                        </button>
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Why Choose Us Reasons */}
-              <div className="border-t border-white/10 pt-6 space-y-4">
-                <h3 className="text-base font-bold text-white">لماذا تختارنا؟ (ميزات وأسباب الاختيار)</h3>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  <input
-                    type="text"
-                    value={newReasonEn}
-                    onChange={(e) => setNewReasonEn(e.target.value)}
-                    placeholder="نقطة الميزة بالإنجليزية..."
-                    className="bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-xs text-white"
-                  />
-                  <input
-                    type="text"
-                    dir="rtl"
-                    value={newReasonAr}
-                    onChange={(e) => setNewReasonAr(e.target.value)}
-                    placeholder="نقطة الميزة بالعربية..."
-                    className="bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-xs text-white"
-                  />
+              {/* 2. Why Choose Us (المميزات وأسباب الاختيار) */}
+              <div className="border-t border-white/10 pt-8 space-y-6">
+                <div>
+                  <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-amber-400" /> لماذا تختارنا؟ (ميزات وأسباب الاختيار)
+                  </h3>
+                  <p className="text-slate-400 text-xs mt-1">تعديل وإضافة ركائز ومزايا العمل مع Codexa.</p>
                 </div>
-                <button
-                  onClick={handleAddReason}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-colors"
-                >
-                  <Plus className="w-3.5 h-3.5 inline mr-1" /> إضافة ميزة
-                </button>
 
-                <div className="space-y-2 pt-2">
+                {/* Add new reason form */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-white/10 space-y-3">
+                  <h4 className="text-xs font-bold text-slate-300">إضافة ميزة جديدة:</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      value={newReasonTitleEn}
+                      onChange={(e) => setNewReasonTitleEn(e.target.value)}
+                      placeholder="عنوان الميزة (English)..."
+                      className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
+                    />
+                    <input
+                      type="text"
+                      dir="rtl"
+                      value={newReasonTitleAr}
+                      onChange={(e) => setNewReasonTitleAr(e.target.value)}
+                      placeholder="عنوان الميزة (عربي)..."
+                      className="bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <textarea
+                      rows={2}
+                      value={newReasonDescEn}
+                      onChange={(e) => setNewReasonDescEn(e.target.value)}
+                      placeholder="شرح الميزة (English)..."
+                      className="bg-slate-900 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    />
+                    <textarea
+                      rows={2}
+                      dir="rtl"
+                      value={newReasonDescAr}
+                      onChange={(e) => setNewReasonDescAr(e.target.value)}
+                      placeholder="شرح الميزة (عربي)..."
+                      className="bg-slate-900 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                    />
+                  </div>
+                  <button
+                    onClick={handleAddReason}
+                    className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition-colors"
+                  >
+                    <Plus className="w-3.5 h-3.5 inline mr-1" /> إضافة الميزة
+                  </button>
+                </div>
+
+                {/* Reasons List */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {reasons.map((r) => (
-                    <div key={r.id} className="p-3 rounded-xl bg-slate-950 border border-white/10 flex items-center justify-between gap-4">
-                      <div className="text-xs space-y-1">
-                        <p className="text-white font-medium">{r.en}</p>
-                        <p className="text-slate-400 font-arabic" dir="rtl">{r.ar}</p>
+                    <div key={r.id} className="p-4 rounded-xl bg-slate-950 border border-white/10 flex items-start justify-between gap-3">
+                      <div className="space-y-1 text-xs">
+                        <span className="font-mono text-blue-400 font-bold">{r.num || '•'}</span>
+                        <h5 className="font-bold text-white">{r.titleAr || r.titleEn}</h5>
+                        <p className="text-slate-400 leading-relaxed">{r.ar || r.en}</p>
                       </div>
                       <button
                         onClick={() => handleDeleteReason(r.id)}
@@ -908,6 +1022,7 @@ export default function AdminPage() {
                   ))}
                 </div>
               </div>
+
             </div>
           )}
 
@@ -1010,28 +1125,6 @@ export default function AdminPage() {
                     />
                   </div>
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">وصف الفوتر الفرعي (English)</label>
-                    <input
-                      type="text"
-                      value={formContent.footerTitleEn || ''}
-                      onChange={(e) => handleFieldChange('footerTitleEn', e.target.value)}
-                      className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-xs text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1.5">وصف الفوتر الفرعي (عربي)</label>
-                    <input
-                      type="text"
-                      dir="rtl"
-                      value={formContent.footerTitleAr || ''}
-                      onChange={(e) => handleFieldChange('footerTitleAr', e.target.value)}
-                      className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-xs text-white"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           )}
@@ -1059,16 +1152,6 @@ export default function AdminPage() {
               )}
 
               <form onSubmit={handleChangePassword} className="space-y-4 max-w-md">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">البريد الإلكتروني للإدارة</label>
-                  <input
-                    type="email"
-                    disabled
-                    value={adminEmail}
-                    className="w-full bg-slate-950/50 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400 cursor-not-allowed"
-                  />
-                </div>
-
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1.5">كلمة المرور الحالية</label>
                   <input
@@ -1201,38 +1284,41 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* PROJECT MODAL */}
+      {/* CASE STUDY MODAL */}
       {newProjectModal && editingProject && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-white/15 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+          <div className="bg-slate-900 border border-white/15 rounded-3xl max-w-xl w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
             <h3 className="text-lg font-bold text-white">
-              {editingProject.id ? 'تعديل المشروع' : 'إضافة مشروع جديد'}
+              {editingProject.id ? 'تعديل دراسة الحالة' : 'إضافة دراسة حالة جديدة'}
             </h3>
 
             <form onSubmit={handleSaveProject} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">عنوان المشروع (English)</label>
-                <input
-                  type="text"
-                  required
-                  value={editingProject.titleEn}
-                  onChange={(e) => setEditingProject({ ...editingProject, titleEn: e.target.value })}
-                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
-                />
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">عنوان المشروع (English)</label>
+                  <input
+                    type="text"
+                    required
+                    value={editingProject.titleEn}
+                    onChange={(e) => setEditingProject({ ...editingProject, titleEn: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">عنوان المشروع (عربي)</label>
+                  <input
+                    type="text"
+                    dir="rtl"
+                    required
+                    value={editingProject.titleAr}
+                    onChange={(e) => setEditingProject({ ...editingProject, titleAr: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
+                  />
+                </div>
               </div>
+
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">عنوان المشروع (عربي)</label>
-                <input
-                  type="text"
-                  dir="rtl"
-                  required
-                  value={editingProject.titleAr}
-                  onChange={(e) => setEditingProject({ ...editingProject, titleAr: e.target.value })}
-                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">التقنيات المستخدمة (مفصولة بفواصل)</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">التقنيات المستخدمة</label>
                 <input
                   type="text"
                   required
@@ -1242,19 +1328,21 @@ export default function AdminPage() {
                   placeholder="Laravel, React, MySQL"
                 />
               </div>
+
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">رابط أو مسار الصورة</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">مسار أو رابط الصورة</label>
                 <input
                   type="text"
                   required
                   value={editingProject.image}
                   onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
                   className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-sm text-white"
-                  placeholder="/projects/accounting.png أو رابط صورة"
+                  placeholder="/projects/export.png"
                 />
               </div>
+
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">رابط المشروع المباشر (اختياري)</label>
+                <label className="block text-xs font-semibold text-slate-300 mb-1">رابط المشروع المباشر</label>
                 <input
                   type="text"
                   value={editingProject.url}
@@ -1263,26 +1351,80 @@ export default function AdminPage() {
                   placeholder="https://..."
                 />
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">الوصف (English)</label>
-                <textarea
-                  rows={2}
-                  required
-                  value={editingProject.descriptionEn}
-                  onChange={(e) => setEditingProject({ ...editingProject, descriptionEn: e.target.value })}
-                  className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs text-white"
-                />
+
+              {/* Challenge */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">التحدي التجاري (EN)</label>
+                  <textarea
+                    rows={2}
+                    required
+                    value={editingProject.challengeEn}
+                    onChange={(e) => setEditingProject({ ...editingProject, challengeEn: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">التحدي التجاري (عربي)</label>
+                  <textarea
+                    rows={2}
+                    dir="rtl"
+                    required
+                    value={editingProject.challengeAr}
+                    onChange={(e) => setEditingProject({ ...editingProject, challengeAr: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">الوصف (عربي)</label>
-                <textarea
-                  rows={2}
-                  dir="rtl"
-                  required
-                  value={editingProject.descriptionAr}
-                  onChange={(e) => setEditingProject({ ...editingProject, descriptionAr: e.target.value })}
-                  className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-xs text-white"
-                />
+
+              {/* Solution */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">الحل البرمجي (EN)</label>
+                  <textarea
+                    rows={2}
+                    required
+                    value={editingProject.solutionEn}
+                    onChange={(e) => setEditingProject({ ...editingProject, solutionEn: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">الحل البرمجي (عربي)</label>
+                  <textarea
+                    rows={2}
+                    dir="rtl"
+                    required
+                    value={editingProject.solutionAr}
+                    onChange={(e) => setEditingProject({ ...editingProject, solutionAr: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              {/* Result */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">النتيجة والأثر (EN)</label>
+                  <textarea
+                    rows={2}
+                    required
+                    value={editingProject.resultEn}
+                    onChange={(e) => setEditingProject({ ...editingProject, resultEn: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">النتيجة والأثر (عربي)</label>
+                  <textarea
+                    rows={2}
+                    dir="rtl"
+                    required
+                    value={editingProject.resultAr}
+                    onChange={(e) => setEditingProject({ ...editingProject, resultAr: e.target.value })}
+                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-2.5 text-xs text-white"
+                  />
+                </div>
               </div>
 
               <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
@@ -1297,7 +1439,7 @@ export default function AdminPage() {
                   type="submit"
                   className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-lg shadow-blue-600/20"
                 >
-                  حفظ المشروع
+                  حفظ دراسة الحالة
                 </button>
               </div>
             </form>
