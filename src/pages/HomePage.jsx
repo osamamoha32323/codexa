@@ -306,29 +306,18 @@ export default function HomePage() {
 
     let finalBudgetText = '';
     if (budgetSelection === 'tier-1') {
-      finalBudgetText = currency === 'USD' 
-        ? `Under $500 (حوالي ${formatEgp(500)} ج.م)`
-        : `أقل من ${formatEgp(500)} ج.م (Under $500)`;
+      finalBudgetText = currency === 'USD' ? 'Under $500' : `أقل من ${formatEgp(500)} ج.م`;
     } else if (budgetSelection === 'tier-2') {
-      finalBudgetText = currency === 'USD'
-        ? `$500 – $1,500 (${formatEgp(500)} – ${formatEgp(1500)} ج.م)`
-        : `${formatEgp(500)} – ${formatEgp(1500)} ج.م ($500 – $1,500)`;
+      finalBudgetText = currency === 'USD' ? '$500 – $1,500' : `${formatEgp(500)} – ${formatEgp(1500)} ج.م`;
     } else if (budgetSelection === 'tier-3') {
-      finalBudgetText = currency === 'USD'
-        ? `$1,500 – $3,000 (${formatEgp(1500)} – ${formatEgp(3000)} ج.م)`
-        : `${formatEgp(1500)} – ${formatEgp(3000)} ج.م ($1,500 – $3,000)`;
+      finalBudgetText = currency === 'USD' ? '$1,500 – $3,000' : `${formatEgp(1500)} – ${formatEgp(3000)} ج.م`;
     } else if (budgetSelection === 'tier-4') {
-      finalBudgetText = currency === 'USD'
-        ? `$3,000+ (${formatEgp(3000)}+ ج.م)`
-        : `${formatEgp(3000)}+ ج.م ($3,000+)`;
+      finalBudgetText = currency === 'USD' ? '$3,000+' : `${formatEgp(3000)}+ ج.م`;
     } else if (budgetSelection === 'custom') {
       const numVal = parseFloat(customBudgetAmount) || 0;
-      if (currency === 'USD') {
-        finalBudgetText = `$${numVal.toLocaleString()} USD (${formatEgp(numVal)} ج.م)`;
-      } else {
-        const usdEquiv = (numVal / (usdToEgpRate || 49)).toFixed(1);
-        finalBudgetText = `${numVal.toLocaleString()} ج.م (حوالي $${usdEquiv} USD)`;
-      }
+      finalBudgetText = currency === 'USD'
+        ? `$${numVal.toLocaleString()} USD`
+        : `${numVal.toLocaleString()} جنيه مصري`;
     }
 
     addQuoteRequest({
@@ -1057,18 +1046,18 @@ export default function HomePage() {
                       >
                         {currency === 'USD' ? (
                           <>
-                            <option value="tier-1">Under $500 (≈ {formatEgp(500)} EGP)</option>
-                            <option value="tier-2">$500 – $1,500 (≈ {formatEgp(500)} – {formatEgp(1500)} EGP)</option>
-                            <option value="tier-3">$1,500 – $3,000 (≈ {formatEgp(1500)} – {formatEgp(3000)} EGP)</option>
-                            <option value="tier-4">$3,000+ (≈ {formatEgp(3000)}+ EGP)</option>
+                            <option value="tier-1">Under $500</option>
+                            <option value="tier-2">$500 – $1,500</option>
+                            <option value="tier-3">$1,500 – $3,000</option>
+                            <option value="tier-4">$3,000+</option>
                             <option value="custom">✍️ {isRtl ? 'أدخل ميزانية مخصصة...' : 'Enter custom budget...'}</option>
                           </>
                         ) : (
                           <>
-                            <option value="tier-1">أقل من {formatEgp(500)} ج.م (Under $500)</option>
-                            <option value="tier-2">{formatEgp(500)} – {formatEgp(1500)} ج.م ($500 – $1,500)</option>
-                            <option value="tier-3">{formatEgp(1500)} – {formatEgp(3000)} ج.م ($1,500 – $3,000)</option>
-                            <option value="tier-4">{formatEgp(3000)}+ ج.م ($3,000+)</option>
+                            <option value="tier-1">أقل من {formatEgp(500)} ج.م</option>
+                            <option value="tier-2">{formatEgp(500)} – {formatEgp(1500)} ج.م</option>
+                            <option value="tier-3">{formatEgp(1500)} – {formatEgp(3000)} ج.م</option>
+                            <option value="tier-4">{formatEgp(3000)}+ ج.م</option>
                             <option value="custom">✍️ {isRtl ? 'أدخل ميزانية مخصصة...' : 'Enter custom budget...'}</option>
                           </>
                         )}
