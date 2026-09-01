@@ -512,7 +512,7 @@ export default function HomePage() {
               </div>
               <div>
                 <p className="text-xs text-slate-400">{isRtl ? 'تطبيقات ويب مخصصة' : 'Custom Web Apps'}</p>
-                <p className="text-sm font-bold text-white">{isRtl ? 'بنية آمنة مبنية لـ Laravel' : 'Robust & Scalable Stack'}</p>
+                <p className="text-sm font-bold text-white">{isRtl ? 'بنية آمنة' : 'Secure Architecture'}</p>
               </div>
             </div>
           </motion.div>
