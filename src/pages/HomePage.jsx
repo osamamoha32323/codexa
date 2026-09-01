@@ -4,7 +4,9 @@ import { AppContext } from '../context/AppContext';
 import {
   Building2, Factory, Globe, LayoutDashboard, ShoppingCart, Code2,
   Mail, PhoneCall, MapPin, CheckCircle2, ArrowRight, ArrowLeft, ExternalLink,
-  Github, Linkedin, Twitter, Languages, Search, Menu, X
+  Github, Linkedin, Twitter, Languages, Search, Menu, X, Sparkles,
+  Shield, Check, MessageSquare, Send, ChevronRight, Layers, Cpu, Server, Terminal,
+  Workflow, ArrowUpRight, HelpCircle
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +20,7 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2
+      staggerChildren: 0.15
     }
   }
 };
@@ -92,35 +94,28 @@ const MatrixRain = () => {
 
     const rainDrops = [];
     for (let x = 0; x < columns; x++) {
-      rainDrops[x] = Math.random() * -100; // Start at different heights
+      rainDrops[x] = Math.random() * -100;
     }
 
     const draw = () => {
-      // Semi-transparent black to create trailing effect
-      ctx.fillStyle = 'rgba(2, 6, 23, 0.1)'; // Matches slate-950
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.1)';
       ctx.fillRect(0, 0, width, height);
-
       ctx.font = fontSize + 'px monospace';
 
       for (let i = 0; i < rainDrops.length; i++) {
-        // Random character
         const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-
-        // Varying green shades for depth
         const opacity = Math.random() * 0.5 + 0.5;
         ctx.fillStyle = `rgba(34, 197, 94, ${opacity})`;
-
         ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
 
         if (rainDrops[i] * fontSize > height && Math.random() > 0.975) {
           rainDrops[i] = 0;
         }
-        rainDrops[i] += 0.8; // Speed of falling
+        rainDrops[i] += 0.8;
       }
     };
 
     let interval = setInterval(draw, 30);
-
     const handleResize = () => {
       if (!canvas || !canvas.parentElement) return;
       width = canvas.width = window.innerWidth;
@@ -134,7 +129,6 @@ const MatrixRain = () => {
     };
 
     window.addEventListener('resize', handleResize);
-
     return () => {
       clearInterval(interval);
       window.removeEventListener('resize', handleResize);
@@ -146,9 +140,7 @@ const MatrixRain = () => {
       <div className="absolute inset-0 opacity-40">
         <canvas ref={canvasRef} className="w-full h-full" />
       </div>
-      {/* Radial gradient overlay to focus attention on the center */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.8)_100%)]"></div>
-      {/* Bottom fade */}
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950 to-transparent"></div>
     </div>
   );
@@ -159,14 +151,28 @@ export default function HomePage() {
     content, 
     projects, 
     services, 
-    skills, 
+    workflow,
+    techCategories, 
     reasons, 
     lang, 
     setLang, 
-    addMessage 
+    addQuoteRequest
   } = useContext(AppContext);
+
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  // Quote Form State
+  const [quoteForm, setQuoteForm] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    projectType: 'Company Website',
+    budget: '$500 - $1,500',
+    details: ''
+  });
+  const [quoteSent, setQuoteSent] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -175,6 +181,7 @@ export default function HomePage() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
@@ -192,64 +199,81 @@ export default function HomePage() {
     navLogo: content.navLogo || "Codexa",
     navAbout: isRtl ? (content.navAboutAr || "من نحن") : (content.navAboutEn || "About Us"),
     navServices: isRtl ? (content.navServicesAr || "الخدمات") : (content.navServicesEn || "Services"),
-    navProjects: isRtl ? (content.navProjectsAr || "المشاريع") : (content.navProjectsEn || "Projects"),
-    navTalk: isRtl ? (content.navTalkAr || "تواصل معنا") : (content.navTalkEn || "Contact Us"),
+    navProcess: isRtl ? (content.navProcessAr || "طريقة العمل") : (content.navProcessEn || "How We Work"),
+    navProjects: isRtl ? (content.navProjectsAr || "أعمالنا") : (content.navProjectsEn || "Case Studies"),
+    navTalk: isRtl ? (content.navTalkAr || "ابدأ مشروعك") : (content.navTalkEn || "Start a Project"),
 
     // Hero
-    heroBadge: isRtl ? (content.heroBadgeAr || "شركة حلول برمجية وأنظمة أعمال") : (content.heroBadgeEn || "Software House & Business Systems"),
-    heroTitle1: isRtl ? (content.heroTitle1Ar || "مرحباً، نحن Codexa.") : (content.heroTitle1En || "Hi, We are Codexa."),
-    heroTitle2: isRtl ? (content.heroTitle2Ar || "نبني حلولاً رقمية.") : (content.heroTitle2En || "We build digital solutions."),
+    heroBadge: isRtl ? (content.heroBadgeAr || "شركة حلول برمجية وأنظمة أعمال") : (content.heroBadgeEn || "Software House · Business Systems & Web Solutions"),
+    heroTitle1: isRtl ? (content.heroTitle1Ar || "نبني مواقع وأنظمة") : (content.heroTitle1En || "We Build Websites & Systems That"),
+    heroTitle2: isRtl ? (content.heroTitle2Ar || "تساعد شركتك على النمو.") : (content.heroTitle2En || "Help Your Business Scale & Grow."),
     heroIntro: isRtl
-      ? (content.heroIntroAr || "نقوم ببناء مواقع احترافية وأنظمة أعمال مخصصة للشركات والمصانع وشركات التصدير.")
-      : (content.heroIntroEn || "We build professional websites and custom business systems for companies, factories, and export businesses."),
-    heroBtnProjects: isRtl ? (content.heroBtnProjectsAr || "شاهد مشاريعنا") : (content.heroBtnProjectsEn || "View Our Projects"),
-    heroBtnContact: isRtl ? (content.heroBtnContactAr || "تواصل معنا") : (content.heroBtnContactEn || "Contact Us"),
+      ? (content.heroIntroAr || "نطور مواقع الشركات، الأنظمة الداخلية، منصات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة — مصممة بدقة حسب طبيعة واحتياجات عملك اليومية.")
+      : (content.heroIntroEn || "We develop corporate websites, internal business systems, export trading portals, admin dashboards, and custom Laravel web applications — engineered specifically around your real-world workflow."),
+    heroBtnProjects: isRtl ? (content.heroBtnProjectsAr || "شاهد أعمالنا") : (content.heroBtnProjectsEn || "Explore Our Work"),
+    heroBtnContact: isRtl ? (content.heroBtnContactAr || "ابدأ مشروعك") : (content.heroBtnContactEn || "Start Your Project"),
 
     // About
-    aboutTitle: isRtl ? (content.aboutTitleAr || "من نحن") : (content.aboutTitleEn || "About Us"),
-    aboutP1: isRtl ? (content.aboutP1Ar || "نحن شركة تطوير برمجيات نركز على بناء حلول حقيقية للشركات. نتخصص في إنشاء مواقع الشركات، أنظمة المصانع، بوابات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة.")
-      : (content.aboutP1En || "We are a software development agency focused on building real solutions for businesses. We specialize in creating powerful company websites, factory systems, export business portals, admin dashboards, and robust custom web applications."),
+    aboutBadge: isRtl ? (content.aboutBadgeAr || "من نحن") : (content.aboutBadgeEn || "Who We Are"),
+    aboutTitle: isRtl ? (content.aboutTitleAr || "نساعد الشركات والمصانع على تحويل احتياجاتهم اليومية إلى حلول رقمية عملية.") : (content.aboutTitleEn || "Transforming Daily Business Needs Into High-Performance Digital Solutions."),
+    aboutP1: isRtl ? (content.aboutP1Ar || "نحن في Codexa نساعد الشركات والمصانع وأصحاب الأعمال على تحويل احتياجاتهم اليومية إلى حلول رقمية عملية. من المواقع التعريفية والمنصات متعددة اللغات لشركات التصدير، إلى أنظمة إدارة الطلبات ولوحات التحكم وتطبيقات الويب المخصصة.")
+      : (content.aboutP1En || "At Codexa, we partner with companies, manufacturing factories, export businesses, and enterprises to bridge the gap between complex operations and intuitive digital systems. From corporate identities and multilingual trading portals to order management systems and bespoke web applications."),
     aboutP2: isRtl
-      ? (content.aboutP2Ar || "مع خبرتنا في Laravel, PHP, MySQL بالإضافة إلى الواجهات (HTML/CSS/JS/Bootstrap)، لا ينصب تركيزنا فقط على المظهر الجمالي، بل على هندسة أنظمة تدفع بعجلة الأعمال للأمام وتوفر حلولاً عملية.")
-      : (content.aboutP2En || "With expertise in Laravel, PHP, MySQL, formatting with HTML/CSS, and interactivity through JavaScript and Bootstrap, our focus is not just on aesthetics, but on engineering systems that drive actual business value."),
-    aboutStat1: isRtl ? (content.aboutStat1Ar || "أعمال موجهة") : (content.aboutStat1En || "Business Focused"),
-    aboutStat2: isRtl ? (content.aboutStat2Ar || "أنظمة موثوقة") : (content.aboutStat2En || "Reliable Systems"),
+      ? (content.aboutP2Ar || "هدفنا ليس بناء موقع جميل فقط، بل بناء نظام متكامل يخدم عملك الفعلي، يوفر الوقت والجهد، وينظم سير العمليات بدقة وأمان.")
+      : (content.aboutP2En || "Our philosophy is simple: we don't just build visually stunning interfaces; we engineer digital solutions that serve your core business, eliminate manual overhead, save valuable time, and optimize operations."),
+    aboutPill1: isRtl ? (content.aboutPill1Ar || "تطوير مخصص بالكامل") : (content.aboutPill1En || "Custom Development"),
+    aboutPill2: isRtl ? (content.aboutPill2Ar || "حلول موجهة لخدمة العمل") : (content.aboutPill2En || "Business-Driven Focus"),
+    aboutPill3: isRtl ? (content.aboutPill3Ar || "بنية آمنة وقابلة للتوسع") : (content.aboutPill3En || "Responsive & Scalable Architecture"),
 
     // Services
-    servicesTitle: isRtl ? (content.servicesTitleAr || "الخدمات") : (content.servicesTitleEn || "Services"),
+    servicesBadge: isRtl ? (content.servicesBadgeAr || "ماذا نقدم") : (content.servicesBadgeEn || "What We Deliver"),
+    servicesTitle: isRtl ? (content.servicesTitleAr || "حلول وخدمات برمجية متخصصة لدفع أعمالك نحو الأمام") : (content.servicesTitleEn || "Tailored Web & Software Services Engineered for Real Growth"),
     servicesDesc: isRtl
-      ? (content.servicesDescAr || "حلول برمجية متخصصة مصممة للارتقاء بالبنية التحتية الرقمية لشركتك.")
-      : (content.servicesDescEn || "Specialized web development solutions designed to elevate your company's digital infrastructure."),
+      ? (content.servicesDescAr || "منتجات رقمية مصممة خصيصاً لأتمتة أعمالك، فتح أسواق جديدة لشركتك، وإبراز هويتك باحترافية.")
+      : (content.servicesDescEn || "Strategic digital products designed to digitize operations, expand your market reach, and elevate your brand presence."),
+
+    // Process / How We Work
+    processBadge: isRtl ? (content.processBadgeAr || "منهجية التنفيذ") : (content.processBadgeEn || "Execution Methodology"),
+    processTitle: isRtl ? (content.processTitleAr || "طريقة العمل — من الفكرة إلى الإطلاق الناجح") : (content.processTitleEn || "How We Work — From Concept to Scalable Launch"),
+    processDesc: isRtl
+      ? (content.processDescAr || "خطوات واضحة ومنظمة تضمن تنفيذ مشروعك بأعلى معايير الجودة والأمان والتسليم في الموعد المحدد.")
+      : (content.processDescEn || "A structured, transparent 6-step engineering workflow ensuring predictability, quality, and business alignment."),
 
     // Projects
-    projectsTitle: isRtl ? (content.projectsTitleAr || "المشاريع") : (content.projectsTitleEn || "Projects"),
+    projectsBadge: isRtl ? (content.projectsBadgeAr || "دراسات حالة وأعمالنا") : (content.projectsBadgeEn || "Case Studies & Portfolio"),
+    projectsTitle: isRtl ? (content.projectsTitleAr || "نماذج من أعمالنا ودراسات الحالة") : (content.projectsTitleEn || "Selected Business Solutions & Case Studies"),
     projectsDesc: isRtl
-      ? (content.projectsDescAr || "مجموعة مختارة من أعمال التطوير الحديثة، تتراوح من بوابات الأعمال إلى أنظمة الإدارة المعقدة.")
-      : (content.projectsDescEn || "A selection of recent development work, ranging from business portals to complex management systems."),
-    projectsViewAll: isRtl ? "عرض كل المشاريع" : "View all projects",
-    projectsViewDetails: isRtl ? "قريباً" : "Coming Soon",
-    projectsVisitSite: isRtl ? "زيارة الموقع" : "Visit Website",
+      ? (content.projectsDescAr || "تعرف على كيف ساعدنا عملاءنا في بناء منصات تصدير وأنظمة إدارة متكاملة تلبي أهدافهم التجارية.")
+      : (content.projectsDescEn || "Explore how we engineered custom solutions for export trading enterprises and business management workflows."),
+    projectsVisitSite: isRtl ? "زيارة المشروع مباشرة" : "Visit Live Project",
+    projectsChallenge: isRtl ? "التحدي التجاري:" : "The Business Challenge:",
+    projectsSolution: isRtl ? "الحل البرمجي:" : "The Engineering Solution:",
+    projectsResult: isRtl ? "النتيجة والقيمة المضافة:" : "Outcome & Impact:",
 
-    // Skills & Reasons
-    skillsTitle: isRtl ? (content.skillsTitleAr || "المهارات التقنية") : (content.skillsTitleEn || "Technical Arsenal"),
-    reasonsTitle: isRtl ? (content.reasonsTitleAr || "لماذا تختارنا؟") : (content.reasonsTitleEn || "Why Choose Us?"),
+    // Tech Stack & Reasons
+    techStackTitle: isRtl ? (content.techStackTitleAr || "البنية التكنولوجية") : (content.techStackTitleEn || "Technology Stack"),
+    techStackDesc: isRtl ? "التقنيات الحديثة والأدوات القوية التي نبني بها أنظمة عملائنا." : "Modern, reliable, and secure tools used to build robust enterprise software.",
+    reasonsTitle: isRtl ? (content.reasonsTitleAr || "لماذا تختار Codexa؟") : (content.reasonsTitleEn || "Why Choose Codexa?"),
 
-    // Contact
-    contactTitle: isRtl ? (content.contactTitleAr || "تواصل معنا") : (content.contactTitleEn || "Contact Us"),
+    // Contact & Quote Form
+    contactBadge: isRtl ? (content.contactBadgeAr || "لنبدأ العمل معاً") : (content.contactBadgeEn || "Let's Build Together"),
+    contactTitle: isRtl ? (content.contactTitleAr || "أخبرنا عن مشروعك القادم") : (content.contactTitleEn || "Tell Us About Your Project"),
     contactDesc: isRtl
-      ? (content.contactDescAr || "هل تبحث عن حل برمجي مخصص لشركتك؟ دعنا نناقش مشروعك.")
-      : (content.contactDescEn || "Looking for a tailored web solution for your company? Let's discuss your project."),
+      ? (content.contactDescAr || "هل تبحث عن نظام مخصص أو موقع احترافي لشركتك؟ املأ النموذج وسنتواصل معك خلال 24 ساعة لتقديم عرض السعر المناسب.")
+      : (content.contactDescEn || "Have an upcoming project or looking to digitize your company's workflow? Request a quote and let's discuss your requirements."),
     contactEmailValue: content.contactEmail || "osama.mohamedr3d33@gmail.com",
     contactPhoneValue: content.contactPhone || "+20 1556701167",
     contactWhatsappValue: content.contactWhatsapp || "201556701167",
-
-    contactLocationLabel: isRtl ? "الموقع" : "Location",
+    contactLocationLabel: isRtl ? "المقر الرئيسي" : "Headquarters",
     contactLocationValue: isRtl ? (content.contactLocationAr || "الإسكندرية، مصر") : (content.contactLocationEn || "Alexandria, Egypt"),
 
     // Footer
-    footerTitle: isRtl ? (content.footerTitleAr || "شركة حلول برمجية | أنظمة أعمال ومواقع إلكترونية") : (content.footerTitleEn || "Software House | Business Systems & Web Solutions"),
+    footerTitle: isRtl ? (content.footerTitleAr || "شركة حلول برمجية · أنظمة أعمال ومواقع إلكترونية") : (content.footerTitleEn || "Software House · Business Systems & Web Solutions"),
+    footerDesc: isRtl 
+      ? "نبتكر حلولاً رقمية مخصصة، منصات تصدير عالمية، وأنظمة إدارية متطورة تدعم نمو الشركات والمصانع."
+      : "Engineering high-performance web applications, export trading portals, and custom business management systems.",
     footerCopyright: isRtl ? `© ${new Date().getFullYear()} ${content.navLogo || 'Codexa'}. جميع الحقوق محفوظة.` : `© ${new Date().getFullYear()} ${content.navLogo || 'Codexa'}. All rights reserved.`,
-    footerBuiltWith: isRtl ? "تم البناء بواسطة Codexa" : "Built with React & Tailwind",
+    footerBuiltWith: isRtl ? "Codexa — شركاؤك في التحول الرقمي" : "Codexa — Digital Engineering & Business Systems",
   };
 
   const getServiceIcon = (iconName) => {
@@ -265,22 +289,41 @@ export default function HomePage() {
     }
   };
 
-  const servicesList = (services || []).map(s => ({
-    title: isRtl ? s.titleAr : s.titleEn,
-    desc: isRtl ? s.descAr : s.descEn,
-    icon: getServiceIcon(s.icon)
-  }));
-
-  const skillsList = skills || [];
-
-  const reasonsList = (reasons || []).map(r => (isRtl ? r.ar : r.en));
+  const handleQuoteSubmit = (e) => {
+    e.preventDefault();
+    addQuoteRequest(quoteForm);
+    setQuoteSent(true);
+    setQuoteForm({
+      name: '',
+      company: '',
+      email: '',
+      phone: '',
+      projectType: 'Company Website',
+      budget: '$500 - $1,500',
+      details: ''
+    });
+    setTimeout(() => setQuoteSent(false), 6000);
+  };
 
   return (
-    <div className={`min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-200 transition-colors duration-300 ${isRtl ? 'font-arabic' : 'font-sans'}`}>
+    <div className={`min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white transition-colors duration-300 ${isRtl ? 'font-arabic' : 'font-sans'}`}>
+
+      {/* Floating WhatsApp Quick Action Button */}
+      <a
+        href={`https://wa.me/${t.contactWhatsappValue}?text=${encodeURIComponent(isRtl ? 'مرحباً Codexa، أود الاستفسار عن تفاصيل مشروع جديد.' : 'Hello Codexa, I would like to inquire about starting a new project.')}`}
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-6 end-6 z-50 flex items-center gap-2.5 px-4 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-full shadow-2xl shadow-emerald-600/40 hover:scale-105 active:scale-95 transition-all duration-300 border border-emerald-400/30 group font-bold text-sm"
+      >
+        <MessageSquare className="w-5 h-5 fill-current" />
+        <span className="hidden sm:inline">
+          {isRtl ? 'تحدث معنا على WhatsApp' : 'Chat on WhatsApp'}
+        </span>
+      </a>
 
       {/* Navigation */}
       <nav className={`fixed w-full z-50 transition-all duration-500 px-6 md:px-12 lg:px-24 ${scrolled
-        ? 'bg-slate-950/90 backdrop-blur-xl border-b border-white/10 py-3 shadow-2xl'
+        ? 'bg-slate-950/90 backdrop-blur-xl border-b border-white/10 py-3.5 shadow-2xl'
         : 'bg-transparent py-5'
         }`}>
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -289,38 +332,41 @@ export default function HomePage() {
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8 font-medium text-slate-300">
+          <div className="hidden md:flex items-center gap-8 font-medium text-slate-300 text-sm">
             <a href="#about" className="hover:text-blue-400 transition-colors">{t.navAbout}</a>
             <a href="#services" className="hover:text-blue-400 transition-colors">{t.navServices}</a>
+            <a href="#process" className="hover:text-blue-400 transition-colors">{t.navProcess}</a>
             <a href="#projects" className="hover:text-blue-400 transition-colors">{t.navProjects}</a>
+            <a href="#why-us" className="hover:text-blue-400 transition-colors">{t.reasonsTitle}</a>
 
             <div className="flex items-center gap-4 border-s border-white/10 ps-4">
               <button
                 onClick={toggleLanguage}
-                className="flex items-center gap-2 text-slate-400 hover:text-blue-400 transition-colors px-2 py-1 rounded-md bg-white/5 hover:bg-white/10"
+                className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10"
                 title={isRtl ? "Switch to English" : "التبديل للعربية"}
               >
-                <Languages className="w-5 h-5" />
-                <span className="text-sm font-bold uppercase">{isRtl ? 'EN' : 'AR'}</span>
+                <span className="text-base">{isRtl ? '🇬🇧' : '🇦🇪'}</span>
+                <span className="text-xs font-bold uppercase">{isRtl ? 'EN' : 'العربية'}</span>
               </button>
-              <a href="#contact" className="px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20">
+              <a href="#contact" className="px-5 py-2.5 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition-all shadow-lg shadow-blue-600/25 font-bold text-xs flex items-center gap-1.5">
                 {t.navTalk}
+                <ArrowIcon className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
 
           {/* Mobile Menu Toggle */}
-          <div className="md:hidden flex items-center gap-4 relative z-50">
+          <div className="md:hidden flex items-center gap-3 relative z-50">
             <button
               onClick={toggleLanguage}
-              className="flex items-center gap-2 text-slate-400 hover:text-blue-400 transition-colors px-3 py-1.5 rounded-lg bg-white/5 border border-white/10"
+              className="flex items-center gap-1.5 text-slate-300 hover:text-white transition-colors px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/10"
             >
-              <Languages className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase">{isRtl ? 'EN' : 'AR'}</span>
+              <span className="text-sm">{isRtl ? '🇬🇧' : '🇦🇪'}</span>
+              <span className="text-xs font-bold">{isRtl ? 'EN' : 'عربي'}</span>
             </button>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 text-white bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors"
+              className="p-2 text-white bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -336,135 +382,176 @@ export default function HomePage() {
             height: isMenuOpen ? 'auto' : 0
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`md:hidden absolute top-full left-0 w-full bg-slate-950/95 backdrop-blur-2xl border-b border-white/10 overflow-hidden shadow-2xl`}
+          className={`md:hidden absolute top-full left-0 w-full bg-slate-950/98 backdrop-blur-2xl border-b border-white/10 overflow-hidden shadow-2xl`}
         >
-          <div className="px-6 py-8 flex flex-col gap-6 text-center">
-            <a
-              href="#about"
-              onClick={() => setIsMenuOpen(false)}
-              className="text-xl font-medium text-slate-300 hover:text-blue-400 transition-colors"
-            >
-              {t.navAbout}
+          <div className="px-6 py-8 flex flex-col gap-5 text-center">
+            <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navAbout}</a>
+            <a href="#services" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navServices}</a>
+            <a href="#process" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navProcess}</a>
+            <a href="#projects" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navProjects}</a>
+            <a href="#why-us" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.reasonsTitle}</a>
+            <a href="#contact" onClick={() => setIsMenuOpen(false)} className="mt-2 w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-600/30">
+              {t.navTalk}
             </a>
-            <a
-              href="#services"
-              onClick={() => setIsMenuOpen(false)}
-              className="text-xl font-medium text-slate-300 hover:text-blue-400 transition-colors"
-            >
-              {t.navServices}
-            </a>
-            <a
-              href="#projects"
-              onClick={() => setIsMenuOpen(false)}
-              className="text-xl font-medium text-slate-300 hover:text-blue-400 transition-colors"
-            >
-              {t.navProjects}
-            </a>
-            <div className="pt-4 border-t border-white/10">
-              <a
-                href="#contact"
-                onClick={() => setIsMenuOpen(false)}
-                className="inline-block w-full px-6 py-4 bg-blue-600 text-white rounded-2xl font-bold text-lg shadow-lg shadow-blue-600/20 active:scale-[0.98] transition-all"
-              >
-                {t.navTalk}
-              </a>
-            </div>
           </div>
         </motion.div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 md:px-12 lg:px-24 overflow-hidden bg-slate-950">
-        {/* Background Matrix Rain */}
+      <section className="relative min-h-[92vh] flex items-center justify-center px-6 md:px-12 lg:px-24 pt-32 pb-20 overflow-hidden">
         <MatrixRain />
 
-        <div className={`absolute top-20 ${isRtl ? 'right-10' : 'left-10'} w-72 h-72 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob`}></div>
-        <div className={`absolute top-20 ${isRtl ? 'left-10' : 'right-10'} w-72 h-72 bg-sky-500 rounded-full mix-blend-screen filter blur-3xl opacity-20 animate-blob animation-delay-2000`}></div>
-
-        <div className="max-w-7xl mx-auto relative z-10 text-center">
-          <motion.div initial="hidden" animate="visible" variants={fadeIn}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 font-medium text-sm mb-8 shadow-sm">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
-              </span>
-              {t.heroBadge}
-            </div>
+        <div className="relative z-10 max-w-5xl mx-auto text-center">
+          <motion.div
+            initial="hidden" animate="visible" variants={fadeIn}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs sm:text-sm font-semibold mb-8 backdrop-blur-md shadow-inner"
+          >
+            <Sparkles className="w-4 h-4 text-blue-400 shrink-0" />
+            <span>{t.heroBadge}</span>
           </motion.div>
 
           <motion.h1
             initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.1 }}
-            className={`text-5xl md:text-7xl font-bold tracking-tight mb-6 text-white ${isRtl ? 'leading-[1.4]' : ''}`}
+            className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.15] mb-8"
           >
-            {t.heroTitle1} <br className="hidden md:block" />
-            <span className="gradient-text">{t.heroTitle2}</span>
+            {t.heroTitle1}{' '}
+            <span className="bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-400 bg-clip-text text-transparent block sm:inline mt-1 sm:mt-0">
+              {t.heroTitle2}
+            </span>
           </motion.h1>
 
           <motion.p
             initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.2 }}
-            className="text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed font-normal"
           >
             {t.heroIntro}
           </motion.p>
 
           <motion.div
             initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.3 }}
-            className="flex flex-col sm:flex-row justify-center gap-4"
+            className="flex flex-col sm:flex-row justify-center items-center gap-4"
           >
-            <a href="#projects" className="inline-flex justify-center items-center gap-2 px-8 py-4 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30 transition-all">
-              {t.heroBtnProjects} <ArrowIcon className="w-5 h-5" />
+            <a
+              href="#contact"
+              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-4 rounded-2xl bg-blue-600 text-white font-bold hover:bg-blue-500 hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all transform hover:-translate-y-0.5 active:scale-95 text-base"
+            >
+              {t.heroBtnContact} <ArrowIcon className="w-5 h-5" />
             </a>
-            <a href="#contact" className="inline-flex justify-center items-center gap-2 px-8 py-4 rounded-full bg-white/10 text-white border border-white/20 font-medium hover:bg-white/20 transition-all backdrop-blur-sm shadow-sm">
-              {t.heroBtnContact}
+            <a
+              href="#projects"
+              className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-4 rounded-2xl bg-white/10 text-white border border-white/15 font-semibold hover:bg-white/20 transition-all backdrop-blur-md shadow-sm text-base"
+            >
+              {t.heroBtnProjects}
             </a>
+          </motion.div>
+
+          {/* Quick Value Pillars */}
+          <motion.div
+            initial="hidden" animate="visible" variants={fadeIn} transition={{ delay: 0.4 }}
+            className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 text-start max-w-4xl mx-auto"
+          >
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shrink-0">
+                <Globe className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-400">{isRtl ? 'بوابات التصدير والمصانع' : 'Export & Factory Sites'}</p>
+                <p className="text-sm font-bold text-white">{isRtl ? 'منصات عالمية ومتعددة اللغات' : 'Global Multilingual Reach'}</p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shrink-0">
+                <LayoutDashboard className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-400">{isRtl ? 'لوحات التحكم والإدارة' : 'Internal Dashboards'}</p>
+                <p className="text-sm font-bold text-white">{isRtl ? 'أتمتة العمليات وتتبع الطلبات' : 'Operations Automation'}</p>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-slate-900/60 border border-white/10 backdrop-blur-md flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+                <Shield className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="text-xs text-slate-400">{isRtl ? 'تطبيقات ويب مخصصة' : 'Custom Web Apps'}</p>
+                <p className="text-sm font-bold text-white">{isRtl ? 'بنية آمنة مبنية لـ Laravel' : 'Robust & Scalable Stack'}</p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 px-6 md:px-12 lg:px-24 bg-white">
+      <section id="about" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">{t.aboutTitle}</h2>
-              <div className="text-lg text-slate-600 leading-relaxed mb-6" dangerouslySetInnerHTML={{ __html: t.aboutP1 }} />
-              <div className="text-lg text-slate-600 leading-relaxed mb-8" dangerouslySetInnerHTML={{ __html: t.aboutP2 }} />
+          <div className="grid lg:grid-cols-12 gap-12 items-center">
+            
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} className="lg:col-span-7 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
+                <Building2 className="w-3.5 h-3.5" />
+                <span>{t.aboutBadge}</span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white leading-tight">
+                {t.aboutTitle}
+              </h2>
+              <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
+                {t.aboutP1}
+              </p>
+              <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
+                {t.aboutP2}
+              </p>
 
-              <div className="flex gap-4">
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex-1">
-                  <h3 className="text-3xl font-bold text-blue-600 mb-1">100%</h3>
-                  <p className="text-sm font-medium text-slate-500">{t.aboutStat1}</p>
+              {/* Real Value Badges (No 100% or 24/7 illusions) */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-4">
+                <div className="p-4 bg-slate-950/80 rounded-2xl border border-white/10 flex flex-col justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-blue-500 mb-2"></div>
+                  <h3 className="text-sm font-bold text-white">{t.aboutPill1}</h3>
+                  <p className="text-xs text-slate-400 mt-1">{isRtl ? 'مبني من الصفر لمتطلباتك' : 'Tailored to your exact logic'}</p>
                 </div>
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex-1">
-                  <h3 className="text-3xl font-bold text-blue-600 mb-1">24/7</h3>
-                  <p className="text-sm font-medium text-slate-500">{t.aboutStat2}</p>
+                <div className="p-4 bg-slate-950/80 rounded-2xl border border-white/10 flex flex-col justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 mb-2"></div>
+                  <h3 className="text-sm font-bold text-white">{t.aboutPill2}</h3>
+                  <p className="text-xs text-slate-400 mt-1">{isRtl ? 'خدمة أهداف العمل والربحية' : 'Built to drive commercial value'}</p>
+                </div>
+                <div className="p-4 bg-slate-950/80 rounded-2xl border border-white/10 flex flex-col justify-center">
+                  <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 mb-2"></div>
+                  <h3 className="text-sm font-bold text-white">{t.aboutPill3}</h3>
+                  <p className="text-xs text-slate-400 mt-1">{isRtl ? 'أمان وقابلية للتوسع المستقبلي' : 'Scales seamlessly with growth'}</p>
                 </div>
               </div>
             </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} className="relative">
-              <div className="aspect-square md:aspect-[4/3] rounded-3xl bg-slate-100 border border-slate-200 overflow-hidden shadow-2xl flex items-center justify-center p-1">
-                <div className="w-full h-full relative structure-bg rounded-2xl bg-slate-900 flex flex-col shadow-[inset_0_2px_20px_rgba(0,0,0,0.5)] border border-white/5" dir="ltr">
-                  <div className="absolute inset-0 bg-blue-500/5 pointer-events-none animate-pulse"></div>
-                  <div className="flex gap-1.5 p-3 border-b border-white/5 bg-white/5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-400/80"></div>
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80"></div>
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-400/80"></div>
+
+            {/* Visual Technical Architecture Card (Side Easter-Egg Card) */}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} className="lg:col-span-5 relative">
+              <div className="rounded-3xl bg-slate-950 border border-white/15 overflow-hidden shadow-2xl p-1 relative">
+                <div className="w-full relative structure-bg rounded-2xl bg-slate-900/90 flex flex-col border border-white/10" dir="ltr">
+                  <div className="flex items-center justify-between p-3.5 border-b border-white/10 bg-slate-950/60">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-400/80"></div>
+                      <div className="w-3 h-3 rounded-full bg-amber-400/80"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-400/80"></div>
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+                      <Terminal className="w-3 h-3 text-blue-400" /> CodexaArchitecture.ts
+                    </span>
                   </div>
-                  <div className="flex-1 p-5 overflow-hidden flex flex-col justify-center">
-                    <pre className="text-[13px] md:text-[15px] lg:text-[17px] font-mono text-slate-300 leading-[1.8] font-medium text-left">
+                  <div className="p-5 overflow-hidden">
+                    <pre className="text-[12px] sm:text-[13px] font-mono text-slate-300 leading-[1.8] text-left">
                       <code>
-                        <span className="text-purple-400">const</span> <span className="text-amber-300">Company</span> = &#123;<br />
-                        &nbsp;&nbsp;<span className="text-blue-400">role</span>: <span className="text-green-300">"Software House & Solutions"</span>,<br />
-                        &nbsp;&nbsp;<span className="text-blue-400">mission</span>: <span className="text-green-300">"Building real business solutions"</span>,<br />
-                        &nbsp;&nbsp;<span className="text-blue-400">specialties</span>: [<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">"Company Websites"</span>, <span className="text-green-300">"Factory Systems"</span>,<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">"Export Portals"</span>, <span className="text-green-300">"Admin Dashboards"</span>,<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">"Custom Web Apps"</span><br />
-                        &nbsp;&nbsp;],<br />
-                        &nbsp;&nbsp;<span className="text-blue-400">expertise</span>: [<span className="text-green-300">"Laravel"</span>, <span className="text-green-300">"PHP"</span>, <span className="text-green-300">"MySQL"</span>,<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">"JS/Bootstrap"</span>, <span className="text-green-300">"HTML/CSS"</span>],<br />
-                        &nbsp;&nbsp;<span className="text-blue-400">goal</span>: <span className="text-orange-300">()</span> <span className="text-purple-400">=&gt;</span> <span className="text-green-300">"Engineering systems that"</span> +<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-300">" drive actual business value."</span><br />
+                        <span className="text-purple-400">interface</span> <span className="text-amber-300">EngineeringStandards</span> &#123;<br />
+                        &nbsp;&nbsp;<span className="text-blue-400">coreFocus</span>: <span className="text-green-300">"Business Growth & Scalability"</span>;<br />
+                        &nbsp;&nbsp;<span className="text-blue-400">targetClients</span>: [<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-emerald-300">"Corporates"</span>, <span className="text-emerald-300">"Factories"</span>,<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-emerald-300">"Export Businesses"</span>, <span className="text-emerald-300">"Enterprises"</span><br />
+                        &nbsp;&nbsp;];<br />
+                        &nbsp;&nbsp;<span className="text-blue-400">capabilities</span>: &#123;<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-sky-300">portals</span>: <span className="text-green-300">"Multilingual RFQ Catalogs"</span>,<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-sky-300">dashboards</span>: <span className="text-green-300">"Real-time Analytics"</span>,<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-sky-300">customApps</span>: <span className="text-green-300">"Laravel / React Systems"</span><br />
+                        &nbsp;&nbsp;&#125;;<br />
+                        &nbsp;&nbsp;<span className="text-blue-400">deliverable</span>: () <span className="text-purple-400">=&gt;</span> <span className="text-green-300">"Systems that drive real ROI"</span>;<br />
                         &#125;;
                       </code>
                     </pre>
@@ -472,53 +559,109 @@ export default function HomePage() {
                 </div>
               </div>
             </motion.div>
+
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 px-6 md:px-12 lg:px-24 bg-slate-50">
+      <section id="services" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-950 relative">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.servicesTitle}</h2>
-            <p className="text-slate-600 text-lg">{t.servicesDesc}</p>
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>{t.servicesBadge}</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">{t.servicesTitle}</h2>
+            <p className="text-slate-400 text-base sm:text-lg">{t.servicesDesc}</p>
           </div>
 
           <motion.div
             variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {servicesList.map((service, index) => (
+            {services.map((service) => (
               <motion.div
-                key={index}
+                key={service.id}
                 variants={fadeIn}
-                className="group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-[0_20px_50px_rgba(59,130,246,0.1)] hover:border-blue-500/30 hover:-translate-y-2 transition-all duration-500 relative overflow-hidden"
+                className="group bg-slate-900/80 border border-white/10 p-8 rounded-3xl hover:border-blue-500/50 hover:bg-slate-900 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative z-10">
-                  <div className="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-500">
-                    {React.cloneElement(service.icon, { className: "w-8 h-8 transition-colors duration-500" })}
+                <div>
+                  <div className="w-16 h-16 bg-blue-500/10 border border-blue-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                    {getServiceIcon(service.icon)}
                   </div>
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-blue-600 transition-colors">{service.title}</h3>
-                  <p className="text-slate-600 leading-relaxed">{service.desc}</p>
+                  <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
+                    {isRtl ? service.titleAr : service.titleEn}
+                  </h3>
+                  <p className="text-slate-400 leading-relaxed text-sm mb-6">
+                    {isRtl ? service.descAr : service.descEn}
+                  </p>
                 </div>
+
+                {/* Strategic CTA on every service card */}
+                <a
+                  href="#contact"
+                  className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 hover:text-white group-hover:translate-x-1 transition-all pt-4 border-t border-white/5"
+                >
+                  <span>{isRtl ? (service.ctaAr || 'ابدأ مشروعك ←') : (service.ctaEn || 'Start Project →')}</span>
+                </a>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section id="projects" className="py-20 px-6 md:px-12 lg:px-24 bg-white">
+      {/* How We Work Section (Execution Methodology) */}
+      <section id="process" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/80 text-white relative border-y border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.projectsTitle}</h2>
-              <p className="text-slate-600 text-lg">{t.projectsDesc}</p>
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+              <Workflow className="w-3.5 h-3.5" />
+              <span>{t.processBadge}</span>
             </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">{t.processTitle}</h2>
+            <p className="text-slate-400 text-base sm:text-lg">{t.processDesc}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {workflow.map((item, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-950/70 border border-white/10 rounded-3xl p-6 relative hover:border-emerald-500/40 transition-all group"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-black text-emerald-400/60 group-hover:text-emerald-400 font-mono transition-colors">
+                    {item.step}
+                  </span>
+                  <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xs font-bold">
+                    ✓
+                  </div>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
+                  {isRtl ? item.titleAr : item.titleEn}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                  {isRtl ? item.descAr : item.descEn}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section (Case Studies) */}
+      <section id="projects" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-950">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
+              <Layers className="w-3.5 h-3.5" />
+              <span>{t.projectsBadge}</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">{t.projectsTitle}</h2>
+            <p className="text-slate-400 text-base sm:text-lg">{t.projectsDesc}</p>
+          </div>
+
+          <div className="space-y-12 max-w-5xl mx-auto">
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
@@ -526,56 +669,75 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                className="group flex flex-col bg-white rounded-3xl border border-slate-200 overflow-hidden hover:border-blue-500/50 hover:shadow-[0_20px_50px_rgba(59,130,246,0.15)] transition-all duration-500"
+                className="bg-slate-900 border border-white/10 rounded-3xl overflow-hidden hover:border-blue-500/40 shadow-2xl transition-all grid lg:grid-cols-12 gap-6"
               >
-                <a
-                  href={project.url && project.url !== '#' ? project.url : project.image}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`h-64 w-full ${project.image.startsWith('bg-') ? project.image : 'bg-slate-100'} relative overflow-hidden block cursor-pointer group/img`}
-                  dir="ltr"
-                >
-                  {!project.image.startsWith('bg-') && (
-                    <img
-                      src={project.image}
-                      alt={project.titleEn}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-black/0 group-hover/img:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover/img:opacity-100 duration-300">
-                    <div className="bg-white/20 backdrop-blur-md p-4 rounded-full border border-white/30 text-white transform scale-90 group-hover/img:scale-100 transition-transform">
-                      {project.url && project.url !== '#' ? <ExternalLink className="w-6 h-6" /> : <Search className="w-6 h-6" />}
-                    </div>
-                  </div>
-                </a>
+                {/* Project Image Preview */}
+                <div className="lg:col-span-5 bg-slate-950 relative overflow-hidden flex items-center justify-center p-6 border-b lg:border-b-0 lg:border-e border-white/10">
+                  <img
+                    src={project.image}
+                    alt={project.titleEn}
+                    className="w-full h-full max-h-[340px] object-cover rounded-2xl border border-white/10 shadow-lg hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
 
-                <div className="p-8 flex-1 flex flex-col">
-                  <h3 className="text-2xl font-bold mb-3 group-hover:text-blue-600 transition-colors uppercase-first">{isRtl ? project.titleAr : project.titleEn}</h3>
-                  <p className="text-slate-600 mb-6 flex-1">{isRtl ? project.descriptionAr : project.descriptionEn}</p>
-
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {project.tech.split(',').map((item, i) => (
-                      <span key={i} className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-medium rounded-md" dir="ltr">
-                        {item.trim()}
+                {/* Case Study Breakdown */}
+                <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-4">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <span className="px-3 py-1 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold rounded-lg">
+                        Case Study #{index + 1}
                       </span>
-                    ))}
+                    </div>
+                    <h3 className="text-2xl font-black text-white">
+                      {isRtl ? project.titleAr : project.titleEn}
+                    </h3>
+                    <p className="text-xs text-slate-400 font-medium mt-1">
+                      {isRtl ? project.subtitleAr : project.subtitleEn}
+                    </p>
                   </div>
 
-                  {project.url && project.url !== '#' ? (
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center justify-center w-full gap-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium transition-all shadow-md shadow-blue-600/20 group/btn active:scale-[0.98]"
-                    >
-                      <span>{t.projectsVisitSite}</span>
-                      <ExternalLink className="w-4 h-4 transition-transform group-hover/btn:translate-x-0.5" />
-                    </a>
-                  ) : (
-                    <div className="inline-flex items-center justify-center w-full gap-2 py-3 px-4 bg-slate-50 border border-slate-200 text-slate-400 rounded-xl font-medium cursor-default">
-                      {t.projectsViewDetails}
+                  <div className="space-y-3 text-xs sm:text-sm text-slate-300">
+                    <div className="p-3.5 rounded-xl bg-slate-950/80 border border-white/5 space-y-1">
+                      <p className="font-bold text-amber-400">{t.projectsChallenge}</p>
+                      <p className="text-slate-400 leading-relaxed">{isRtl ? project.challengeAr : project.challengeEn}</p>
                     </div>
-                  )}
+
+                    <div className="p-3.5 rounded-xl bg-slate-950/80 border border-white/5 space-y-1">
+                      <p className="font-bold text-blue-400">{t.projectsSolution}</p>
+                      <p className="text-slate-400 leading-relaxed">{isRtl ? project.solutionAr : project.solutionEn}</p>
+                    </div>
+
+                    <div className="p-3.5 rounded-xl bg-slate-950/80 border border-white/5 space-y-1">
+                      <p className="font-bold text-emerald-400">{t.projectsResult}</p>
+                      <p className="text-slate-400 leading-relaxed">{isRtl ? project.resultAr : project.resultEn}</p>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-white/10">
+                    <div className="flex flex-wrap gap-1.5" dir="ltr">
+                      {project.tech.split(',').map((techItem, i) => (
+                        <span key={i} className="px-2.5 py-1 bg-white/5 border border-white/10 text-slate-300 text-[11px] font-mono rounded-md">
+                          {techItem.trim()}
+                        </span>
+                      ))}
+                    </div>
+
+                    {project.url && project.url !== '#' ? (
+                      <a
+                        href={project.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-600/20 transition-all"
+                      >
+                        <span>{t.projectsVisitSite}</span>
+                        <ArrowUpRight className="w-4 h-4" />
+                      </a>
+                    ) : (
+                      <span className="text-xs text-slate-500 font-mono">
+                        {isRtl ? 'نظام خاص / Private ERP' : 'Internal System'}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -583,127 +745,366 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Skills Section */}
-      <section className="py-20 px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      {/* Technology Stack & Why Choose Us Section */}
+      <section id="why-us" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative border-t border-white/5">
+        <div className="max-w-7xl mx-auto space-y-20">
+          
+          {/* Why Choose Codexa Grid (6 Pillars) */}
+          <div className="space-y-10">
+            <div className="text-center max-w-3xl mx-auto space-y-3">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">{t.reasonsTitle}</h2>
+              <p className="text-slate-400 text-base">{isRtl ? 'لماذا يثق بنا أصحاب الشركات والمصانع في تنفيذ مشاريعهم الرقمية؟' : 'The engineering values and guarantees we bring to every enterprise client.'}</p>
+            </div>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16">
-
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">{t.skillsTitle}</h2>
-              <div className="flex flex-wrap gap-3">
-                {skillsList.map((skill, index) => (
-                  <span key={index} className="px-5 py-3 bg-white/10 border border-white/10 rounded-xl text-slate-200 font-medium backdrop-blur-sm hover:bg-white/20 transition-colors" dir="ltr">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeIn} transition={{ delay: 0.2 }}>
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">{t.reasonsTitle}</h2>
-              <ul className="space-y-4">
-                {reasonsList.map((reason, index) => (
-                  <li key={index} className="flex items-start gap-4 p-4 rounded-2xl bg-white/5 border border-white/5">
-                    <CheckCircle2 className="w-6 h-6 text-blue-400 shrink-0 mt-0.5" />
-                    <span className="text-slate-300 text-lg">{reason}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {reasons.map((r) => (
+                <div
+                  key={r.id}
+                  className="p-6 rounded-3xl bg-slate-950 border border-white/10 hover:border-blue-500/40 transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    <span className="text-xl font-mono font-black text-blue-400 mb-3 block">
+                      {r.num}
+                    </span>
+                    <h3 className="text-lg font-bold text-white mb-2">
+                      {isRtl ? r.titleAr : r.titleEn}
+                    </h3>
+                    <p className="text-slate-400 text-xs sm:text-sm leading-relaxed">
+                      {isRtl ? r.ar : r.en}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+
+          {/* Categorized Professional Tech Stack (Not CV style) */}
+          <div className="p-8 sm:p-12 rounded-3xl bg-slate-950 border border-white/10 space-y-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
+              <div>
+                <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <Cpu className="w-6 h-6 text-blue-400" /> {t.techStackTitle}
+                </h3>
+                <p className="text-slate-400 text-xs sm:text-sm mt-1">{t.techStackDesc}</p>
+              </div>
+              <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20 w-fit">
+                Production-Ready Stack
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {techCategories.map((cat, idx) => (
+                <div key={idx} className="space-y-3">
+                  <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider">
+                    {isRtl ? cat.categoryAr : cat.categoryEn}
+                  </h4>
+                  <ul className="space-y-2">
+                    {cat.items.map((tech, i) => (
+                      <li key={i} className="flex items-center gap-2 text-xs sm:text-sm text-slate-300 font-mono" dir="ltr">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                        {tech}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
-      {/* Contact Section */}
-      <section id="contact" className="py-20 px-6 md:px-12 lg:px-24 bg-slate-50">
+      {/* Contact Section with Interactive Request a Quote Form */}
+      <section id="contact" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-950 relative border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t.contactTitle}</h2>
-            <p className="text-slate-600 text-lg">{t.contactDesc}</p>
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
+              <Mail className="w-3.5 h-3.5" />
+              <span>{t.contactBadge}</span>
+            </div>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">{t.contactTitle}</h2>
+            <p className="text-slate-400 text-base sm:text-lg">{t.contactDesc}</p>
           </div>
 
-          <div className="max-w-4xl mx-auto">
-            <motion.div
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-              className="grid grid-cols-1 md:grid-cols-3 gap-6"
-            >
-              <motion.div variants={fadeIn} className="bg-white p-8 rounded-3xl border border-slate-200 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-4 shrink-0">
+          <div className="grid lg:grid-cols-12 gap-10 max-w-6xl mx-auto items-start">
+            
+            {/* Direct Contact Channels Info */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="p-6 rounded-3xl bg-slate-900 border border-white/10 space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
                   <Mail className="w-6 h-6" />
                 </div>
-                <div className="w-full">
-                  <p className="text-sm text-slate-500 font-medium mb-1">{isRtl ? 'البريد الإلكتروني' : 'Email'}</p>
-                  <a href={`mailto:${t.contactEmailValue}`} className="text-slate-900 font-bold hover:text-blue-600 transition-colors block break-words font-sans text-[13px] sm:text-sm md:text-base" dir="ltr">{t.contactEmailValue}</a>
+                <div>
+                  <p className="text-xs text-slate-400">{isRtl ? 'البريد الإلكتروني المباشر' : 'Direct Email'}</p>
+                  <a href={`mailto:${t.contactEmailValue}`} className="text-white font-bold hover:text-blue-400 text-sm font-sans" dir="ltr">
+                    {t.contactEmailValue}
+                  </a>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div variants={fadeIn} className="bg-white p-8 rounded-3xl border border-slate-200 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-4 shrink-0">
-                  <PhoneCall className="w-6 h-6" />
+              <div className="p-6 rounded-3xl bg-slate-900 border border-white/10 space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <MessageSquare className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500 font-medium mb-1">{isRtl ? 'واتساب' : 'WhatsApp'}</p>
-                  <a href={`https://wa.me/${t.contactWhatsappValue}`} target="_blank" rel="noreferrer" className="text-slate-900 font-bold font-sans hover:text-green-600 transition-colors text-lg" dir="ltr">{t.contactPhoneValue}</a>
+                  <p className="text-xs text-slate-400">{isRtl ? 'واتساب للمحادثة السريعة' : 'WhatsApp Support'}</p>
+                  <a
+                    href={`https://wa.me/${t.contactWhatsappValue}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-white font-bold hover:text-emerald-400 text-sm font-sans"
+                    dir="ltr"
+                  >
+                    {t.contactPhoneValue}
+                  </a>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div variants={fadeIn} className="bg-white p-8 rounded-3xl border border-slate-200 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-4 shrink-0">
+              <div className="p-6 rounded-3xl bg-slate-900 border border-white/10 space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center">
                   <MapPin className="w-6 h-6" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-500 font-medium mb-1">{t.contactLocationLabel}</p>
-                  <p className="text-slate-900 font-bold text-lg">{t.contactLocationValue}</p>
+                  <p className="text-xs text-slate-400">{t.contactLocationLabel}</p>
+                  <p className="text-white font-bold text-sm">{t.contactLocationValue}</p>
                 </div>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
+
+            {/* Project Request & Quote Form */}
+            <div className="lg:col-span-7 bg-slate-900 border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
+              <h3 className="text-xl font-bold text-white mb-2">
+                {isRtl ? 'طلب عرض سعر / دراسة مشروع' : 'Request a Project Proposal'}
+              </h3>
+              <p className="text-xs text-slate-400 mb-6">
+                {isRtl ? 'أدخل تفاصيل مشروعك وسنقوم بالرد عليك في غضون 24 ساعة بخطة وتكلفة تقديرية.' : 'Provide details about your project and we will get back to you with a structured proposal.'}
+              </p>
+
+              {quoteSent ? (
+                <div className="p-8 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+                    <Check className="w-6 h-6" />
+                  </div>
+                  <h4 className="text-lg font-bold text-white">
+                    {isRtl ? 'تم استلام طلبك بنجاح!' : 'Your Request Has Been Received!'}
+                  </h4>
+                  <p className="text-xs text-slate-300">
+                    {isRtl ? 'شكراً لتواصلك معنا. سنراجع متطلباتك ونتواصل معك عبر البريد والواتساب قريباً.' : 'Thank you for reaching out. We will review your requirements and respond shortly.'}
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleQuoteSubmit} className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        {isRtl ? 'الاسم الكامل *' : 'Full Name *'}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={quoteForm.name}
+                        onChange={(e) => setQuoteForm({ ...quoteForm, name: e.target.value })}
+                        placeholder={isRtl ? 'أحمد محمد' : 'John Doe'}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        {isRtl ? 'اسم الشركة / المنشأة' : 'Company Name'}
+                      </label>
+                      <input
+                        type="text"
+                        value={quoteForm.company}
+                        onChange={(e) => setQuoteForm({ ...quoteForm, company: e.target.value })}
+                        placeholder={isRtl ? 'شركة الاستيراد والتصدير' : 'Company LLC'}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        {isRtl ? 'البريد الإلكتروني *' : 'Email Address *'}
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        dir="ltr"
+                        value={quoteForm.email}
+                        onChange={(e) => setQuoteForm({ ...quoteForm, email: e.target.value })}
+                        placeholder="name@company.com"
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        {isRtl ? 'رقم الهاتف / الواتساب *' : 'Phone / WhatsApp *'}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        dir="ltr"
+                        value={quoteForm.phone}
+                        onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
+                        placeholder="+20 1..."
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        {isRtl ? 'نوع المشروع' : 'Project Type'}
+                      </label>
+                      <select
+                        value={quoteForm.projectType}
+                        onChange={(e) => setQuoteForm({ ...quoteForm, projectType: e.target.value })}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500"
+                      >
+                        <option value="Company Website">{isRtl ? 'موقع شركة / Corporate Site' : 'Company Website'}</option>
+                        <option value="Export Portal">{isRtl ? 'موقع تصدير وتجارة / Export Portal' : 'Export & Trading Portal'}</option>
+                        <option value="Factory Website">{isRtl ? 'موقع مصنع / Factory Website' : 'Factory Website'}</option>
+                        <option value="Admin Dashboard">{isRtl ? 'لوحة تحكم / Admin Dashboard' : 'Admin Dashboard'}</option>
+                        <option value="Custom Web App">{isRtl ? 'تطبيق ويب مخصص / Custom App' : 'Custom Web App'}</option>
+                        <option value="Other">{isRtl ? 'أخرى / Other' : 'Other'}</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">
+                        {isRtl ? 'الميزانية التقديرية' : 'Estimated Budget'}
+                      </label>
+                      <select
+                        value={quoteForm.budget}
+                        onChange={(e) => setQuoteForm({ ...quoteForm, budget: e.target.value })}
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-blue-500"
+                      >
+                        <option value="$300 - $700">$300 - $700</option>
+                        <option value="$700 - $1,500">$700 - $1,500</option>
+                        <option value="$1,500 - $3,000">$1,500 - $3,000</option>
+                        <option value="$3,000+">$3,000+</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      {isRtl ? 'تفاصيل ومتطلبات المشروع' : 'Project Details & Scope'}
+                    </label>
+                    <textarea
+                      rows={3}
+                      required
+                      value={quoteForm.details}
+                      onChange={(e) => setQuoteForm({ ...quoteForm, details: e.target.value })}
+                      placeholder={isRtl ? 'اشرح باختصار فكرة موقعك أو النظام والوظائف المطلوبة...' : 'Describe what functions and pages you need...'}
+                      className="w-full bg-slate-950 border border-white/10 rounded-xl p-3 text-sm text-white focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl text-sm transition-all shadow-xl shadow-blue-600/30 flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
+                  >
+                    <Send className="w-4 h-4" />
+                    {isRtl ? 'احصل على عرض السعر وخطة التنفيذ' : 'Submit & Get Proposal'}
+                  </button>
+                </form>
+              )}
+            </div>
+
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-slate-950 py-12 px-6 border-t border-slate-900 text-slate-400">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-start flex flex-col items-center md:items-start">
+      {/* Comprehensive Corporate Footer */}
+      <footer className="bg-slate-950 py-16 px-6 md:px-12 lg:px-24 border-t border-white/10 text-slate-400">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/5">
+          
+          {/* Brand Info */}
+          <div className="lg:col-span-5 space-y-4">
             <Logo light={true} />
-            <p className="text-sm mt-3">{t.footerTitle}</p>
+            <p className="text-sm text-slate-400 max-w-sm leading-relaxed">
+              {t.footerDesc}
+            </p>
+            <div className="flex gap-3 pt-2">
+              <a href={`mailto:${t.contactEmailValue}`} className="p-3 bg-white/5 rounded-xl hover:bg-blue-600/20 hover:text-blue-400 transition-all" title="Email">
+                <Mail className="w-5 h-5" />
+              </a>
+              <a href={`https://wa.me/${t.contactWhatsappValue}`} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-xl hover:bg-green-600/20 hover:text-green-400 transition-all" title="WhatsApp">
+                <PhoneCall className="w-5 h-5" />
+              </a>
+              {content.githubUrl && (
+                <a href={content.githubUrl} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-xl hover:bg-white/10 hover:text-white transition-all" title="GitHub">
+                  <Github className="w-5 h-5" />
+                </a>
+              )}
+              {content.linkedinUrl && content.linkedinUrl !== '#' && (
+                <a href={content.linkedinUrl} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-xl hover:bg-blue-600/20 hover:text-blue-400 transition-all" title="LinkedIn">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              )}
+            </div>
           </div>
 
-          <div className="flex gap-4">
-            <a href={`mailto:${t.contactEmailValue}`} className="p-3 bg-white/5 rounded-full hover:bg-blue-600/20 hover:text-blue-400 transition-all duration-300 group" title="Email">
-              <Mail className="w-5 h-5" />
-            </a>
-            <a href={`https://wa.me/${t.contactWhatsappValue}`} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-green-600/20 hover:text-green-400 transition-all duration-300 group" title="WhatsApp">
-              <PhoneCall className="w-5 h-5" />
-            </a>
-            {content.githubUrl && (
-              <a href={content.githubUrl} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-white/10 hover:text-white transition-all duration-300 group" title="GitHub">
-                <Github className="w-5 h-5" />
-              </a>
-            )}
-            {content.linkedinUrl && content.linkedinUrl !== '#' && (
-              <a href={content.linkedinUrl} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-blue-600/20 hover:text-blue-400 transition-all duration-300 group" title="LinkedIn">
-                <Linkedin className="w-5 h-5" />
-              </a>
-            )}
+          {/* Services Column */}
+          <div className="lg:col-span-3 space-y-3">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+              {isRtl ? 'الخدمات والحلول' : 'Services'}
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">{isRtl ? 'مواقع الشركات والمؤسسات' : 'Corporate Websites'}</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">{isRtl ? 'منصات وبوابات التصدير' : 'Export Trading Portals'}</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">{isRtl ? 'مواقع ومنصات المصانع' : 'Factory & Plant Sites'}</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">{isRtl ? 'لوحات التحكم والبيانات' : 'Custom Dashboards'}</a></li>
+              <li><a href="#services" className="hover:text-blue-400 transition-colors">{isRtl ? 'تطبيقات الويب المخصصة لـ Laravel' : 'Custom Laravel Apps'}</a></li>
+            </ul>
           </div>
+
+          {/* Quick Links Column */}
+          <div className="lg:col-span-2 space-y-3">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+              {isRtl ? 'روابط سريعة' : 'Company'}
+            </h4>
+            <ul className="space-y-2 text-xs sm:text-sm">
+              <li><a href="#about" className="hover:text-blue-400 transition-colors">{t.navAbout}</a></li>
+              <li><a href="#process" className="hover:text-blue-400 transition-colors">{t.navProcess}</a></li>
+              <li><a href="#projects" className="hover:text-blue-400 transition-colors">{t.navProjects}</a></li>
+              <li><a href="#why-us" className="hover:text-blue-400 transition-colors">{t.reasonsTitle}</a></li>
+              <li><a href="#contact" className="hover:text-blue-400 transition-colors">{t.navTalk}</a></li>
+            </ul>
+          </div>
+
+          {/* Direct Contact Column */}
+          <div className="lg:col-span-2 space-y-3">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+              {isRtl ? 'التواصل المباشر' : 'Contact'}
+            </h4>
+            <div className="space-y-2 text-xs sm:text-sm">
+              <p className="font-mono text-slate-300">{t.contactPhoneValue}</p>
+              <p className="text-slate-400">{t.contactLocationValue}</p>
+              <div className="pt-2">
+                <a href="#contact" className="text-blue-400 hover:underline font-bold text-xs">
+                  {isRtl ? 'طلب عرض سعر سريع ←' : 'Request a Proposal →'}
+                </a>
+              </div>
+            </div>
+          </div>
+
         </div>
-        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 text-center text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+
+        <div className="max-w-7xl mx-auto mt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs">
           <p>{t.footerCopyright}</p>
           <div className="flex items-center gap-4">
-            <p>{t.footerBuiltWith}</p>
+            <p className="text-slate-500">{t.footerBuiltWith}</p>
             <Link to="/admin" className="text-slate-600 hover:text-blue-400 transition-colors text-xs">
               {isRtl ? 'لوحة الإدارة' : 'Admin'}
             </Link>
           </div>
         </div>
       </footer>
+
     </div>
   );
 }

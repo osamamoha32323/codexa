@@ -9,60 +9,80 @@ export const defaultContent = {
   navAboutAr: "من نحن",
   navServicesEn: "Services",
   navServicesAr: "الخدمات",
-  navProjectsEn: "Projects",
-  navProjectsAr: "المشاريع",
-  navTalkEn: "Contact Us",
-  navTalkAr: "تواصل معنا",
+  navProcessEn: "How We Work",
+  navProcessAr: "طريقة العمل",
+  navProjectsEn: "Case Studies",
+  navProjectsAr: "أعمالنا والمشاريع",
+  navTalkEn: "Start a Project",
+  navTalkAr: "ابدأ مشروعك",
 
-  // Hero
-  heroBadgeEn: "Software House & Business Systems",
-  heroBadgeAr: "شركة حلول برمجية وأنظمة أعمال",
-  heroTitle1En: "Hi, We are Codexa.",
-  heroTitle1Ar: "مرحباً، نحن Codexa.",
-  heroTitle2En: "We build digital solutions.",
-  heroTitle2Ar: "نبني حلولاً رقمية.",
-  heroIntroEn: "We build professional websites and custom business systems for companies, factories, and export businesses.",
-  heroIntroAr: "نقوم ببناء مواقع احترافية وأنظمة أعمال مخصصة للشركات والمصانع وشركات التصدير.",
-  heroBtnProjectsEn: "View Our Projects",
-  heroBtnProjectsAr: "شاهد مشاريعنا",
-  heroBtnContactEn: "Contact Us",
-  heroBtnContactAr: "تواصل معنا",
+  // Hero Section
+  heroBadgeEn: "Software House · Business Systems & Web Solutions",
+  heroBadgeAr: "شركة حلول برمجية وأنظمة أعمال وتطوير ويب",
+  heroTitle1En: "We Build Websites & Systems That",
+  heroTitle1Ar: "نبني مواقع وأنظمة",
+  heroTitle2En: "Help Your Business Scale & Grow.",
+  heroTitle2Ar: "تساعد شركتك على النمو.",
+  heroIntroEn: "We develop corporate websites, internal business systems, export trading portals, admin dashboards, and custom Laravel web applications — engineered specifically around your real-world workflow.",
+  heroIntroAr: "نطور مواقع الشركات، الأنظمة الداخلية، منصات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة — مصممة بدقة حسب طبيعة واحتياجات عملك اليومية.",
+  heroBtnProjectsEn: "Explore Our Work",
+  heroBtnProjectsAr: "شاهد أعمالنا",
+  heroBtnContactEn: "Start Your Project",
+  heroBtnContactAr: "ابدأ مشروعك",
 
-  // About
-  aboutTitleEn: "About Us",
-  aboutTitleAr: "من نحن",
-  aboutP1En: "We are a software development agency focused on building real solutions for businesses. We specialize in creating powerful company websites, factory systems, export business portals, admin dashboards, and robust custom web applications.",
-  aboutP1Ar: "نحن شركة تطوير برمجيات نركز على بناء حلول حقيقية للشركات. نتخصص في إنشاء مواقع الشركات، أنظمة المصانع، بوابات التصدير، لوحات التحكم، وتطبيقات الويب المخصصة.",
-  aboutP2En: "With expertise in Laravel, PHP, MySQL, formatting with HTML/CSS, and interactivity through JavaScript and Bootstrap, our focus is not just on aesthetics, but on engineering systems that drive actual business value.",
-  aboutP2Ar: "مع خبرتنا في Laravel, PHP, MySQL بالإضافة إلى الواجهات (HTML/CSS/JS/Bootstrap)، لا ينصب تركيزنا فقط على المظهر الجمالي، بل على هندسة أنظمة تدفع بعجلة الأعمال للأمام وتوفر حلولاً عملية.",
-  aboutStat1En: "Business Focused",
-  aboutStat1Ar: "أعمال موجهة",
-  aboutStat2En: "Reliable Systems",
-  aboutStat2Ar: "أنظمة موثوقة",
+  // About Section
+  aboutBadgeEn: "Who We Are",
+  aboutBadgeAr: "من نحن",
+  aboutTitleEn: "Transforming Daily Business Needs Into High-Performance Digital Solutions.",
+  aboutTitleAr: "نساعد الشركات والمصانع على تحويل احتياجاتهم اليومية إلى حلول رقمية عملية.",
+  aboutP1En: "At Codexa, we partner with companies, manufacturing factories, export businesses, and enterprises to bridge the gap between complex operations and intuitive digital systems. From corporate identities and multilingual trading portals to order management systems and bespoke web applications.",
+  aboutP1Ar: "نحن في Codexa نساعد الشركات والمصانع وأصحاب الأعمال على تحويل احتياجاتهم اليومية إلى حلول رقمية عملية. من المواقع التعريفية والمنصات متعددة اللغات لشركات التصدير، إلى أنظمة إدارة الطلبات ولوحات التحكم وتطبيقات الويب المخصصة.",
+  aboutP2En: "Our philosophy is simple: we don't just build visually stunning interfaces; we engineer digital solutions that serve your core business, eliminate manual overhead, save valuable time, and optimize operations.",
+  aboutP2Ar: "هدفنا ليس بناء موقع جميل فقط، بل بناء نظام متكامل يخدم عملك الفعلي، يوفر الوقت والجهد، وينظم سير العمليات بدقة وأمان.",
+  aboutPill1En: "Custom Development",
+  aboutPill1Ar: "تطوير مخصص بالكامل",
+  aboutPill2En: "Business-Driven Focus",
+  aboutPill2Ar: "حلول موجهة لخدمة العمل",
+  aboutPill3En: "Responsive & Scalable Architecture",
+  aboutPill3Ar: "بنية آمنة وقابلة للتوسع",
 
   // Services Header
-  servicesTitleEn: "Services",
-  servicesTitleAr: "الخدمات",
-  servicesDescEn: "Specialized web development solutions designed to elevate your company's digital infrastructure.",
-  servicesDescAr: "حلول برمجية متخصصة مصممة للارتقاء بالبنية التحتية الرقمية لشركتك.",
+  servicesBadgeEn: "What We Deliver",
+  servicesBadgeAr: "ماذا نقدم",
+  servicesTitleEn: "Tailored Web & Software Services Engineered for Real Growth",
+  servicesTitleAr: "حلول وخدمات برمجية متخصصة لدفع أعمالك نحو الأمام",
+  servicesDescEn: "Strategic digital products designed to digitize operations, expand your market reach, and elevate your brand presence.",
+  servicesDescAr: "منتجات رقمية مصممة خصيصاً لأتمتة أعمالك، فتح أسواق جديدة لشركتك، وإبراز هويتك باحترافية.",
+
+  // How We Work Section
+  processBadgeEn: "Execution Methodology",
+  processBadgeAr: "منهجية التنفيذ",
+  processTitleEn: "How We Work — From Concept to Scalable Launch",
+  processTitleAr: "طريقة العمل — من الفكرة إلى الإطلاق الناجح",
+  processDescEn: "A structured, transparent 6-step engineering workflow ensuring predictability, quality, and business alignment.",
+  processDescAr: "خطوات واضحة ومنظمة تضمن تنفيذ مشروعك بأعلى معايير الجودة والأمان والتسليم في الموعد المحدد.",
 
   // Projects Header
-  projectsTitleEn: "Projects",
-  projectsTitleAr: "المشاريع",
-  projectsDescEn: "A selection of recent development work, ranging from business portals to complex management systems.",
-  projectsDescAr: "مجموعة مختارة من أعمال التطوير الحديثة، تتراوح من بوابات الأعمال إلى أنظمة الإدارة المعقدة.",
+  projectsBadgeEn: "Case Studies & Portfolio",
+  projectsBadgeAr: "دراسات حالة وأعمالنا",
+  projectsTitleEn: "Selected Business Solutions & Case Studies",
+  projectsTitleAr: "نماذج من أعمالنا ودراسات الحالة",
+  projectsDescEn: "Explore how we engineered custom solutions for export trading enterprises and business management workflows.",
+  projectsDescAr: "تعرف على كيف ساعدنا عملاءنا في بناء منصات تصدير وأنظمة إدارة متكاملة تلبي أهدافهم التجارية.",
 
   // Skills & Reasons
-  skillsTitleEn: "Technical Arsenal",
-  skillsTitleAr: "المهارات التقنية",
-  reasonsTitleEn: "Why Choose Us?",
-  reasonsTitleAr: "لماذا تختارنا؟",
+  techStackTitleEn: "Technology Stack",
+  techStackTitleAr: "البنية التكنولوجية",
+  reasonsTitleEn: "Why Choose Codexa?",
+  reasonsTitleAr: "لماذا تختار Codexa؟",
 
   // Contact
-  contactTitleEn: "Contact Us",
-  contactTitleAr: "تواصل معنا",
-  contactDescEn: "Looking for a tailored web solution for your company? Let's discuss your project.",
-  contactDescAr: "هل تبحث عن حل برمجي مخصص لشركتك؟ دعنا نناقش مشروعك.",
+  contactBadgeEn: "Let's Build Together",
+  contactBadgeAr: "لنبدأ العمل معاً",
+  contactTitleEn: "Tell Us About Your Project",
+  contactTitleAr: "أخبرنا عن مشروعك القادم",
+  contactDescEn: "Have an upcoming project or looking to digitize your company's workflow? Request a quote and let's discuss your requirements.",
+  contactDescAr: "هل تبحث عن نظام مخصص أو موقع احترافي لشركتك؟ املأ النموذج وسنتواصل معك خلال 24 ساعة لتقديم عرض السعر المناسب.",
   contactEmail: "osama.mohamedr3d33@gmail.com",
   contactPhone: "+20 1556701167",
   contactWhatsapp: "201556701167",
@@ -75,160 +95,293 @@ export const defaultContent = {
   twitterUrl: "#",
 
   // Footer
-  footerTitleEn: "Software House | Business Systems & Web Solutions",
-  footerTitleAr: "شركة حلول برمجية | أنظمة أعمال ومواقع إلكترونية"
+  footerTitleEn: "Software House · Business Systems & Web Solutions",
+  footerTitleAr: "شركة حلول برمجية · أنظمة أعمال ومواقع إلكترونية"
 };
 
 export const defaultServices = [
   {
     id: 1,
-    titleEn: "Company Websites",
-    titleAr: "مواقع الشركات",
-    descEn: "Professional, responsive websites built to represent your company's brand and attract clients.",
-    descAr: "مواقع احترافية وسريعة الاستجابة مصممة لتمثيل علامتك التجارية وجذب العملاء.",
-    icon: "Building2"
+    titleEn: "Corporate & Company Websites",
+    titleAr: "مواقع الشركات والمؤسسات",
+    descEn: "Fast, responsive, and authoritative corporate websites built to reflect your brand identity and convert business leads.",
+    descAr: "مواقع احترافية وسريعة الاستجابة تعكس هوية شركتك، تبني المصداقية وتساعدك على الوصول إلى عملاء جدد.",
+    icon: "Building2",
+    ctaEn: "Start Company Site →",
+    ctaAr: "ابدأ موقع شركتك ←"
   },
   {
     id: 2,
-    titleEn: "Factory Websites",
-    titleAr: "مواقع المصانع",
-    descEn: "Digital presence tailored for factories, showcasing facilities, production lines, and achievements.",
-    descAr: "واجهة رقمية مخصصة للمصانع، لتقديم المنشآت وخطوط الإنتاج والإنجازات.",
-    icon: "Factory"
+    titleEn: "Manufacturing & Factory Portals",
+    titleAr: "مواقع ومنصات المصانع",
+    descEn: "Tailored digital presence for manufacturing facilities, showcasing production lines, capacity, certifications, and capabilities.",
+    descAr: "واجهات رقمية مخصصة للمصانع، لتقديم خطوط الإنتاج والشهادات والقدرات التشغيلية لشركاء الأعمال.",
+    icon: "Factory",
+    ctaEn: "Build Factory Portal →",
+    ctaAr: "ابدأ منصة مصنعك ←"
   },
   {
     id: 3,
-    titleEn: "Export Business Websites",
-    titleAr: "بوابات ومواقع التصدير",
-    descEn: "Multilingual, globally appealing sites for export businesses with product catalogs and order forms.",
-    descAr: "مواقع جذابة عالمياً ومتعددة اللغات لشركات التصدير مع قوائم المنتجات ونماذج الطلبات.",
-    icon: "Globe"
+    titleEn: "Export & International Trading Websites",
+    titleAr: "مواقع وبوابات التصدير الدولية",
+    descEn: "Multilingual, globally optimized platforms with comprehensive product catalogs, RFQ forms, and international buyer appeal.",
+    descAr: "مواقع متعددة اللغات لشركات التصدير والمنتجات الزراعية والصناعية مع قوائم المنتجات ونماذج طلب عروض الأسعار.",
+    icon: "Globe",
+    ctaEn: "Launch Export Site →",
+    ctaAr: "انطلق للأسواق العالمية ←"
   },
   {
     id: 4,
-    titleEn: "Admin Dashboards",
-    titleAr: "لوحات التحكم",
-    descEn: "Powerful, secure, and intuitive admin panels to monitor and manage your business metrics.",
-    descAr: "لوحات تحكم قوية وآمنة وبديهية لمراقبة وإدارة جميع مؤشرات أعمالك.",
-    icon: "LayoutDashboard"
+    titleEn: "Custom Admin Dashboards",
+    titleAr: "لوحات التحكم وإدارة البيانات",
+    descEn: "Intuitive, secure control panels that give you full operational oversight, real-time analytics, and data management.",
+    descAr: "لوحات تحكم قوية وبديهية تمنحك إشرافاً كاملاً على مؤشرات أعمالك، تقارير الأداء، وإدارة البيانات بأمان.",
+    icon: "LayoutDashboard",
+    ctaEn: "Build Dashboard →",
+    ctaAr: "صمم لوحة تحكمك ←"
   },
   {
     id: 5,
-    titleEn: "Order Management Systems",
-    titleAr: "أنظمة إدارة الطلبات",
-    descEn: "Custom systems to track orders, manage statuses, and streamline your entire business workflow.",
-    descAr: "أنظمة مخصصة لتتبع الطلبات، وإدارة الحالات، وتبسيط سير العمل بالكامل.",
-    icon: "ShoppingCart"
+    titleEn: "Order Management & Workflow Systems",
+    titleAr: "أنظمة إدارة الطلبات وسير العمل",
+    descEn: "Custom internal systems to track orders, automate status updates, dispatching, and eliminate workflow bottlenecks.",
+    descAr: "أنظمة مخصصة لتتبع دورة الطلبات، إدارة الحالات التشغيلية، وأتمتة العمليات اليومية لزيادة الإنتاجية.",
+    icon: "ShoppingCart",
+    ctaEn: "Automate Workflow →",
+    ctaAr: "أتمت سير العمل ←"
   },
   {
     id: 6,
-    titleEn: "Custom Laravel Web Apps",
+    titleEn: "Custom Laravel Web Applications",
     titleAr: "تطبيقات الويب المخصصة لـ Laravel",
-    descEn: "Robust, scalable, and secure backend solutions engineered to handle complex business requirements.",
-    descAr: "حلول خلفية قوية وقابلة للتوسع وآمنة مصممة للتعامل مع متطلبات العمل المعقدة.",
-    icon: "Code2"
+    descEn: "Secure, scalable backend web applications designed from scratch to solve your specific, complex business logic.",
+    descAr: "حلول خلفية قوية وقابلة للتوسع مبنية من الصفر لتناسب المنطق البرمجي الخاص بطبيعة عملك.",
+    icon: "Code2",
+    ctaEn: "Build Custom App →",
+    ctaAr: "ابنِ تطبيقك المخصص ←"
+  }
+];
+
+export const defaultWorkflow = [
+  {
+    step: "01",
+    titleEn: "Discovery & Analysis",
+    titleAr: "الاستكشاف والتحليل",
+    descEn: "We deeply understand your business model, operational challenges, and exact technical requirements before writing a single line of code.",
+    descAr: "نبدأ بفهم فكرة المشروع ونموذج العمل والمشاكل التي ترغب في حلها وتحديد المتطلبات بدقة قبل أي كود."
+  },
+  {
+    step: "02",
+    titleEn: "Architecture & Planning",
+    titleAr: "التخطيط وهندسة النظام",
+    descEn: "We architect the database schema, define user roles, plan feature roadmaps, and select the optimal technical stack.",
+    descAr: "نحدد البنية المعمارية، قواعد البيانات، الصلاحيات، وخطة العمل المناسبة لتحقيق أفضل أداء."
+  },
+  {
+    step: "03",
+    titleEn: "UI/UX Design",
+    titleAr: "تصميم واجهات وتجربة المستخدم",
+    descEn: "We craft modern, user-friendly, responsive layouts tailored for your target audience on both mobile and desktop.",
+    descAr: "نصمم واجهات عصرية ومتجاوبة وسهلة الاستخدام تخدم تجربة العميل على الهاتف والكمبيوتر."
+  },
+  {
+    step: "04",
+    titleEn: "Full-Stack Development",
+    titleAr: "البرمجة والتطوير الفعلي",
+    descEn: "We write clean, secure, and maintainable code adhering to industry standards and modern software engineering practices.",
+    descAr: "نبدأ بناء النظام وكتابة كود نظيف ومحمي وقابل للتوسع باستخدام أحدث معايير الأمان والتطوير."
+  },
+  {
+    step: "05",
+    titleEn: "Testing & Quality Assurance",
+    titleAr: "الاختبار وضمان الجودة",
+    descEn: "Rigorous testing of workflows, device responsiveness, performance speed, data security, and edge-case scenarios.",
+    descAr: "نختبر الأداء وسرعة التحميل، تجاوب الشاشات، واختبارات الأمان لضمان عمل كل وظيفة بكفاءة."
+  },
+  {
+    step: "06",
+    titleEn: "Deployment & Growth",
+    titleAr: "الإطلاق والدعم المستمر",
+    descEn: "We deploy the system to production servers, provide staff training, and offer continuous support and feature extensions.",
+    descAr: "نطلق المشروع ونسلمه لك جاهزاً للعمل، مع تدريب فريقك وتقديم الدعم والتطوير المستمر."
   }
 ];
 
 export const defaultProjects = [
   {
     id: 1,
-    titleEn: "The Accounts - Pro System",
-    titleAr: "برنامج المحاسبة - النظام المتكامل",
-    descriptionEn: "A comprehensive accounting and business management system. Features dashboard analytics, customer/product management, and financial tracking.",
-    descriptionAr: "نظام محاسبة وإدارة أعمال متكامل. يتميز بلوحة تحكم تحليلية، إدارة العملاء والمنتجات، وتتبع الحركات المالية اليومية.",
-    tech: "Laravel, React, InertiaJS, MySQL",
-    image: "/projects/accounting.png",
-    url: "#"
+    titleEn: "Ryan Trading — Export & Trading Portal",
+    titleAr: "ريان تريدنج — منصة وبوابة التصدير الدولية",
+    subtitleEn: "International Agriculture & Fresh Produce Export Portal",
+    subtitleAr: "موقع وبوابة تصدير الحاصلات الزراعية والمنتجات الطازجة عالمياً",
+    challengeEn: "An international export company needed a globally optimized, multilingual digital platform to present their premium agricultural crops, build buyer confidence across overseas markets, and streamline B2B inquiries.",
+    challengeAr: "شركة تعمل في تصدير المنتجات الطازجة والزراعية تحتاج إلى منصة احترافية لعرض منتجاتها بجودة عالية، كسب ثقة المستوردين في الأسواق الدولية وتسهيل استقبال طلبات التصدير.",
+    solutionEn: "We engineered a lightning-fast multilingual website with structured product catalogs, high-resolution media galleries, and direct international inquiry channels.",
+    solutionAr: "قمنا ببناء موقع متعدد اللغات بتجربة مستخدم عالمية يعرض كتالوج المنتجات والمواصفات ونماذج مخصصة لطلبات الاستيراد والشحنات.",
+    tech: "Laravel, Blade, Multi-language, Bootstrap, MySQL",
+    resultEn: "An authoritative global presence ready to receive overseas trade leads and establish credible exporter credentials.",
+    resultAr: "موقع احترافي جاهز للتواصل مع العملاء الدوليين وعرض المنتجات وجذب عقود تصدير جديدة.",
+    image: "/projects/export.png",
+    url: "https://www.edku-overseas.com/"
   },
   {
     id: 2,
-    titleEn: "Ryan Trading",
-    titleAr: "ريان تريدنج",
-    descriptionEn: "A high-end multi-language website for an international export company, showcasing fresh produce and facilitating global trade.",
-    descriptionAr: "موقع إلكتروني متعدد اللغات رفيع المستوى لشركة تصدير دولية، يعرض المنتجات الطازجة ويسهل عمليات التجارة العالمية.",
-    tech: "Laravel, Blade, Multi-language, Bootstrap",
-    image: "/projects/export.png",
-    url: "https://www.edku-overseas.com/"
+    titleEn: "The Accounts — Pro ERP & Financial System",
+    titleAr: "نظام المحاسبة المتكامل — The Accounts",
+    subtitleEn: "Full-Featured Accounting & Inventory Management",
+    subtitleAr: "نظام محاسبي وسحابي لإدارة الفواتير والمخازن والعملاء",
+    challengeEn: "Medium businesses struggled with disjointed Excel sheets, unrecorded ledger transactions, and a lack of real-time visibility over inventory turnover and cash flows.",
+    challengeAr: "الحاجة إلى نظام إداري ومالي موثوق يلغي العشوائية في الحسابات اليومية وينظم حركة المخزون والفواتير والعملاء في مكان واحد.",
+    solutionEn: "Developed a comprehensive business accounting system featuring analytical dashboards, ledger automation, stock tracking, and granular financial reporting.",
+    solutionAr: "تطوير نظام محاسبي متكامل يضم لوحة تحكم ذكية، إدارة المبيعات والمشتريات، متابعة الحركات النقدية وتقارير الأرباح والخسائر بدقة.",
+    tech: "Laravel, React, InertiaJS, MySQL, Tailwind",
+    resultEn: "Streamlined daily operations, error-free financial accounting, and instant insight into profitability metrics.",
+    resultAr: "تنظيم كامل للعمليات الحسابية والمالية مع تقليل الأخطاء البشرية وتوفير ساعات العمل اليومية.",
+    image: "/projects/accounting.png",
+    url: "#"
   }
 ];
 
-export const defaultSkills = [
-  "Laravel", "PHP", "MySQL", "HTML", "CSS", "JavaScript",
-  "Bootstrap", "Blade", "Git", "Responsive Design", "Cyber Security"
+export const defaultTechCategories = [
+  {
+    categoryEn: "Backend Architecture",
+    categoryAr: "تطوير الأنظمة الخلفية (Backend)",
+    items: ["Laravel", "PHP", "MySQL", "RESTful APIs", "Database Optimization"]
+  },
+  {
+    categoryEn: "Frontend & UI Systems",
+    categoryAr: "واجهات وتجربة المستخدم (Frontend)",
+    items: ["React.js", "JavaScript (ES6+)", "Tailwind CSS", "Bootstrap", "HTML5 / CSS3"]
+  },
+  {
+    categoryEn: "Development & Engineering",
+    categoryAr: "أدوات الهندسة والعمليات",
+    items: ["Git / GitHub", "Vite", "Blade Engine", "Responsive Design", "InertiaJS"]
+  },
+  {
+    categoryEn: "Security & Reliability",
+    categoryAr: "الأمان وحماية البيانات",
+    items: ["Secure Auth & RBAC", "Data Encryption", "CSRF / SQLi Protection", "Performance Caching"]
+  }
 ];
 
 export const defaultReasons = [
   {
     id: 1,
-    en: "Business-focused solutions designed for real-world operations.",
-    ar: "حلول تركز على الأعمال ومصممة للعمليات الواقعية."
+    num: "01",
+    titleEn: "We Understand Your Business First",
+    titleAr: "نفهم عملك أولاً",
+    en: "We dive deep into your workflow and operational challenges before writing a single line of code.",
+    ar: "نبدأ بفهم طبيعة نشاطك التجاري والتحديات اليومية قبل كتابة أي كود برمجي لضمان حل المشكلة الحقيقية."
   },
   {
     id: 2,
-    en: "Clean, premium, and highly professional user interfaces.",
-    ar: "واجهات مستخدم نظيفة واحترافية وعالية الجودة."
+    num: "02",
+    titleEn: "Tailored, Never Generic",
+    titleAr: "حلول مخصصة بالكامل",
+    en: "No rigid templates or forced pre-made systems; every solution is built around your specific workflow.",
+    ar: "لا نفرض عليك قوالب جاهزة أو أنظمة مقيدة؛ نبني الحل ليناسب دورة العمل الخاصة بك بالضبط."
   },
   {
     id: 3,
-    en: "Custom systems built entirely around your specific client needs.",
-    ar: "أنظمة مخصصة مبنية بالكامل لتناسب متطلبات العمل."
+    num: "03",
+    titleEn: "Modern & Professional UI/UX",
+    titleAr: "تصميم واجهات احترافي وسريع",
+    en: "Sleek, responsive, and intuitive interfaces optimized for smooth operation on phones and desktops.",
+    ar: "واجهات مستخدم حديثة وسريعة الاستجابة تعمل بسلاسة فائقة على أجهزة الهاتف والكمبيوتر."
   },
   {
     id: 4,
-    en: "Strong backend and database architecture for scalable apps.",
-    ar: "بنية تحتية قوية لقواعد البيانات لبناء تطبيقات قابلة للتوسع."
+    num: "04",
+    titleEn: "Engineered for Scalability",
+    titleAr: "قابلية التوسع والنمو المستقبلي",
+    en: "Clean database architecture and modular code that grows alongside your expanding business.",
+    ar: "نبني الأنظمة بهندسة نظيفة تسمح بتطويرها وإضافة ميزات جديدة مع توسع شركتك دون الحاجة لإعادة البناء."
+  },
+  {
+    id: 5,
+    num: "05",
+    titleEn: "Enterprise-Grade Security",
+    titleAr: "أمان وحماية عالية للبيانات",
+    en: "Robust protection for accounts, sensitive transactions, and company records following strict security standards.",
+    ar: "أولوية قصوى لحماية الحسابات، البيانات المالية، وسجلات العملاء الحساسة من أي اختراق."
+  },
+  {
+    id: 6,
+    num: "06",
+    titleEn: "Continuous Support & Maintenance",
+    titleAr: "دعم فني وتطوير مستمر",
+    en: "We stay by your side after launch with system updates, performance tuning, and technical guidance.",
+    ar: "نظل بجانبك بعد إطلاق المشروع لتقديم الصيانة والتدريب والدعم الفني السريع متى احتجت."
   }
 ];
 
 export const AppProvider = ({ children }) => {
   const [content, setContent] = useState(() => {
-    const saved = localStorage.getItem('codexa_content');
+    const saved = localStorage.getItem('codexa_content_v2');
     return saved ? { ...defaultContent, ...JSON.parse(saved) } : defaultContent;
   });
 
   const [services, setServices] = useState(() => {
-    const saved = localStorage.getItem('codexa_services');
+    const saved = localStorage.getItem('codexa_services_v2');
     return saved ? JSON.parse(saved) : defaultServices;
   });
 
+  const [workflow, setWorkflow] = useState(() => {
+    const saved = localStorage.getItem('codexa_workflow_v2');
+    return saved ? JSON.parse(saved) : defaultWorkflow;
+  });
+
   const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem('codexa_projects');
+    const saved = localStorage.getItem('codexa_projects_v2');
     return saved ? JSON.parse(saved) : defaultProjects;
   });
 
-  const [skills, setSkills] = useState(() => {
-    const saved = localStorage.getItem('codexa_skills');
-    return saved ? JSON.parse(saved) : defaultSkills;
+  const [techCategories, setTechCategories] = useState(() => {
+    const saved = localStorage.getItem('codexa_tech_v2');
+    return saved ? JSON.parse(saved) : defaultTechCategories;
   });
 
   const [reasons, setReasons] = useState(() => {
-    const saved = localStorage.getItem('codexa_reasons');
+    const saved = localStorage.getItem('codexa_reasons_v2');
     return saved ? JSON.parse(saved) : defaultReasons;
   });
 
-  const [lang, setLang] = useState('en');
+  const [quoteRequests, setQuoteRequests] = useState(() => {
+    const saved = localStorage.getItem('codexa_quote_requests');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [lang, setLang] = useState('ar');
 
   // Sync state to localStorage
   useEffect(() => {
-    localStorage.setItem('codexa_content', JSON.stringify(content));
+    localStorage.setItem('codexa_content_v2', JSON.stringify(content));
   }, [content]);
 
   useEffect(() => {
-    localStorage.setItem('codexa_services', JSON.stringify(services));
+    localStorage.setItem('codexa_services_v2', JSON.stringify(services));
   }, [services]);
 
   useEffect(() => {
-    localStorage.setItem('codexa_projects', JSON.stringify(projects));
+    localStorage.setItem('codexa_workflow_v2', JSON.stringify(workflow));
+  }, [workflow]);
+
+  useEffect(() => {
+    localStorage.setItem('codexa_projects_v2', JSON.stringify(projects));
   }, [projects]);
 
   useEffect(() => {
-    localStorage.setItem('codexa_skills', JSON.stringify(skills));
-  }, [skills]);
+    localStorage.setItem('codexa_tech_v2', JSON.stringify(techCategories));
+  }, [techCategories]);
 
   useEffect(() => {
-    localStorage.setItem('codexa_reasons', JSON.stringify(reasons));
+    localStorage.setItem('codexa_reasons_v2', JSON.stringify(reasons));
   }, [reasons]);
+
+  useEffect(() => {
+    localStorage.setItem('codexa_quote_requests', JSON.stringify(quoteRequests));
+  }, [quoteRequests]);
 
   const updateContentField = (key, value) => {
     setContent(prev => ({ ...prev, [key]: value }));
@@ -238,21 +391,25 @@ export const AppProvider = ({ children }) => {
     setContent(newContent);
   };
 
+  const addQuoteRequest = (req) => {
+    const newReq = { ...req, id: Date.now(), date: new Date().toLocaleDateString('ar-EG') };
+    setQuoteRequests(prev => [newReq, ...prev]);
+    return true;
+  };
+
   const resetToDefaults = () => {
     setContent(defaultContent);
     setServices(defaultServices);
+    setWorkflow(defaultWorkflow);
     setProjects(defaultProjects);
-    setSkills(defaultSkills);
+    setTechCategories(defaultTechCategories);
     setReasons(defaultReasons);
-    localStorage.removeItem('codexa_content');
-    localStorage.removeItem('codexa_services');
-    localStorage.removeItem('codexa_projects');
-    localStorage.removeItem('codexa_skills');
-    localStorage.removeItem('codexa_reasons');
-  };
-
-  const addMessage = (message) => {
-    console.log("Contact form submission (Mock):", message);
+    localStorage.removeItem('codexa_content_v2');
+    localStorage.removeItem('codexa_services_v2');
+    localStorage.removeItem('codexa_workflow_v2');
+    localStorage.removeItem('codexa_projects_v2');
+    localStorage.removeItem('codexa_tech_v2');
+    localStorage.removeItem('codexa_reasons_v2');
   };
 
   return (
@@ -263,20 +420,22 @@ export const AppProvider = ({ children }) => {
       updateAllContent,
       services,
       setServices,
+      workflow,
+      setWorkflow,
       projects,
       setProjects,
-      skills,
-      setSkills,
+      techCategories,
+      setTechCategories,
       reasons,
       setReasons,
+      quoteRequests,
+      setQuoteRequests,
+      addQuoteRequest,
       resetToDefaults,
       lang,
-      setLang,
-      addMessage
+      setLang
     }}>
       {children}
     </AppContext.Provider>
   );
 };
-
-
