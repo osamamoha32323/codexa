@@ -30,27 +30,42 @@ const Logo = ({ light = false }) => (
     whileHover={{ scale: 1.03 }}
     transition={{ duration: 0.2 }}
   >
-    {/* Exact Rounded Dark Navy Box with Clean </> */}
-    <div className="relative flex items-center justify-center w-12 h-12 rounded-[18px] bg-[#0c1220] shadow-md border border-white/10 shrink-0">
+    {/* Rounded Dark Box with clean </> code icon */}
+    <div className="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-[#0e1626]/90 shadow-lg border border-white/10 shrink-0">
       <svg
-        className="w-7 h-7"
+        className="w-6 h-6"
         viewBox="0 0 100 100"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g stroke="white" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="38 28 17 50 38 72" />
-          <line x1="56" y1="24" x2="44" y2="76" />
-          <polyline points="62 28 83 50 62 72" />
-        </g>
+        <path
+          d="M34 32 L15 50 L34 68"
+          stroke="white"
+          strokeWidth="11"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M58 24 L42 76"
+          stroke="white"
+          strokeWidth="11"
+          strokeLinecap="round"
+        />
+        <path
+          d="M66 32 L85 50 L66 68"
+          stroke="white"
+          strokeWidth="11"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </svg>
     </div>
 
-    {/* Exact Typography: "Code" in Bold White + "xa" in Electric Blue + Blue Dot "." */}
-    <div className={`text-[32px] font-black tracking-tight flex items-baseline leading-none font-sans ${light ? 'text-white' : 'text-slate-900'}`}>
+    {/* Typography: "Code" in white, "xa" in bright blue, "." in bright blue */}
+    <div className={`text-[30px] font-extrabold tracking-tight flex items-baseline leading-none ${light ? 'text-white' : 'text-slate-900'}`}>
       <span>Code</span>
       <span className="text-[#3b82f6]">xa</span>
-      <span className="text-[#3b82f6] text-[34px] leading-none ml-[1px]">.</span>
+      <span className="text-[#3b82f6] ml-[0.5px]">.</span>
     </div>
   </motion.div>
 );
