@@ -155,7 +155,16 @@ const MatrixRain = () => {
 };
 
 export default function HomePage() {
-  const { content, addMessage, projects, lang, setLang } = useContext(AppContext);
+  const { 
+    content, 
+    projects, 
+    services, 
+    skills, 
+    reasons, 
+    lang, 
+    setLang, 
+    addMessage 
+  } = useContext(AppContext);
   const [scrolled, setScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -178,14 +187,13 @@ export default function HomePage() {
   const isRtl = lang === 'ar';
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
-
   const t = {
     // Navigation
     navLogo: content.navLogo || "Codexa",
     navAbout: isRtl ? (content.navAboutAr || "من نحن") : (content.navAboutEn || "About Us"),
-    navServices: isRtl ? "الخدمات" : "Services",
-    navProjects: isRtl ? "المشاريع" : "Projects",
-    navTalk: isRtl ? "تواصل معنا" : "Contact Us",
+    navServices: isRtl ? (content.navServicesAr || "الخدمات") : (content.navServicesEn || "Services"),
+    navProjects: isRtl ? (content.navProjectsAr || "المشاريع") : (content.navProjectsEn || "Projects"),
+    navTalk: isRtl ? (content.navTalkAr || "تواصل معنا") : (content.navTalkEn || "Contact Us"),
 
     // Hero
     heroBadge: isRtl ? (content.heroBadgeAr || "شركة حلول برمجية وأنظمة أعمال") : (content.heroBadgeEn || "Software House & Business Systems"),
@@ -194,8 +202,8 @@ export default function HomePage() {
     heroIntro: isRtl
       ? (content.heroIntroAr || "نقوم ببناء مواقع احترافية وأنظمة أعمال مخصصة للشركات والمصانع وشركات التصدير.")
       : (content.heroIntroEn || "We build professional websites and custom business systems for companies, factories, and export businesses."),
-    heroBtnProjects: isRtl ? "شاهد مشاريعنا" : "View Our Projects",
-    heroBtnContact: isRtl ? "تواصل معنا" : "Contact Us",
+    heroBtnProjects: isRtl ? (content.heroBtnProjectsAr || "شاهد مشاريعنا") : (content.heroBtnProjectsEn || "View Our Projects"),
+    heroBtnContact: isRtl ? (content.heroBtnContactAr || "تواصل معنا") : (content.heroBtnContactEn || "Contact Us"),
 
     // About
     aboutTitle: isRtl ? (content.aboutTitleAr || "من نحن") : (content.aboutTitleEn || "About Us"),
@@ -204,89 +212,68 @@ export default function HomePage() {
     aboutP2: isRtl
       ? (content.aboutP2Ar || "مع خبرتنا في Laravel, PHP, MySQL بالإضافة إلى الواجهات (HTML/CSS/JS/Bootstrap)، لا ينصب تركيزنا فقط على المظهر الجمالي، بل على هندسة أنظمة تدفع بعجلة الأعمال للأمام وتوفر حلولاً عملية.")
       : (content.aboutP2En || "With expertise in Laravel, PHP, MySQL, formatting with HTML/CSS, and interactivity through JavaScript and Bootstrap, our focus is not just on aesthetics, but on engineering systems that drive actual business value."),
-    aboutStat1: isRtl ? "أعمال موجهة" : "Business Focused",
-    aboutStat2: isRtl ? "أنظمة موثوقة" : "Reliable Systems",
+    aboutStat1: isRtl ? (content.aboutStat1Ar || "أعمال موجهة") : (content.aboutStat1En || "Business Focused"),
+    aboutStat2: isRtl ? (content.aboutStat2Ar || "أنظمة موثوقة") : (content.aboutStat2En || "Reliable Systems"),
 
     // Services
-    servicesTitle: isRtl ? "الخدمات" : "Services",
+    servicesTitle: isRtl ? (content.servicesTitleAr || "الخدمات") : (content.servicesTitleEn || "Services"),
     servicesDesc: isRtl
-      ? "حلول برمجية متخصصة مصممة للارتقاء بالبنية التحتية الرقمية لشركتك."
-      : "Specialized web development solutions designed to elevate your company's digital infrastructure.",
+      ? (content.servicesDescAr || "حلول برمجية متخصصة مصممة للارتقاء بالبنية التحتية الرقمية لشركتك.")
+      : (content.servicesDescEn || "Specialized web development solutions designed to elevate your company's digital infrastructure."),
 
     // Projects
-    projectsTitle: isRtl ? "المشاريع" : "Projects",
+    projectsTitle: isRtl ? (content.projectsTitleAr || "المشاريع") : (content.projectsTitleEn || "Projects"),
     projectsDesc: isRtl
-      ? "مجموعة مختارة من أعمال التطوير الحديثة، تتراوح من بوابات الأعمال إلى أنظمة الإدارة المعقدة."
-      : "A selection of recent development work, ranging from business portals to complex management systems.",
+      ? (content.projectsDescAr || "مجموعة مختارة من أعمال التطوير الحديثة، تتراوح من بوابات الأعمال إلى أنظمة الإدارة المعقدة.")
+      : (content.projectsDescEn || "A selection of recent development work, ranging from business portals to complex management systems."),
     projectsViewAll: isRtl ? "عرض كل المشاريع" : "View all projects",
     projectsViewDetails: isRtl ? "قريباً" : "Coming Soon",
     projectsVisitSite: isRtl ? "زيارة الموقع" : "Visit Website",
 
     // Skills & Reasons
-    skillsTitle: isRtl ? "المهارات التقنية" : "Technical Arsenal",
-    reasonsTitle: isRtl ? "لماذا تختارنا؟" : "Why Choose Us?",
+    skillsTitle: isRtl ? (content.skillsTitleAr || "المهارات التقنية") : (content.skillsTitleEn || "Technical Arsenal"),
+    reasonsTitle: isRtl ? (content.reasonsTitleAr || "لماذا تختارنا؟") : (content.reasonsTitleEn || "Why Choose Us?"),
 
     // Contact
-    contactTitle: isRtl ? "تواصل معنا" : "Contact Us",
+    contactTitle: isRtl ? (content.contactTitleAr || "تواصل معنا") : (content.contactTitleEn || "Contact Us"),
     contactDesc: isRtl
-      ? "هل تبحث عن حل برمجي مخصص لشركتك؟ دعنا نناقش مشروعك."
-      : "Looking for a tailored web solution for your company? Let's discuss your project.",
-    contactEmailValue: "osama.mohamedr3d33@gmail.com",
-    contactPhoneValue: "01556701167",
+      ? (content.contactDescAr || "هل تبحث عن حل برمجي مخصص لشركتك؟ دعنا نناقش مشروعك.")
+      : (content.contactDescEn || "Looking for a tailored web solution for your company? Let's discuss your project."),
+    contactEmailValue: content.contactEmail || "osama.mohamedr3d33@gmail.com",
+    contactPhoneValue: content.contactPhone || "+20 1556701167",
+    contactWhatsappValue: content.contactWhatsapp || "201556701167",
 
     contactLocationLabel: isRtl ? "الموقع" : "Location",
-    contactLocationValue: isRtl ? "الإسكندرية" : "Alexandria",
+    contactLocationValue: isRtl ? (content.contactLocationAr || "الإسكندرية، مصر") : (content.contactLocationEn || "Alexandria, Egypt"),
 
     // Footer
-    footerTitle: isRtl ? (content.footerTitleAr || "شركة حلول برمجية | أنظمة أعمال") : (content.footerTitleEn || "Software House | Business Systems"),
-    footerCopyright: isRtl ? `© ${new Date().getFullYear()} Codexa. جميع الحقوق محفوظة.` : `© ${new Date().getFullYear()} Codexa. All rights reserved.`,
-    footerBuiltWith: isRtl ? "تم البناء باستخدام React و Tailwind" : "Built with React & Tailwind",
+    footerTitle: isRtl ? (content.footerTitleAr || "شركة حلول برمجية | أنظمة أعمال ومواقع إلكترونية") : (content.footerTitleEn || "Software House | Business Systems & Web Solutions"),
+    footerCopyright: isRtl ? `© ${new Date().getFullYear()} ${content.navLogo || 'Codexa'}. جميع الحقوق محفوظة.` : `© ${new Date().getFullYear()} ${content.navLogo || 'Codexa'}. All rights reserved.`,
+    footerBuiltWith: isRtl ? "تم البناء بواسطة Codexa" : "Built with React & Tailwind",
   };
 
-  const servicesList = [
-    {
-      title: isRtl ? "مواقع الشركات" : "Company Websites",
-      desc: isRtl ? "مواقع احترافية وسريعة الاستجابة مصممة لتمثيل علامتك التجارية وجذب العملاء." : "Professional, responsive websites built to represent your company's brand and attract clients.",
-      icon: <Building2 className="w-8 h-8 text-blue-500" />
-    },
-    {
-      title: isRtl ? "مواقع المصانع" : "Factory Websites",
-      desc: isRtl ? "واجهة رقمية مخصصة للمصانع، لتقديم المنشآت وخطوط الإنتاج والإنجازات." : "Digital presence tailored for factories, showcasing facilities, production lines, and achievements.",
-      icon: <Factory className="w-8 h-8 text-blue-500" />
-    },
-    {
-      title: isRtl ? "بوابات ومواقع التصدير" : "Export Business Websites",
-      desc: isRtl ? "مواقع جذابة عالمياً ومتعددة اللغات لشركات التصدير مع قوائم المنتجات ونماذج الطلبات." : "Multilingual, globally appealing sites for export businesses with product catalogs and order forms.",
-      icon: <Globe className="w-8 h-8 text-blue-500" />
-    },
-    {
-      title: isRtl ? "لوحات التحكم" : "Admin Dashboards",
-      desc: isRtl ? "لوحات تحكم قوية وآمنة وبديهية لمراقبة وإدارة جميع مؤشرات أعمالك." : "Powerful, secure, and intuitive admin panels to monitor and manage your business metrics.",
-      icon: <LayoutDashboard className="w-8 h-8 text-blue-500" />
-    },
-    {
-      title: isRtl ? "أنظمة إدارة الطلبات" : "Order Management Systems",
-      desc: isRtl ? "أنظمة مخصصة لتتبع الطلبات، وإدارة الحالات، وتبسيط سير العمل بالكامل." : "Custom systems to track orders, manage statuses, and streamline your entire business workflow.",
-      icon: <ShoppingCart className="w-8 h-8 text-blue-500" />
-    },
-    {
-      title: isRtl ? "تطبيقات الويب المخصصة لـ Laravel" : "Custom Laravel Web Apps",
-      desc: isRtl ? "حلول خلفية قوية وقابلة للتوسع وآمنة مصممة للتعامل مع متطلبات العمل المعقدة." : "Robust, scalable, and secure backend solutions engineered to handle complex business requirements.",
-      icon: <Code2 className="w-8 h-8 text-blue-500" />
-    },
-  ];
+  const getServiceIcon = (iconName) => {
+    switch (iconName) {
+      case 'Building2': return <Building2 className="w-8 h-8 text-blue-500" />;
+      case 'Factory': return <Factory className="w-8 h-8 text-blue-500" />;
+      case 'Globe': return <Globe className="w-8 h-8 text-blue-500" />;
+      case 'LayoutDashboard': return <LayoutDashboard className="w-8 h-8 text-blue-500" />;
+      case 'ShoppingCart': return <ShoppingCart className="w-8 h-8 text-blue-500" />;
+      case 'Code2':
+      default:
+        return <Code2 className="w-8 h-8 text-blue-500" />;
+    }
+  };
 
-  const skillsList = [
-    "Laravel", "PHP", "MySQL", "HTML", "CSS", "JavaScript",
-    "Bootstrap", "Blade", "Git", "Responsive Design", "Cyber Security"
-  ];
+  const servicesList = (services || []).map(s => ({
+    title: isRtl ? s.titleAr : s.titleEn,
+    desc: isRtl ? s.descAr : s.descEn,
+    icon: getServiceIcon(s.icon)
+  }));
 
-  const reasonsList = [
-    isRtl ? "حلول تركز على الأعمال ومصممة للعمليات الواقعية." : "Business-focused solutions designed for real-world operations.",
-    isRtl ? "واجهات مستخدم نظيفة واحترافية وعالية الجودة." : "Clean, premium, and highly professional user interfaces.",
-    isRtl ? "أنظمة مخصصة مبنية بالكامل لتناسب متطلبات العمل." : "Custom systems built entirely around your specific client needs.",
-    isRtl ? "بنية تحتية قوية لقواعد البيانات لبناء تطبيقات قابلة للتوسع." : "Strong backend and database architecture for scalable apps."
-  ];
+  const skillsList = skills || [];
+
+  const reasonsList = (reasons || []).map(r => (isRtl ? r.ar : r.en));
 
   return (
     <div className={`min-h-screen bg-slate-50 text-slate-900 selection:bg-blue-200 transition-colors duration-300 ${isRtl ? 'font-arabic' : 'font-sans'}`}>
@@ -652,7 +639,7 @@ export default function HomePage() {
                 </div>
                 <div className="w-full">
                   <p className="text-sm text-slate-500 font-medium mb-1">{isRtl ? 'البريد الإلكتروني' : 'Email'}</p>
-                  <a href="mailto:osama.mohamedr3d33@gmail.com" className="text-slate-900 font-bold hover:text-blue-600 transition-colors block break-words font-sans text-[13px] sm:text-sm md:text-base" dir="ltr">osama.mohamedr3d33@gmail.com</a>
+                  <a href={`mailto:${t.contactEmailValue}`} className="text-slate-900 font-bold hover:text-blue-600 transition-colors block break-words font-sans text-[13px] sm:text-sm md:text-base" dir="ltr">{t.contactEmailValue}</a>
                 </div>
               </motion.div>
 
@@ -662,7 +649,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <p className="text-sm text-slate-500 font-medium mb-1">{isRtl ? 'واتساب' : 'WhatsApp'}</p>
-                  <a href="https://wa.me/201556701167" className="text-slate-900 font-bold font-sans hover:text-green-600 transition-colors text-lg" dir="ltr">+20 1556701167</a>
+                  <a href={`https://wa.me/${t.contactWhatsappValue}`} target="_blank" rel="noreferrer" className="text-slate-900 font-bold font-sans hover:text-green-600 transition-colors text-lg" dir="ltr">{t.contactPhoneValue}</a>
                 </div>
               </motion.div>
 
@@ -689,17 +676,32 @@ export default function HomePage() {
           </div>
 
           <div className="flex gap-4">
-            <a href="mailto:osama.mohamedr3d33@gmail.com" className="p-3 bg-white/5 rounded-full hover:bg-blue-600/20 hover:text-blue-400 transition-all duration-300 group" title="Email">
+            <a href={`mailto:${t.contactEmailValue}`} className="p-3 bg-white/5 rounded-full hover:bg-blue-600/20 hover:text-blue-400 transition-all duration-300 group" title="Email">
               <Mail className="w-5 h-5" />
             </a>
-            <a href="https://wa.me/201556701167" className="p-3 bg-white/5 rounded-full hover:bg-green-600/20 hover:text-green-400 transition-all duration-300 group" title="WhatsApp">
+            <a href={`https://wa.me/${t.contactWhatsappValue}`} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-green-600/20 hover:text-green-400 transition-all duration-300 group" title="WhatsApp">
               <PhoneCall className="w-5 h-5" />
             </a>
+            {content.githubUrl && (
+              <a href={content.githubUrl} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-white/10 hover:text-white transition-all duration-300 group" title="GitHub">
+                <Github className="w-5 h-5" />
+              </a>
+            )}
+            {content.linkedinUrl && content.linkedinUrl !== '#' && (
+              <a href={content.linkedinUrl} target="_blank" rel="noreferrer" className="p-3 bg-white/5 rounded-full hover:bg-blue-600/20 hover:text-blue-400 transition-all duration-300 group" title="LinkedIn">
+                <Linkedin className="w-5 h-5" />
+              </a>
+            )}
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 text-center text-sm flex flex-col md:flex-row justify-between items-center gap-4">
           <p>{t.footerCopyright}</p>
-          <p>{t.footerBuiltWith}</p>
+          <div className="flex items-center gap-4">
+            <p>{t.footerBuiltWith}</p>
+            <Link to="/admin" className="text-slate-600 hover:text-blue-400 transition-colors text-xs">
+              {isRtl ? 'لوحة الإدارة' : 'Admin'}
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
