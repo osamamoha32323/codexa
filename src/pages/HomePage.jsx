@@ -25,19 +25,32 @@ const staggerContainer = {
 
 const Logo = ({ light = false }) => (
   <motion.div
-    className="flex items-center gap-2"
+    className="flex items-center gap-3.5 select-none"
     dir="ltr"
-    whileHover={{ scale: 1.05 }}
+    whileHover={{ scale: 1.03 }}
+    transition={{ duration: 0.2 }}
   >
-    <div className="relative">
-      <div className="absolute inset-0 bg-blue-500 blur-lg opacity-20 animate-pulse"></div>
-      <div className="relative flex items-center justify-center w-11 h-11 rounded-xl bg-[#0f172a] text-white shadow-lg border border-white/10 overflow-hidden group">
-        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <span className="font-mono font-medium text-xl tracking-tighter -ml-0.5 z-10">&lt;/&gt;</span>
-      </div>
+    {/* Exact Rounded Dark Navy Box with Clean </> */}
+    <div className="relative flex items-center justify-center w-12 h-12 rounded-[18px] bg-[#0c1220] shadow-md border border-white/10 shrink-0">
+      <svg
+        className="w-7 h-7"
+        viewBox="0 0 100 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g stroke="white" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="38 28 17 50 38 72" />
+          <line x1="56" y1="24" x2="44" y2="76" />
+          <polyline points="62 28 83 50 62 72" />
+        </g>
+      </svg>
     </div>
-    <div className={`text-3xl font-bold tracking-tight ${light ? 'text-white' : 'text-slate-900'}`}>
-      Code<span className="text-blue-500">xa.</span>
+
+    {/* Exact Typography: "Code" in Bold White + "xa" in Electric Blue + Blue Dot "." */}
+    <div className={`text-[32px] font-black tracking-tight flex items-baseline leading-none font-sans ${light ? 'text-white' : 'text-slate-900'}`}>
+      <span>Code</span>
+      <span className="text-[#3b82f6]">xa</span>
+      <span className="text-[#3b82f6] text-[34px] leading-none ml-[1px]">.</span>
     </div>
   </motion.div>
 );
