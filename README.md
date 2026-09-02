@@ -1,4 +1,4 @@
-# 💻 CODExa — Software House & Enterprise Web Solutions Platform
+# 💻 Codexa — Software House & Enterprise Web Solutions Platform
 
 ![React 18](https://img.shields.io/badge/React-18.2-61DAFB?style=flat-square&logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/Vite-5.1-646CFF?style=flat-square&logo=vite&logoColor=white)
@@ -8,7 +8,7 @@
 ![Vercel Edge](https://img.shields.io/badge/Vercel-Edge_CDN-000000?style=flat-square&logo=vercel&logoColor=white)
 ![License MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
-A production-ready, high-performance web platform and digital solutions hub engineered for **CODExa**, an Egyptian software house delivering tailored enterprise systems, export trading portals, admin dashboards, and custom web applications.
+A production-ready, high-performance web platform and digital solutions hub engineered for **Codexa**, an Egyptian software house delivering tailored enterprise systems, export trading portals, admin dashboards, and custom web applications.
 
 ---
 
@@ -179,7 +179,7 @@ cp .env.example .env
 
 Review variables in `.env`:
 ```env
-VITE_APP_NAME="CODExa Software House"
+VITE_APP_NAME="Codexa Software House"
 VITE_SITE_URL="https://codexa-xx.vercel.app"
 VITE_CONTACT_EMAIL="osama.mohamedr3d33@gmail.com"
 VITE_CONTACT_PHONE="+201556701167"
