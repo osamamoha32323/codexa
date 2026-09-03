@@ -222,7 +222,7 @@ export const defaultProjects = [
     resultEn: "An authoritative global presence ready to receive overseas trade leads and establish credible exporter credentials.",
     resultAr: "موقع احترافي جاهز للتواصل مع العملاء الدوليين وعرض المنتجات وجذب عقود تصدير جديدة.",
     image: "/projects/export.png",
-    url: "https://www.edku-overseas.com/"
+    url: "https://www.ryan-trading.com/home"
   },
   {
     id: 2,
@@ -318,7 +318,7 @@ export const defaultReasons = [
 
 export const AppProvider = ({ children }) => {
   const [content, setContent] = useState(() => {
-    const saved = localStorage.getItem('codexa_content_v3');
+    const saved = localStorage.getItem('codexa_content_v4');
     return saved ? { ...defaultContent, ...JSON.parse(saved) } : defaultContent;
   });
 
@@ -333,7 +333,7 @@ export const AppProvider = ({ children }) => {
   });
 
   const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem('codexa_projects_v2');
+    const saved = localStorage.getItem('codexa_projects_v3');
     return saved ? JSON.parse(saved) : defaultProjects;
   });
 
@@ -396,7 +396,7 @@ export const AppProvider = ({ children }) => {
 
   // Sync state to localStorage
   useEffect(() => {
-    localStorage.setItem('codexa_content_v3', JSON.stringify(content));
+    localStorage.setItem('codexa_content_v4', JSON.stringify(content));
   }, [content]);
 
   useEffect(() => {
@@ -408,7 +408,7 @@ export const AppProvider = ({ children }) => {
   }, [workflow]);
 
   useEffect(() => {
-    localStorage.setItem('codexa_projects_v2', JSON.stringify(projects));
+    localStorage.setItem('codexa_projects_v3', JSON.stringify(projects));
   }, [projects]);
 
   useEffect(() => {
@@ -444,10 +444,10 @@ export const AppProvider = ({ children }) => {
     setProjects(defaultProjects);
     setTechCategories(defaultTechCategories);
     setReasons(defaultReasons);
-    localStorage.removeItem('codexa_content_v3');
+    localStorage.removeItem('codexa_content_v4');
     localStorage.removeItem('codexa_services_v2');
     localStorage.removeItem('codexa_workflow_v2');
-    localStorage.removeItem('codexa_projects_v2');
+    localStorage.removeItem('codexa_projects_v3');
     localStorage.removeItem('codexa_tech_v2');
     localStorage.removeItem('codexa_reasons_v2');
   };

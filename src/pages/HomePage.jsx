@@ -614,7 +614,7 @@ export default function HomePage() {
 
           <motion.div
             variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6"
           >
             {services.map((service) => (
               <motion.div
@@ -697,7 +697,7 @@ export default function HomePage() {
             <p className="text-slate-400 text-base sm:text-lg">{t.projectsDesc}</p>
           </div>
 
-          <div className="space-y-12 max-w-5xl mx-auto">
+          <div className="space-y-8 sm:space-y-12 max-w-5xl mx-auto">
             {projects.map((project, index) => (
               <motion.div
                 key={project.id}
@@ -783,7 +783,7 @@ export default function HomePage() {
 
       {/* Technology Stack & Why Choose Us Section */}
       <section id="why-us" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative border-t border-white/5">
-        <div className="max-w-7xl mx-auto space-y-20">
+        <div className="max-w-7xl mx-auto space-y-12 sm:space-y-20">
           
           {/* Why Choose Codexa Grid (6 Pillars) */}
           <div className="space-y-10">
