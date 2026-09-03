@@ -35,6 +35,7 @@ export default function AdminPage() {
     setReasons,
     quoteRequests,
     setQuoteRequests,
+    visitorCount,
   } = useContext(AppContext);
 
   // Authentication State
