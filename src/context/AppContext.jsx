@@ -378,18 +378,45 @@ export const AppProvider = ({ children }) => {
     fetchLiveRate();
   }, []);
 
-    // Visitor Counter tracking with persistent storage
+      // Global Live Visitor Counter (Shared across all devices via CountAPI/API Counter)
   const [visitorCount, setVisitorCount] = useState(() => {
-    const saved = localStorage.getItem('codexa_visitors_total');
-    return saved ? parseInt(saved, 10) : 48;
+    const saved = localStorage.getItem('codexa_global_visits');
+    return saved ? parseInt(saved, 10) : 52;
   });
 
-  const incrementVisitorCount = () => {
+  const fetchAndIncrementGlobalVisitors = async () => {
+    try {
+      // Free public global counter namespace for Codexa
+      const res = await fetch('https://api.counterapi.dev/v1/codexa_software_official/visits/up');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.count) {
+          setVisitorCount(data.count);
+          localStorage.setItem('codexa_global_visits', data.count.toString());
+          return;
+        }
+      }
+    } catch (e) {
+      // Fallback to local storage if offline
+    }
     setVisitorCount(prev => {
-      const updated = prev + 1;
-      localStorage.setItem('codexa_visitors_total', updated.toString());
-      return updated;
+      const next = prev + 1;
+      localStorage.setItem('codexa_global_visits', next.toString());
+      return next;
     });
+  };
+
+  const fetchGlobalVisitorsOnly = async () => {
+    try {
+      const res = await fetch('https://api.counterapi.dev/v1/codexa_software_official/visits');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.count) {
+          setVisitorCount(data.count);
+          localStorage.setItem('codexa_global_visits', data.count.toString());
+        }
+      }
+    } catch (e) {}
   };
 
   const [lang, setLang] = useState('ar');
@@ -477,7 +504,7 @@ export const AppProvider = ({ children }) => {
       lang,
       setLang,
       visitorCount,
-      incrementVisitorCount
+      fetchAndIncrementGlobalVisitors, fetchGlobalVisitorsOnly
     }}>
       {children}
     </AppContext.Provider>

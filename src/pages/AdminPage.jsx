@@ -36,6 +36,7 @@ export default function AdminPage() {
     quoteRequests,
     setQuoteRequests,
     visitorCount,
+    fetchGlobalVisitorsOnly,
   } = useContext(AppContext);
 
   // Authentication State
