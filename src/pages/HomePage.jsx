@@ -342,7 +342,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className={`min-h-screen bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white transition-colors duration-300 ${isRtl ? 'font-arabic' : 'font-sans'}`}>
+    <div className={`min-h-screen w-full overflow-x-hidden bg-slate-950 text-slate-100 selection:bg-blue-600 selection:text-white transition-colors duration-300 ${isRtl ? 'font-arabic' : 'font-sans'}`}>
 
       {/* Floating WhatsApp Quick Action Button */}
       <a
@@ -358,7 +358,7 @@ export default function HomePage() {
       </a>
 
       {/* Navigation */}
-      <nav className={`fixed w-full z-50 transition-all duration-500 px-6 md:px-12 lg:px-24 ${scrolled
+      <nav className={`fixed w-full top-0 left-0 right-0 z-50 transition-all duration-500 px-4 sm:px-6 md:px-12 lg:px-24 ${scrolled
         ? 'bg-slate-950/90 backdrop-blur-xl border-b border-white/10 py-3.5 shadow-2xl'
         : 'bg-transparent py-5'
         }`}>
@@ -434,7 +434,7 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative min-h-[92vh] flex items-center justify-center px-6 md:px-12 lg:px-24 pt-32 pb-20 overflow-hidden">
+      <section className="relative min-h-[92vh] flex items-center justify-center px-4 sm:px-6 md:px-12 lg:px-24 pt-32 pb-20 overflow-hidden">
         <MatrixRain />
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
@@ -520,7 +520,7 @@ export default function HomePage() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative border-t border-white/5">
+      <section id="about" className="py-24 px-4 sm:px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-12 gap-12 items-center">
             
@@ -574,7 +574,7 @@ export default function HomePage() {
                     </span>
                   </div>
                   <div className="p-5 overflow-hidden">
-                    <pre className="text-[12px] sm:text-[13px] font-mono text-slate-300 leading-[1.8] text-left">
+                    <pre className="text-[11px] sm:text-[13px] font-mono text-slate-300 leading-[1.7] text-left overflow-x-auto whitespace-pre-wrap break-words">
                       <code>
                         <span className="text-purple-400">interface</span> <span className="text-amber-300">EngineeringStandards</span> &#123;<br />
                         &nbsp;&nbsp;<span className="text-blue-400">coreFocus</span>: <span className="text-green-300">"Business Growth & Scalability"</span>;<br />
@@ -601,7 +601,7 @@ export default function HomePage() {
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-950 relative">
+      <section id="services" className="py-24 px-4 sm:px-6 md:px-12 lg:px-24 bg-slate-950 relative">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
@@ -648,7 +648,7 @@ export default function HomePage() {
       </section>
 
       {/* How We Work Section (Execution Methodology) */}
-      <section id="process" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900/80 text-white relative border-y border-white/5">
+      <section id="process" className="py-24 px-4 sm:px-6 md:px-12 lg:px-24 bg-slate-900/80 text-white relative border-y border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
@@ -686,7 +686,7 @@ export default function HomePage() {
       </section>
 
       {/* Projects Section (Case Studies) */}
-      <section id="projects" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-950">
+      <section id="projects" className="py-24 px-4 sm:px-6 md:px-12 lg:px-24 bg-slate-950">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
@@ -782,7 +782,7 @@ export default function HomePage() {
       </section>
 
       {/* Technology Stack & Why Choose Us Section */}
-      <section id="why-us" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative border-t border-white/5">
+      <section id="why-us" className="py-24 px-4 sm:px-6 md:px-12 lg:px-24 bg-slate-900 text-white relative border-t border-white/5">
         <div className="max-w-7xl mx-auto space-y-12 sm:space-y-20">
           
           {/* Why Choose Codexa Grid (6 Pillars) */}
@@ -851,7 +851,7 @@ export default function HomePage() {
       </section>
 
       {/* Contact Section with Interactive Request a Quote Form */}
-      <section id="contact" className="py-24 px-6 md:px-12 lg:px-24 bg-slate-950 relative border-t border-white/5">
+      <section id="contact" className="py-24 px-4 sm:px-6 md:px-12 lg:px-24 bg-slate-950 relative border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold">
@@ -1127,7 +1127,7 @@ export default function HomePage() {
       </section>
 
       {/* Comprehensive Corporate Footer */}
-      <footer className="bg-slate-950 py-16 px-6 md:px-12 lg:px-24 border-t border-white/10 text-slate-400">
+      <footer className="bg-slate-950 py-16 px-4 sm:px-6 md:px-12 lg:px-24 border-t border-white/10 text-slate-400">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 pb-12 border-b border-white/5">
           
           {/* Brand Info */}
