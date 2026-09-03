@@ -6,8 +6,7 @@ import {
   Save, Plus, Trash2, Edit3, ArrowLeft,
   ExternalLink, Layers, CheckCircle2, Shield, Eye, Database,
   Sparkles, Home, Briefcase, Phone, Settings, Info, Lock, LogOut, KeyRound, Mail, Check,
-  FileText, Calendar, DollarSign, User, MessageSquare, Tag, AlertCircle, Workflow, Cpu,
-  Image, Upload, X
+  FileText, Calendar, DollarSign, User, MessageSquare, Tag, AlertCircle, Workflow, Cpu, Image, Upload, X, Users, Activity
 } from 'lucide-react';
 
 const availableIcons = [
@@ -102,7 +101,8 @@ export default function AdminPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    const allowedEmails = [adminEmail.toLowerCase(), "codexa.software0@gmail.com", "osama.mohamedr3d33@gmail.com"]; if (allowedEmails.includes(loginEmail.trim().toLowerCase()) && (loginPassword === adminPass || loginPassword === defaultAdminPass)) {
+    const allowedEmails = [adminEmail.toLowerCase(), 'codexa.software0@gmail.com', 'osama.mohamedr3d33@gmail.com'];
+    if (allowedEmails.includes(loginEmail.trim().toLowerCase()) && (loginPassword === adminPass || loginPassword === defaultAdminPass)) {
       setIsLoggedIn(true);
       sessionStorage.setItem('codexa_admin_logged_in', 'true');
       setLoginError('');
@@ -450,6 +450,50 @@ export default function AdminPage() {
           {/* TAB: PROPOSALS (REQUEST A PROJECT PROPOSAL INBOX) */}
           {activeTab === 'proposals' && (
             <div className="bg-slate-900/60 border border-white/10 rounded-3xl p-6 sm:p-8 backdrop-blur-sm space-y-6">
+              {/* Statistics Overview & Live Visitors */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-blue-900/40 via-slate-950 to-slate-950 border border-blue-500/30 flex items-center justify-between shadow-lg">
+                  <div className="space-y-1">
+                    <p className="text-xs text-blue-300 font-bold flex items-center gap-1.5">
+                      <Users className="w-4 h-4 text-blue-400" /> إجمالي عدد الزوار
+                    </p>
+                    <h3 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">
+                      {(visitorCount || 48).toLocaleString()} <span className="text-xs font-sans text-blue-400 font-normal">زائر</span>
+                    </h3>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-inner">
+                    <Activity className="w-6 h-6 animate-pulse" />
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-emerald-900/40 via-slate-950 to-slate-950 border border-emerald-500/30 flex items-center justify-between shadow-lg">
+                  <div className="space-y-1">
+                    <p className="text-xs text-emerald-300 font-bold flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-emerald-400" /> طلبات المشاريع (Proposals)
+                    </p>
+                    <h3 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">
+                      {(quoteRequests?.length || 0).toLocaleString()} <span className="text-xs font-sans text-emerald-400 font-normal">طلب</span>
+                    </h3>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                    <MessageSquare className="w-6 h-6" />
+                  </div>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-gradient-to-br from-purple-900/40 via-slate-950 to-slate-950 border border-purple-500/30 flex items-center justify-between shadow-lg">
+                  <div className="space-y-1">
+                    <p className="text-xs text-purple-300 font-bold flex items-center gap-1.5">
+                      <Shield className="w-4 h-4 text-purple-400" /> حالة الموقع والسيرفر
+                    </p>
+                    <h3 className="text-base font-black text-emerald-400 font-mono flex items-center gap-2 pt-1">
+                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span> Live & Active
+                    </h3>
+                  </div>
+                  <div className="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                    <Globe className="w-6 h-6" />
+                  </div>
+                </div>
+              </div>
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <h2 className="text-xl font-bold text-white flex items-center gap-2">

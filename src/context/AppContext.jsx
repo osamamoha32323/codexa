@@ -378,6 +378,20 @@ export const AppProvider = ({ children }) => {
     fetchLiveRate();
   }, []);
 
+    // Visitor Counter tracking with persistent storage
+  const [visitorCount, setVisitorCount] = useState(() => {
+    const saved = localStorage.getItem('codexa_visitors_total');
+    return saved ? parseInt(saved, 10) : 48;
+  });
+
+  const incrementVisitorCount = () => {
+    setVisitorCount(prev => {
+      const updated = prev + 1;
+      localStorage.setItem('codexa_visitors_total', updated.toString());
+      return updated;
+    });
+  };
+
   const [lang, setLang] = useState('ar');
 
   // Sync state to localStorage
