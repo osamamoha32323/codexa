@@ -186,13 +186,16 @@ export default function HomePage() {
   });
   const [quoteSent, setQuoteSent] = useState(false);
 
-  useEffect(() => {
+    useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMenuOpen]);
 
   useEffect(() => {
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -410,23 +413,32 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Mobile Menu Overlay */}
+        {/* Backdrop Overlay to close on clicking anywhere */}
+        {isMenuOpen && (
+          <div 
+            onClick={() => setIsMenuOpen(false)}
+            className="md:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-30"
+          />
+        )}
+
+        {/* Mobile Menu Content (100% Solid, Non-transparent, Crisp) */}
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{
             opacity: isMenuOpen ? 1 : 0,
-            height: isMenuOpen ? 'auto' : 0
+            y: isMenuOpen ? 0 : -20,
+            display: isMenuOpen ? 'block' : 'none'
           }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          className={`md:hidden absolute top-full left-0 w-full bg-slate-950/98 backdrop-blur-2xl border-b border-white/10 overflow-hidden shadow-2xl`}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="md:hidden absolute top-full left-0 right-0 w-full bg-[#070b14] border-b border-white/15 shadow-2xl z-40"
         >
-          <div className="px-6 py-8 flex flex-col gap-5 text-center">
-            <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navAbout}</a>
-            <a href="#services" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navServices}</a>
-            <a href="#process" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navProcess}</a>
-            <a href="#projects" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.navProjects}</a>
-            <a href="#why-us" onClick={() => setIsMenuOpen(false)} className="text-slate-300 hover:text-blue-400 font-medium py-1">{t.reasonsTitle}</a>
-            <a href="#contact" onClick={() => setIsMenuOpen(false)} className="mt-2 w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-600/30">
+          <div className="px-6 py-8 flex flex-col gap-5 text-center bg-[#070b14]">
+            <a href="#about" onClick={() => setIsMenuOpen(false)} className="text-slate-200 hover:text-blue-400 font-bold text-base py-2 border-b border-white/5">{t.navAbout}</a>
+            <a href="#services" onClick={() => setIsMenuOpen(false)} className="text-slate-200 hover:text-blue-400 font-bold text-base py-2 border-b border-white/5">{t.navServices}</a>
+            <a href="#process" onClick={() => setIsMenuOpen(false)} className="text-slate-200 hover:text-blue-400 font-bold text-base py-2 border-b border-white/5">{t.navProcess}</a>
+            <a href="#projects" onClick={() => setIsMenuOpen(false)} className="text-slate-200 hover:text-blue-400 font-bold text-base py-2 border-b border-white/5">{t.navProjects}</a>
+            <a href="#why-us" onClick={() => setIsMenuOpen(false)} className="text-slate-200 hover:text-blue-400 font-bold text-base py-2 border-b border-white/5">{t.reasonsTitle}</a>
+            <a href="#contact" onClick={() => setIsMenuOpen(false)} className="mt-2 w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold shadow-lg shadow-blue-600/30 text-sm">
               {t.navTalk}
             </a>
           </div>
