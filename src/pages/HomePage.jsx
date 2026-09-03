@@ -273,9 +273,9 @@ export default function HomePage() {
     contactDesc: isRtl
       ? (content.contactDescAr || "هل تبحث عن نظام مخصص أو موقع احترافي لشركتك؟ املأ النموذج وسنتواصل معك خلال 24 ساعة لتقديم عرض السعر المناسب.")
       : (content.contactDescEn || "Have an upcoming project or looking to digitize your company's workflow? Request a quote and let's discuss your requirements."),
-    contactEmailValue: content.contactEmail || "osama.mohamedr3d33@gmail.com",
-    contactPhoneValue: content.contactPhone || "+20 1556701167",
-    contactWhatsappValue: content.contactWhatsapp || "201556701167",
+    contactEmailValue: content.contactEmail || "codexa.software0@gmail.com",
+    contactPhoneValue: content.contactPhone || "+20 1060905305",
+    contactWhatsappValue: content.contactWhatsapp || "201060905305",
     contactLocationLabel: isRtl ? "المقر الرئيسي" : "Headquarters",
     contactLocationValue: isRtl ? (content.contactLocationAr || "الإسكندرية، مصر") : (content.contactLocationEn || "Alexandria, Egypt"),
 

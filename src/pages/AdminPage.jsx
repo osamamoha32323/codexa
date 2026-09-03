@@ -39,7 +39,7 @@ export default function AdminPage() {
   } = useContext(AppContext);
 
   // Authentication State
-  const defaultAdminEmail = "osama.mohamedr3d33@gmail.com";
+  const defaultAdminEmail = "codexa.software0@gmail.com";
   const defaultAdminPass = "123456789";
 
   const [adminEmail, setAdminEmail] = useState(() => {
@@ -1065,7 +1065,7 @@ export default function AdminPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">رقم الواتساب (مثال: 201556701167)</label>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">رقم الواتساب (مثال: 201060905305)</label>
                   <input
                     type="text"
                     value={formContent.contactWhatsapp || ''}

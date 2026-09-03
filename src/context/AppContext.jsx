@@ -83,9 +83,9 @@ export const defaultContent = {
   contactTitleAr: "أخبرنا عن مشروعك القادم",
   contactDescEn: "Have an upcoming project or looking to digitize your company's workflow? Request a quote and let's discuss your requirements.",
   contactDescAr: "هل تبحث عن نظام مخصص أو موقع احترافي لشركتك؟ املأ النموذج وسنتواصل معك خلال 24 ساعة لتقديم عرض السعر المناسب.",
-  contactEmail: "osama.mohamedr3d33@gmail.com",
-  contactPhone: "+20 1556701167",
-  contactWhatsapp: "201556701167",
+  contactEmail: "codexa.software0@gmail.com",
+  contactPhone: "+20 1060905305",
+  contactWhatsapp: "201060905305",
   contactLocationEn: "Alexandria, Egypt",
   contactLocationAr: "الإسكندرية، مصر",
 
@@ -318,7 +318,7 @@ export const defaultReasons = [
 
 export const AppProvider = ({ children }) => {
   const [content, setContent] = useState(() => {
-    const saved = localStorage.getItem('codexa_content_v2');
+    const saved = localStorage.getItem('codexa_content_v3');
     return saved ? { ...defaultContent, ...JSON.parse(saved) } : defaultContent;
   });
 
@@ -382,7 +382,7 @@ export const AppProvider = ({ children }) => {
 
   // Sync state to localStorage
   useEffect(() => {
-    localStorage.setItem('codexa_content_v2', JSON.stringify(content));
+    localStorage.setItem('codexa_content_v3', JSON.stringify(content));
   }, [content]);
 
   useEffect(() => {
@@ -430,7 +430,7 @@ export const AppProvider = ({ children }) => {
     setProjects(defaultProjects);
     setTechCategories(defaultTechCategories);
     setReasons(defaultReasons);
-    localStorage.removeItem('codexa_content_v2');
+    localStorage.removeItem('codexa_content_v3');
     localStorage.removeItem('codexa_services_v2');
     localStorage.removeItem('codexa_workflow_v2');
     localStorage.removeItem('codexa_projects_v2');
