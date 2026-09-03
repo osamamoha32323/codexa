@@ -475,7 +475,9 @@ export const AppProvider = ({ children }) => {
       setUsdToEgpRate,
       resetToDefaults,
       lang,
-      setLang
+      setLang,
+      visitorCount,
+      incrementVisitorCount
     }}>
       {children}
     </AppContext.Provider>
