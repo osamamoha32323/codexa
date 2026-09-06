@@ -1,3 +1,4 @@
+import { supabase } from '../lib/supabase';
 import React, { createContext, useState, useEffect } from 'react';
 
 export const AppContext = createContext();
@@ -352,6 +353,51 @@ export const AppProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const fetchGlobalProposals = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('proposals')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (!error && data) {
+        const formatted = data.map(item => ({
+          id: item.id,
+          name: item.name,
+          company: item.company,
+          phone: item.phone,
+          email: item.email,
+          service: item.service,
+          budget: item.budget,
+          currencyUsed: item.currency_used,
+          liveExchangeRate: item.exchange_rate,
+          notes: item.notes,
+          date: item.date || new Date(item.created_at).toLocaleDateString('ar-EG'),
+          created_at: item.created_at
+        }));
+        setQuoteRequests(formatted);
+        localStorage.setItem('codexa_quote_requests', JSON.stringify(formatted));
+      }
+    } catch (err) {
+      console.error('Error fetching global proposals:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchGlobalProposals();
+    const channel = supabase
+      .channel('public:proposals')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'proposals' }, () => {
+        fetchGlobalProposals();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  
+
   // USD to EGP Exchange Rate (Default: 49, with live auto-sync)
   const [usdToEgpRate, setUsdToEgpRate] = useState(() => {
     const savedRate = localStorage.getItem('codexa_usd_egp_rate');
@@ -384,39 +430,56 @@ export const AppProvider = ({ children }) => {
     return saved ? parseInt(saved, 10) : 52;
   });
 
-  const fetchAndIncrementGlobalVisitors = async () => {
-    try {
-      // Free public global counter namespace for Codexa
-      const res = await fetch('https://api.counterapi.dev/v1/codexa_software_official/visits/up');
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.count) {
-          setVisitorCount(data.count);
-          localStorage.setItem('codexa_global_visits', data.count.toString());
-          return;
-        }
-      }
-    } catch (e) {
-      // Fallback to local storage if offline
-    }
-    setVisitorCount(prev => {
-      const next = prev + 1;
-      localStorage.setItem('codexa_global_visits', next.toString());
-      return next;
-    });
-  };
-
   const fetchGlobalVisitorsOnly = async () => {
     try {
-      const res = await fetch('https://api.counterapi.dev/v1/codexa_software_official/visits');
-      if (res.ok) {
-        const data = await res.json();
-        if (data && data.count) {
-          setVisitorCount(data.count);
-          localStorage.setItem('codexa_global_visits', data.count.toString());
-        }
+      const { data, error } = await supabase
+        .from('analytics')
+        .select('total_visitors')
+        .eq('id', 'site_stats')
+        .single();
+      if (!error && data && data.total_visitors) {
+        const val = Number(data.total_visitors);
+        setVisitorCount(val);
+        localStorage.setItem('codexa_global_visits', val.toString());
       }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Error fetching global visitors:', e);
+    }
+  };
+
+  const fetchAndIncrementGlobalVisitors = async () => {
+    try {
+      const sessionLogged = sessionStorage.getItem('codexa_visited_session');
+      if (sessionLogged) {
+        fetchGlobalVisitorsOnly();
+        return;
+      }
+      sessionStorage.setItem('codexa_visited_session', 'true');
+
+      const { data: currentStats } = await supabase
+        .from('analytics')
+        .select('total_visitors')
+        .eq('id', 'site_stats')
+        .single();
+
+      const currentVal = currentStats ? Number(currentStats.total_visitors) : 56;
+      const nextVal = currentVal + 1;
+
+      const { error } = await supabase
+        .from('analytics')
+        .update({ total_visitors: nextVal, updated_at: new Date().toISOString() })
+        .eq('id', 'site_stats');
+
+      if (!error) {
+        setVisitorCount(nextVal);
+        localStorage.setItem('codexa_global_visits', nextVal.toString());
+      } else {
+        setVisitorCount(nextVal);
+      }
+    } catch (e) {
+      console.error('Error incrementing visitor count:', e);
+      setVisitorCount(prev => prev + 1);
+    }
   };
 
   const [lang, setLang] = useState('ar');
@@ -458,11 +521,54 @@ export const AppProvider = ({ children }) => {
     setContent(newContent);
   };
 
-  const addQuoteRequest = (req) => {
-    const newReq = { ...req, id: Date.now(), date: new Date().toLocaleDateString('ar-EG') };
-    setQuoteRequests(prev => [newReq, ...prev]);
+  const addQuoteRequest = async (req) => {
+    const proposalDate = new Date().toLocaleDateString('ar-EG');
+    const localId = Date.now();
+    const optimisticReq = {
+      ...req,
+      id: localId,
+      date: proposalDate
+    };
+    
+    setQuoteRequests(prev => [optimisticReq, ...prev]);
+
+    try {
+      const { data, error } = await supabase
+        .from('proposals')
+        .insert([{
+          name: req.name || '',
+          company: req.company || '',
+          phone: req.phone || '',
+          email: req.email || '',
+          service: req.service || '',
+          budget: req.budget || '',
+          currency_used: req.currencyUsed || 'USD',
+          exchange_rate: req.liveExchangeRate || '',
+          notes: req.notes || '',
+          date: proposalDate
+        }])
+        .select();
+
+      if (!error && data && data.length > 0) {
+        const savedItem = data[0];
+        setQuoteRequests(prev => prev.map(p => p.id === localId ? { ...p, id: savedItem.id } : p));
+      }
+    } catch (err) {
+      console.error('Error saving proposal to Supabase:', err);
+    }
     return true;
   };
+
+  const deleteQuoteRequest = async (id) => {
+    setQuoteRequests(prev => prev.filter(req => req.id !== id));
+    try {
+      await supabase.from('proposals').delete().eq('id', id);
+    } catch (err) {
+      console.error('Error deleting proposal from Supabase:', err);
+    }
+  };
+
+  
 
   const resetToDefaults = () => {
     setContent(defaultContent);
@@ -498,6 +604,8 @@ export const AppProvider = ({ children }) => {
       quoteRequests,
       setQuoteRequests,
       addQuoteRequest,
+      deleteQuoteRequest,
+      fetchGlobalProposals,
       usdToEgpRate,
       setUsdToEgpRate,
       resetToDefaults,

@@ -35,6 +35,8 @@ export default function AdminPage() {
     setReasons,
     quoteRequests,
     setQuoteRequests,
+    deleteQuoteRequest,
+    fetchGlobalProposals,
     visitorCount,
     fetchGlobalVisitorsOnly,
   } = useContext(AppContext);
