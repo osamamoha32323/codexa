@@ -366,7 +366,7 @@ export const AppProvider = ({ children }) => {
           company: item.company,
           phone: item.phone,
           email: item.email,
-          service: item.service,
+          service: item.service || item.project_type || 'Company Website', projectType: item.project_type || item.service || 'Company Website', details: item.details || item.notes || '',
           budget: item.budget,
           currencyUsed: item.currency_used,
           liveExchangeRate: item.exchange_rate,
@@ -449,7 +449,7 @@ export const AppProvider = ({ children }) => {
 
   const fetchAndIncrementGlobalVisitors = async () => {
     try {
-      const sessionLogged = sessionStorage.getItem('codexa_visited_session');
+      // Increment global visitors directly\n      const sessionLogged = null;
       if (sessionLogged) {
         fetchGlobalVisitorsOnly();
         return;
@@ -540,7 +540,7 @@ export const AppProvider = ({ children }) => {
           company: req.company || '',
           phone: req.phone || '',
           email: req.email || '',
-          service: req.service || '',
+          service: req.service || req.projectType || '', project_type: req.projectType || req.service || '', details: req.details || req.notes || '',
           budget: req.budget || '',
           currency_used: req.currencyUsed || 'USD',
           exchange_rate: req.liveExchangeRate || '',
