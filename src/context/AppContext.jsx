@@ -541,6 +541,33 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
     setContent(newContent);
   };
 
+  
+  const saveServices = async (newServices) => {
+    setServices(newServices);
+    await saveSectionToDatabase('services', newServices);
+  };
+
+  const saveWorkflow = async (newWorkflow) => {
+    setWorkflow(newWorkflow);
+    await saveSectionToDatabase('workflow', newWorkflow);
+  };
+
+  const saveProjects = async (newProjects) => {
+    setProjects(newProjects);
+    await saveSectionToDatabase('projects', newProjects);
+  };
+
+  const saveTechCategories = async (newTech) => {
+    setTechCategories(newTech);
+    await saveSectionToDatabase('tech', newTech);
+  };
+
+  const saveReasons = async (newReasons) => {
+    setReasons(newReasons);
+    await saveSectionToDatabase('reasons', newReasons);
+  };
+
+
   const addQuoteRequest = async (req) => {
     const proposalDate = new Date().toLocaleDateString('ar-EG');
     const localId = Date.now();
