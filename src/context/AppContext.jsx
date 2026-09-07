@@ -469,20 +469,13 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
 
   const fetchAndIncrementGlobalVisitors = async () => {
     try {
-      // Global real-time visitor increment\n      const sessionLogged = null;
-      if (sessionLogged) {
-        fetchGlobalVisitorsOnly();
-        return;
-      }
-      sessionStorage.setItem('codexa_visited_session', 'true');
-
       const { data: currentStats } = await supabase
         .from('analytics')
         .select('total_visitors')
         .eq('id', 'site_stats')
         .single();
 
-      const currentVal = currentStats ? Number(currentStats.total_visitors) : 56;
+      const currentVal = currentStats && currentStats.total_visitors ? Number(currentStats.total_visitors) : 56;
       const nextVal = currentVal + 1;
 
       const { error } = await supabase
@@ -497,10 +490,10 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
         setVisitorCount(nextVal);
       }
     } catch (e) {
-      console.error('Error incrementing visitor count:', e);
       setVisitorCount(prev => prev + 1);
     }
   };
+
 
   const [lang, setLang] = useState('ar');
 

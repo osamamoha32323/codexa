@@ -188,7 +188,7 @@ export default function AdminPage() {
   };
 
   // --- Service CRUD ---
-  const handleSaveService = (e) => {
+  const handleSaveService = async (e) => {
     e.preventDefault();
     if (editingService.id) {
       setServices(prev => prev.map(s => s.id === editingService.id ? editingService : s));
@@ -201,7 +201,7 @@ export default function AdminPage() {
     triggerToast('تم حفظ الخدمة بنجاح!');
   };
 
-  const handleDeleteService = (id) => {
+  const handleDeleteService = async (id) => {
     if (window.confirm('هل أنت متأكد من حذف هذه الخدمة؟')) {
       setServices(prev => prev.filter(s => s.id !== id));
       triggerToast('تم حذف الخدمة');

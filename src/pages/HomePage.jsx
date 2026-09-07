@@ -76,7 +76,6 @@ const MatrixRain = () => {
   const canvasRef = React.useRef(null);
 
   useEffect(() => {
-    fetchAndIncrementGlobalVisitors();
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
