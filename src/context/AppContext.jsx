@@ -600,9 +600,20 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
   };
 
   const deleteQuoteRequest = async (id) => {
-    setQuoteRequests(prev => prev.filter(req => req.id !== id));
+    setQuoteRequests(prev => {
+      const updated = prev.filter(req => String(req.id) !== String(id));
+      localStorage.setItem('codexa_quote_requests', JSON.stringify(updated));
+      return updated;
+    });
     try {
-      await supabase.from('proposals').delete().eq('id', id);
+      const numId = Number(id);
+      const targetId = isNaN(numId) ? id : numId;
+      const { data, error } = await supabase
+        .from('proposals')
+        .delete()
+        .eq('id', targetId)
+        .select();
+      console.log('Permanent delete from Supabase result:', { targetId, data, error });
     } catch (err) {
       console.error('Error deleting proposal from Supabase:', err);
     }

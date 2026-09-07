@@ -157,10 +157,14 @@ export default function AdminPage() {
   };
 
   // --- Proposal Requests Management ---
-  const handleDeleteProposal = (id) => {
-    if (window.confirm('هل أنت متأكد من حذف هذا الطلب؟')) {
-      setQuoteRequests(prev => prev.filter(req => req.id !== id));
-      triggerToast('تم حذف الطلب');
+  const handleDeleteProposal = async (id) => {
+    if (window.confirm('هل أنت متأكد من حذف هذا الطلب نهائياً من قاعدة البيانات؟')) {
+      if (deleteQuoteRequest) {
+        await deleteQuoteRequest(id);
+      } else {
+        setQuoteRequests(prev => prev.filter(req => String(req.id) !== String(id)));
+      }
+      triggerToast('تم حذف الطلب نهائياً من الداتابيز');
     }
   };
 
