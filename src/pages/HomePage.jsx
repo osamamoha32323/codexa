@@ -158,6 +158,7 @@ export default function HomePage() {
     lang, 
     setLang, 
     addQuoteRequest,
+    fetchAndIncrementGlobalVisitors,
     usdToEgpRate,
     setUsdToEgpRate
   } = useContext(AppContext);
@@ -188,6 +189,10 @@ export default function HomePage() {
   const [quoteSent, setQuoteSent] = useState(false);
 
     useEffect(() => {
+    if (fetchAndIncrementGlobalVisitors) fetchAndIncrementGlobalVisitors();
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
       if (isMenuOpen) {

@@ -469,7 +469,7 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
 
   const fetchAndIncrementGlobalVisitors = async () => {
     try {
-      // Increment global visitors directly\n      const sessionLogged = null;
+      // Global real-time visitor increment\n      const sessionLogged = null;
       if (sessionLogged) {
         fetchGlobalVisitorsOnly();
         return;
