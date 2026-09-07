@@ -403,16 +403,38 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
   useEffect(() => {
     fetchAllCmsData();
     fetchGlobalProposals();
+    fetchGlobalVisitorsOnly();
+
     const channel = supabase
       .channel('public:realtime_global_sync')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, () => { fetchAllCmsData(); })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'proposals' }, () => {
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, () => { 
+        fetchAllCmsData(); 
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'proposals' }, (payload) => {
+        console.log('Realtime proposals event:', payload);
         fetchGlobalProposals();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'analytics' }, (payload) => {
+        console.log('Realtime analytics event:', payload);
+        if (payload.new && payload.new.total_visitors !== undefined && payload.new.total_visitors !== null) {
+          const val = Number(payload.new.total_visitors);
+          setVisitorCount(val);
+          localStorage.setItem('codexa_global_visits', val.toString());
+        } else {
+          fetchGlobalVisitorsOnly();
+        }
       })
       .subscribe();
 
+    // Heartbeat sync every 10 seconds for seamless consistency
+    const interval = setInterval(() => {
+      fetchGlobalProposals();
+      fetchGlobalVisitorsOnly();
+    }, 10000);
+
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(interval);
     };
   }, []);
 
@@ -444,10 +466,10 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
     fetchLiveRate();
   }, []);
 
-      // Global Live Visitor Counter (Shared across all devices via CountAPI/API Counter)
+  // Global Live Visitor Counter (Synced with Supabase analytics table in real time)
   const [visitorCount, setVisitorCount] = useState(() => {
     const saved = localStorage.getItem('codexa_global_visits');
-    return saved ? parseInt(saved, 10) : 52;
+    return saved !== null && saved !== undefined ? parseInt(saved, 10) : 0;
   });
 
   const fetchGlobalVisitorsOnly = async () => {
@@ -457,7 +479,7 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
         .select('total_visitors')
         .eq('id', 'site_stats')
         .single();
-      if (!error && data && data.total_visitors) {
+      if (!error && data && data.total_visitors !== undefined && data.total_visitors !== null) {
         const val = Number(data.total_visitors);
         setVisitorCount(val);
         localStorage.setItem('codexa_global_visits', val.toString());
@@ -469,28 +491,59 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
 
   const fetchAndIncrementGlobalVisitors = async () => {
     try {
+      // 1. Try atomic PostgreSQL RPC increment
+      const { data, error } = await supabase.rpc('increment_page_view');
+      if (!error && data !== null && data !== undefined) {
+        const nextVal = Number(data);
+        setVisitorCount(nextVal);
+        localStorage.setItem('codexa_global_visits', nextVal.toString());
+        return;
+      }
+
+      // 2. Fallback direct update
       const { data: currentStats } = await supabase
         .from('analytics')
         .select('total_visitors')
         .eq('id', 'site_stats')
         .single();
 
-      const currentVal = currentStats && currentStats.total_visitors ? Number(currentStats.total_visitors) : 56;
+      const currentVal = currentStats && currentStats.total_visitors !== null && currentStats.total_visitors !== undefined
+        ? Number(currentStats.total_visitors)
+        : 0;
       const nextVal = currentVal + 1;
 
-      const { error } = await supabase
+      const { error: updateError } = await supabase
         .from('analytics')
         .update({ total_visitors: nextVal, updated_at: new Date().toISOString() })
         .eq('id', 'site_stats');
 
-      if (!error) {
+      if (!updateError) {
         setVisitorCount(nextVal);
         localStorage.setItem('codexa_global_visits', nextVal.toString());
-      } else {
-        setVisitorCount(nextVal);
       }
     } catch (e) {
-      setVisitorCount(prev => prev + 1);
+      console.error('Error incrementing visitors:', e);
+    }
+  };
+
+  const resetVisitorsCount = async () => {
+    try {
+      setVisitorCount(0);
+      localStorage.setItem('codexa_global_visits', '0');
+
+      // 1. Try atomic PostgreSQL RPC reset
+      const { error: rpcErr } = await supabase.rpc('reset_page_views');
+      if (rpcErr) {
+        // 2. Fallback direct update
+        await supabase
+          .from('analytics')
+          .update({ total_visitors: 0, updated_at: new Date().toISOString() })
+          .eq('id', 'site_stats');
+      }
+      return true;
+    } catch (err) {
+      console.error('Error resetting visitors count:', err);
+      return false;
     }
   };
 
@@ -669,7 +722,9 @@ try { await supabase.from("site_content").upsert({ id, data, updated_at: new Dat
       lang,
       setLang,
       visitorCount,
-      fetchAndIncrementGlobalVisitors, fetchGlobalVisitorsOnly
+      fetchAndIncrementGlobalVisitors,
+      fetchGlobalVisitorsOnly,
+      resetVisitorsCount
     }}>
       {children}
     </AppContext.Provider>

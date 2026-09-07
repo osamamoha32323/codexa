@@ -6,7 +6,7 @@ import {
   Save, Plus, Trash2, Edit3, ArrowLeft,
   ExternalLink, Layers, CheckCircle2, Shield, Eye, Database,
   Sparkles, Home, Briefcase, Phone, Settings, Info, Lock, LogOut, KeyRound, Mail, Check,
-  FileText, Calendar, DollarSign, User, MessageSquare, Tag, AlertCircle, Workflow, Cpu, Image, Upload, X, Users, Activity
+  FileText, Calendar, DollarSign, User, MessageSquare, Tag, AlertCircle, Workflow, Cpu, Image, Upload, X, Users, Activity, RotateCcw
 } from 'lucide-react';
 
 const availableIcons = [
@@ -39,6 +39,7 @@ export default function AdminPage() {
     fetchGlobalProposals,
     visitorCount,
     fetchGlobalVisitorsOnly,
+    resetVisitorsCount,
   } = useContext(AppContext);
 
   // Authentication State
@@ -165,6 +166,15 @@ export default function AdminPage() {
         setQuoteRequests(prev => prev.filter(req => String(req.id) !== String(id)));
       }
       triggerToast('تم حذف الطلب نهائياً من الداتابيز');
+    }
+  };
+
+  const handleResetVisitors = async () => {
+    if (window.confirm('هل أنت متأكد من تصفير إجمالي عدد الزوار إلى 0 في قاعدة البيانات؟')) {
+      if (resetVisitorsCount) {
+        await resetVisitorsCount();
+      }
+      triggerToast('تم تصفير عداد الزوار إلى 0 في الداتابيز بنجاح');
     }
   };
 
@@ -463,12 +473,23 @@ export default function AdminPage() {
               {/* Statistics Overview & Live Visitors */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-5 rounded-2xl bg-gradient-to-br from-blue-900/40 via-slate-950 to-slate-950 border border-blue-500/30 flex items-center justify-between shadow-lg">
-                  <div className="space-y-1">
-                    <p className="text-xs text-blue-300 font-bold flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-blue-400" /> إجمالي عدد الزوار
-                    </p>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center gap-2">
+                      <p className="text-xs text-blue-300 font-bold flex items-center gap-1.5">
+                        <Users className="w-4 h-4 text-blue-400" /> إجمالي عدد الزوار
+                      </p>
+                      <button
+                        type="button"
+                        onClick={handleResetVisitors}
+                        title="تصفير عداد الزوار إلى 0 في قاعدة البيانات"
+                        className="px-2 py-0.5 rounded-lg bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 hover:border-rose-500/50 text-rose-300 hover:text-rose-200 text-[10px] font-bold flex items-center gap-1 transition-all cursor-pointer active:scale-95"
+                      >
+                        <RotateCcw className="w-2.5 h-2.5" />
+                        تصفير
+                      </button>
+                    </div>
                     <h3 className="text-2xl sm:text-3xl font-black text-white font-mono tracking-tight">
-                      {(visitorCount || 48).toLocaleString()} <span className="text-xs font-sans text-blue-400 font-normal">زائر</span>
+                      {(visitorCount !== undefined && visitorCount !== null ? visitorCount : 0).toLocaleString()} <span className="text-xs font-sans text-blue-400 font-normal">زائر</span>
                     </h3>
                   </div>
                   <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 shadow-inner">
