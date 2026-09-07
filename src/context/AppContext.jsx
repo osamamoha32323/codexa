@@ -348,6 +348,24 @@ export const AppProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : defaultReasons;
   });
 
+  // --- Supabase CMS Sync ---
+const fetchAllCmsData = async () => {
+try {
+const { data, error } = await supabase.from("site_content").select("*");
+if (!error && data && data.length > 0) data.forEach(row => {
+if (row.id === "content" && row.data) setContent(prev => ({ ...prev, ...row.data }));
+if (row.id === "services" && row.data) setServices(row.data);
+if (row.id === "workflow" && row.data) setWorkflow(row.data);
+if (row.id === "projects" && row.data) setProjects(row.data);
+if (row.id === "tech" && row.data) setTechCategories(row.data);
+if (row.id === "reasons" && row.data) setReasons(row.data);
+});
+} catch (e) {}
+};
+const saveSectionToDatabase = async (id, data) => {
+try { await supabase.from("site_content").upsert({ id, data, updated_at: new Date().toISOString() }); } catch (e) {}
+};
+
   const [quoteRequests, setQuoteRequests] = useState(() => {
     const saved = localStorage.getItem('codexa_quote_requests');
     return saved ? JSON.parse(saved) : [];
@@ -383,9 +401,11 @@ export const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    fetchAllCmsData();
     fetchGlobalProposals();
     const channel = supabase
-      .channel('public:proposals')
+      .channel('public:realtime_global_sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, () => { fetchAllCmsData(); })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'proposals' }, () => {
         fetchGlobalProposals();
       })
@@ -593,14 +613,20 @@ export const AppProvider = ({ children }) => {
       updateAllContent,
       services,
       setServices,
+      saveServices,
       workflow,
       setWorkflow,
+      saveWorkflow,
       projects,
       setProjects,
+      saveProjects,
       techCategories,
       setTechCategories,
+      saveTechCategories,
       reasons,
       setReasons,
+      saveReasons,
+      fetchAllCmsData,
       quoteRequests,
       setQuoteRequests,
       addQuoteRequest,

@@ -165,13 +165,15 @@ export default function AdminPage() {
   };
 
   // --- Project CRUD ---
-  const handleSaveProject = (e) => {
+  const handleSaveProject = async (e) => {
     e.preventDefault();
     if (editingProject.id) {
       setProjects(prev => prev.map(p => p.id === editingProject.id ? editingProject : p));
     } else {
       const newProj = { ...editingProject, id: Date.now() };
-      setProjects(prev => [...prev, newProj]);
+      const updatedList = [...projects, newProj];
+      if (saveProjects) await saveProjects(updatedList);
+      else setProjects(updatedList);
     }
     setEditingProject(null);
     setNewProjectModal(false);
